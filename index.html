@@ -1,639 +1,228 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+<!-- saved from url=(0080)https://id-preview-8cea21cf-%2D1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/ -->
+<html lang="en" data-lt-installed="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="./Modesk Alfa — Seleção de Perfil_files/styles-DM3dZbTT.css" data-precedence="default"><link rel="stylesheet" href="./Modesk Alfa — Seleção de Perfil_files/css2" data-precedence="default"><title>Modesk Alfa — Seleção de Perfil</title><meta property="og:type" content="website"><meta name="twitter:card" content="summary"><meta name="description" content="Plataforma de performance física e nutricional. Selecione seu perfil para acessar treinos e macros."><meta property="og:title" content="Modesk Alfa"><meta property="og:description" content="Gestão de treino e nutrição."><link rel="modulepreload" href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/assets/index-DFXU3YXn.js"><link rel="modulepreload" href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/assets/routes-BsQciVsx.js"><link rel="modulepreload" href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/assets/AppHeader-BuFbgvXQ.js"><link rel="modulepreload" href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/assets/apple-BrlsoYY5.js"><link rel="preconnect" href="https://fonts.googleapis.com/"><link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="anonymous">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --red:#E8002D;--red-dim:rgba(232,0,45,.12);--red-border:rgba(232,0,45,.3);
-  --blue:#00AAFF;--blue-dim:rgba(0,170,255,.1);--blue-border:rgba(0,170,255,.25);
-}
-body{
-  --bg:#0C0C0F;--bg2:#141418;--bg3:#1C1C22;--bg4:#242430;
-  --txt:#F0EFF4;--txt2:#9A98A6;--txt3:#5C5A6E;
-  --card-hover:rgba(255,255,255,.03);
-  --shadow:rgba(0,0,0,.4);
-  font-family:'Inter',sans-serif;
-  background:var(--bg);
-  color:var(--txt);
-  min-height:100vh;
-  overflow-x:hidden;
-  transition:background .35s,color .35s;
-  font-size:16px; /* BASE AUMENTADA */
-}
-body.light{
-  --bg:#F2F2F0;--bg2:#FFFFFF;--bg3:#EAEAE6;--bg4:#D8D8D2;
-  --txt:#111110;--txt2:#5A5955;--txt3:#9A9990;
-  --card-hover:rgba(0,0,0,.02);
-  --shadow:rgba(0,0,0,.12);
-}
-.app-header{
-  position:sticky;top:0;z-index:100;
-  background:rgba(12,12,15,.92);
-  backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--bg4);
-  padding:14px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  transition:background .35s,border-color .35s;
-}
-body.light .app-header{background:rgba(242,242,240,.92);}
-.logo{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:30px;letter-spacing:3px;
-  display:flex;align-items:center;gap:0;
-  user-select:none;
-}
-.logo-mo{color:var(--red);animation:blinkMO 1.6s ease-in-out infinite;}
-@keyframes blinkMO{0%,100%{opacity:1}50%{opacity:.15}}
-.logo-workout{color:var(--txt);transition:color .35s}
-.header-right{display:flex;align-items:center;gap:8px}
-.btn-theme{
-  display:flex;align-items:center;gap:5px;
-  padding:8px 14px;border-radius:20px;
-  background:var(--bg3);border:1px solid var(--bg4);
-  color:var(--txt2);font-family:'Inter',sans-serif;
-  font-size:13px;font-weight:700;letter-spacing:.5px;
-  cursor:pointer;transition:all .2s;white-space:nowrap;
-}
-.btn-theme:hover{background:var(--bg4);color:var(--txt)}
-.btn-theme i{font-size:15px}
-.header-badge{
-  font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  padding:6px 14px;border-radius:20px;
-  background:var(--bg3);color:var(--txt2);
-  border:1px solid var(--bg4);transition:all .3s;
-}
-.header-badge.marcio{background:var(--red-dim);color:var(--red);border-color:var(--red-border)}
-.header-badge.manu{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-border)}
-.screen{display:none;min-height:calc(100vh - 61px);padding:24px 16px 40px}
-.screen.active{display:block}
-.select-header{text-align:center;padding:36px 0 32px}
-.select-eyebrow{
-  font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-  color:var(--txt3);margin-bottom:14px;
-}
-.select-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:48px;letter-spacing:2px;line-height:1;color:var(--txt);transition:color .35s;
-}
-.select-title span{color:var(--red)}
-.profile-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:8px}
-.profile-card{
-  border-radius:16px;padding:26px 22px;cursor:pointer;
-  display:flex;align-items:center;gap:18px;
-  border:1px solid var(--bg4);background:var(--bg2);
-  transition:border-color .25s,transform .18s,background .35s;
-  position:relative;overflow:hidden;
-}
-.profile-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s;}
-.profile-card.marcio::before{background:linear-gradient(135deg,var(--red-dim),transparent 60%)}
-.profile-card.manu::before{background:linear-gradient(135deg,var(--blue-dim),transparent 60%)}
-.profile-card:hover::before{opacity:1}
-.profile-card:hover{transform:translateY(-2px)}
-.profile-card.marcio:hover{border-color:var(--red-border)}
-.profile-card.manu:hover{border-color:var(--blue-border)}
-.profile-card:active{transform:scale(.97)}
-.pc-avatar{
-  width:58px;height:58px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;
-  flex-shrink:0;position:relative;z-index:1;
-}
-.pc-avatar.red{background:var(--red-dim);color:var(--red);border:1px solid var(--red-border)}
-.pc-avatar.blue{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-border)}
-.pc-info{flex:1;position:relative;z-index:1}
-.pc-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;line-height:1.1}
-.pc-name.red{color:var(--red)}
-.pc-name.blue{color:var(--blue)}
-.pc-sub{font-size:14px;color:var(--txt2);margin-top:3px;font-weight:500;letter-spacing:.5px}
-.pc-stats{display:flex;gap:8px;margin-top:10px}
-.pc-stat{font-size:11px;font-weight:700;letter-spacing:.5px;padding:4px 10px;border-radius:20px}
-.marcio .pc-stat{background:var(--red-dim);color:var(--red)}
-.manu .pc-stat{background:var(--blue-dim);color:var(--blue)}
-.pc-arrow{font-size:24px;color:var(--txt3);transition:color .2s,transform .2s;position:relative;z-index:1}
-.profile-card:hover .pc-arrow{transform:translateX(4px)}
-.profile-card.marcio:hover .pc-arrow{color:var(--red)}
-.profile-card.manu:hover .pc-arrow{color:var(--blue)}
-.workout-topbar{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-.btn-back{
-  width:42px;height:42px;border-radius:50%;
-  background:var(--bg3);border:1px solid var(--bg4);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:20px;color:var(--txt2);
-  transition:all .2s;flex-shrink:0;
-}
-.btn-back:hover{background:var(--bg4);color:var(--txt)}
-.workout-name{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:2px;transition:color .35s}
-.workout-name.red{color:var(--red)}
-.workout-name.blue{color:var(--blue)}
-.workout-sub{font-size:14px;color:var(--txt2);font-weight:500;letter-spacing:.5px;margin-top:1px}
-.plan-tabs{
-  display:flex;gap:8px;margin-bottom:22px;
-  overflow-x:auto;padding-bottom:4px;scrollbar-width:none;
-}
-.plan-tabs::-webkit-scrollbar{display:none}
-.tab-btn{
-  flex-shrink:0;padding:10px 18px;border-radius:10px;
-  border:1px solid var(--bg4);background:var(--bg2);
-  color:var(--txt2);font-size:14px;font-weight:700;letter-spacing:.5px;
-  cursor:pointer;transition:all .2s;white-space:nowrap;
-}
-.tab-btn:hover{border-color:var(--txt3);color:var(--txt)}
-.tab-btn.active.red{background:var(--red-dim);border-color:var(--red-border);color:var(--red)}
-.tab-btn.active.blue{background:var(--blue-dim);border-color:var(--blue-border);color:var(--blue)}
-.progress-wrap{
-  margin-bottom:20px;background:var(--bg2);
-  border-radius:10px;border:1px solid var(--bg4);padding:16px 18px;
-  transition:background .35s,border-color .35s;
-}
-.progress-top{display:flex;justify-content:space-between;margin-bottom:10px;align-items:center}
-.progress-label{font-size:13px;font-weight:600;color:var(--txt2)}
-.progress-val{font-size:13px;font-weight:700;color:var(--txt)}
-.progress-bar{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--red),#FF6B6B);transition:width .4s ease}
-.progress-fill.blue{background:linear-gradient(90deg,var(--blue),#66CCFF)}
-.plan-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.plan-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1.5px;color:var(--txt);transition:color .35s}
-.plan-count{font-size:13px;color:var(--txt3);font-weight:600}
-.groups-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
-.group-chip{
-  font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
-  padding:5px 12px;border-radius:20px;
-  background:var(--bg3);color:var(--txt3);
-  border:1px solid var(--bg4);cursor:pointer;transition:all .18s;
-}
-.group-chip.active-r{background:var(--red-dim);color:var(--red);border-color:var(--red-border)}
-.group-chip.active-b{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-border)}
-.exercise-list{display:grid;grid-template-columns:1fr;gap:12px}
-.ex-card{
-  border-radius:16px;background:var(--bg2);border:1px solid var(--bg4);
-  overflow:hidden;transition:border-color .2s,background .35s;
-}
-.ex-row{display:flex;align-items:center;gap:12px;padding:16px 18px;position:relative}
-.ex-row.row1{border-bottom:1px solid var(--bg4);border-left:3px solid var(--red)}
-.ex-row.row2{border-left:3px solid var(--blue)}
-.ex-row.single{border-left:3px solid var(--red)}
-.ex-num{
-  width:30px;height:30px;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:800;flex-shrink:0;
-}
-.ex-num.r{background:var(--red-dim);color:var(--red)}
-.ex-num.b{background:var(--blue-dim);color:var(--blue)}
-.ex-info{flex:1;min-width:0}
-.ex-gtag{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:10px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
-  padding:3px 9px;border-radius:20px;margin-bottom:5px;
-}
-.ex-name{font-size:16px;font-weight:700;color:var(--txt);display:block;line-height:1.25;transition:color .35s}
-.ex-reps{font-size:13px;color:var(--txt2);margin-top:4px;display:flex;align-items:center;gap:5px;font-weight:600}
-.ex-reps i{font-size:13px}
-.btn-demo{
-  width:48px;height:48px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:20px;flex-shrink:0;border:1px solid;transition:all .18s;
-}
-.btn-demo:active{transform:scale(.92)}
-.btn-demo.r{color:var(--red);border-color:var(--red-border);background:var(--red-dim)}
-.btn-demo.r:hover{background:var(--red);color:#fff}
-.btn-demo.b{color:var(--blue);border-color:var(--blue-border);background:var(--blue-dim)}
-.btn-demo.b:hover{background:var(--blue);color:#fff}
-.tag-costas{background:rgba(56,129,204,.15);color:#5B9FD8}
-.tag-peito{background:rgba(204,56,56,.15);color:#D87A7A}
-.tag-ombro{background:rgba(56,171,100,.15);color:#5DC47A}
-.tag-biceps{background:rgba(204,160,56,.15);color:#D4A850}
-.tag-triceps{background:rgba(130,56,204,.15);color:#A06ED4}
-.tag-core{background:rgba(130,130,130,.15);color:#909090}
-.tag-gluteo{background:rgba(204,56,130,.15);color:#D46EA0}
-.tag-adut{background:rgba(56,204,170,.15);color:#50C8A8}
-.tag-pant{background:rgba(56,100,204,.15);color:#6A90D8}
-.tag-posterior{background:rgba(80,150,204,.15);color:#70B0D4}
-.tag-quad{background:rgba(204,80,56,.15);color:#D88060}
-.biset-label{
-  padding:8px 18px;background:rgba(0,170,255,.06);
-  border-bottom:1px solid var(--bg4);
-  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--blue);display:flex;align-items:center;gap:6px;
-}
-.btn-check{
-  background:none;border-radius:8px;
-  padding:7px 14px;cursor:pointer;font-size:13px;font-weight:700;
-  display:flex;align-items:center;gap:5px;letter-spacing:.5px;
-  transition:all .2s;font-family:'Inter',sans-serif;
-}
-.modal-overlay{
-  position:fixed;inset:0;z-index:999;
-  background:rgba(0,0,0,.88);
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  opacity:0;pointer-events:none;transition:opacity .25s;
-}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal-box{
-  width:100%;max-width:400px;background:var(--bg2);
-  border-radius:20px;border:1px solid var(--bg4);overflow:hidden;
-  transform:scale(.92) translateY(16px);
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1),background .35s;
-}
-.modal-overlay.open .modal-box{transform:scale(1) translateY(0)}
-.modal-header{
-  padding:16px 18px 14px;
-  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
-  border-bottom:1px solid var(--bg4);
-}
-.modal-title{font-size:17px;font-weight:700;color:var(--txt);line-height:1.2;transition:color .35s}
-.modal-sub{font-size:13px;color:var(--txt2);margin-top:3px}
-.btn-close-modal{
-  width:34px;height:34px;border-radius:50%;flex-shrink:0;
-  background:var(--bg3);border:1px solid var(--bg4);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:18px;color:var(--txt2);transition:all .18s;
-}
-.btn-close-modal:hover{background:var(--bg4);color:var(--txt)}
-.modal-media{
-  width:100%;background:var(--bg3);
-  display:flex;align-items:center;justify-content:center;
-  min-height:280px;position:relative;overflow:hidden;transition:background .35s;
-}
-.modal-media img{width:100%;height:100%;object-fit:contain;max-height:300px}
-.modal-footer{
-  padding:16px 18px;
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-}
-.modal-reps{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:var(--txt)}
-.btn-close-full{
-  padding:11px 24px;border-radius:10px;background:var(--red);color:#fff;
-  font-size:13px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
-  border:none;cursor:pointer;transition:background .18s,transform .15s;
-}
-.btn-close-full:hover{background:#c40026}
-.btn-close-full:active{transform:scale(.96)}
-@media(min-width:600px){
-  .profile-grid{grid-template-columns:1fr 1fr}
-  .screen{padding:28px 24px 48px}
-  .app-header{padding:16px 28px}
-}
-@media(min-width:900px){
-  .screen{padding:32px 40px 60px;max-width:720px;margin:0 auto}
-}
+	@font-face {
+		font-family: 'CameraPlainVariable';
+		src: url('https://cdn.gpteng.co/mcp-widgets/v1/fonts/CameraPlainVariable.woff2') format('woff2');
+		font-weight: 100 900;
+		font-style: normal;
+		font-display: swap;
+	}
+
+	#lovable-badge {
+		--badge-bg: #1b1b1b;
+		--badge-text: #c5c1b9;
+		--badge-text-hover: #dcdad5;
+		--badge-radius: 6px;
+		--badge-padding: 8px;
+		--badge-gap: 6px;
+		--badge-shadow: 
+			0 0 0 1px rgba(0, 0, 0, 0.88),
+			0 1px 0 0 rgba(0, 0, 0, 0.04),
+			0 2px 2px -1px rgba(0, 0, 0, 0.08),
+			0 4px 4px -2px rgba(0, 0, 0, 0.08),
+			0 8px 8px -4px rgba(0, 0, 0, 0.08),
+			0 16px 16px -8px rgba(0, 0, 0, 0.08);
+		--badge-transition-duration: 0.2s;
+		--badge-transition-easing: cubic-bezier(0.16, 1, 0.32, 1);
+		--focus-color: #575ECF;
+		--focus-offset: 2px;
+		--focus-width: 2px;
+		
+		position: fixed;
+		bottom: 12px;
+		right: 12px;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		z-index: 1000000;
+		background-color: var(--badge-bg) !important;
+		color: var(--badge-text) !important;
+		border-radius: var(--badge-radius);
+		box-shadow: var(--badge-shadow) !important;
+		font-size: 12px;
+		font-family: CameraPlainVariable, "CameraPlainVariable Fallback", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		font-weight: 400 !important;
+		text-transform: none !important;
+		font-feature-settings: normal !important;
+		transform: translateZ(0);
+		will-change: transform, opacity;
+	}
+
+	#lovable-badge-cta {
+		display: flex;
+		align-items: center;
+		gap: var(--badge-gap);
+		padding: 0 var(--badge-padding);
+		height: 100%;
+		color: inherit;
+		text-decoration: none;
+		white-space: nowrap;
+		border-radius: var(--badge-radius) 0 0 var(--badge-radius);
+		transition: 
+			background-color var(--badge-transition-duration) ease,
+			color var(--badge-transition-duration) ease,
+			transform 0.1s ease;
+	}
+
+	#lovable-badge-cta:hover {
+		background: rgba(255, 255, 255, 0.04);
+		color: var(--badge-text-hover);
+	}
+
+	#lovable-badge-cta:active {
+		transform: scale(0.98);
+	}
+
+	#lovable-badge-cta:focus {
+		outline: none;
+	}
+
+	#lovable-badge-cta:focus-visible {
+		outline: var(--focus-width) solid var(--focus-color);
+		outline-offset: var(--focus-offset);
+		z-index: 1;
+	}
+
+	#lovable-badge-text {
+		line-height: 1;
+	}
+
+	#lovable-badge-divider {
+		width: 1px;
+		height: 24px;
+		background-color: rgba(255, 255, 255, 0.04);
+		flex-shrink: 0;
+	}
+
+	#lovable-badge-close {
+		width: 24px;
+		height: 24px;
+		min-width: 24px;
+		min-height: 24px;
+		cursor: pointer;
+		background: none;
+		border: none;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0 var(--badge-radius) var(--badge-radius) 0;
+		flex-shrink: 0;
+		transition: 
+			background-color var(--badge-transition-duration) ease,
+			transform 0.1s ease;
+	}
+
+	#lovable-badge-close:hover {
+		background: rgba(255, 255, 255, 0.04);
+	}
+
+	#lovable-badge-close:active {
+		transform: scale(0.92);
+	}
+
+	#lovable-badge-close:focus {
+		outline: none;
+	}
+
+	#lovable-badge-close:focus-visible {
+		outline: var(--focus-width) solid var(--focus-color);
+		outline-offset: calc(var(--focus-offset) * -1);
+		z-index: 1;
+	}
+
+	#lovable-badge-close svg path {
+		fill: var(--badge-text);
+		transition: fill var(--badge-transition-duration) ease;
+	}
+
+	#lovable-badge-close:hover svg path {
+		fill: var(--badge-text-hover);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#lovable-badge-cta,
+		#lovable-badge-close,
+		#lovable-badge-close svg path {
+			transition: none;
+		}
+		
+		#lovable-badge-cta:active,
+		#lovable-badge-close:active {
+			transform: none;
+		}
+	}
+
+	@media (prefers-contrast: high) {
+		#lovable-badge {
+			--badge-bg: #000;
+			--badge-text: #fff;
+			--badge-text-hover: #fff;
+			border: 2px solid currentColor;
+		}
+		
+		#lovable-badge-cta:focus-visible,
+		#lovable-badge-close:focus-visible {
+			outline-width: 3px;
+		}
+	}
 </style>
-</head>
-<body>
-<header class="app-header">
-  <div class="logo">
-    <span class="logo-mo">MO</span><span class="logo-workout">&nbsp;WORKOUT</span>
-  </div>
-  <div class="header-right">
-    <button class="btn-theme" id="btn-theme" onclick="toggleTheme()">
-      <i class="ti ti-sun" id="theme-icon"></i>
-      <span id="theme-label">CLARO</span>
-    </button>
-    <div class="header-badge" id="hbadge">SELECIONE</div>
-  </div>
-</header>
-<div class="screen active" id="screen-select">
-  <div class="select-header">
-    <div class="select-eyebrow">Programa de treino</div>
-    <div class="select-title">ESCOLHA<br>SEU <span>PERFIL</span></div>
-  </div>
-  <div class="profile-grid">
-    <div class="profile-card marcio" onclick="showProfile('marcio')">
-      <div class="pc-avatar red">M</div>
-      <div class="pc-info">
-        <div class="pc-name red">MÁRCIO</div>
-        <div class="pc-sub">Definição & Força</div>
-        <div class="pc-stats">
-          <span class="pc-stat">3 TREINOS</span>
-          <span class="pc-stat">A · B · C</span>
-        </div>
-      </div>
-      <i class="ti ti-chevron-right pc-arrow"></i>
-    </div>
-    <div class="profile-card manu" onclick="showProfile('manu')">
-      <div class="pc-avatar blue">MA</div>
-      <div class="pc-info">
-        <div class="pc-name blue">MANUELLA</div>
-        <div class="pc-sub">Hipertrofia & Precisão</div>
-        <div class="pc-stats">
-          <span class="pc-stat">3 TREINOS</span>
-          <span class="pc-stat">A · B · C</span>
-        </div>
-      </div>
-      <i class="ti ti-chevron-right pc-arrow"></i>
-    </div>
-  </div>
-</div>
-<div class="screen" id="screen-workout">
-  <div class="workout-topbar">
-    <div class="btn-back" onclick="goBack()"><i class="ti ti-arrow-left"></i></div>
-    <div>
-      <div class="workout-name" id="workout-name">MÁRCIO</div>
-      <div class="workout-sub" id="workout-sub">Definição & Força</div>
-    </div>
-  </div>
-  <div class="plan-tabs" id="plan-tabs"></div>
-  <div class="progress-wrap">
-    <div class="progress-top">
-      <span class="progress-label">Progresso do treino</span>
-      <span class="progress-val" id="prog-val">0 / 0 exercícios</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
-  </div>
-  <div id="plan-content"></div>
-</div>
-<div class="modal-overlay" id="modal" onclick="handleModalClick(event)">
-  <div class="modal-box" id="modal-box">
-    <div class="modal-header">
-      <div>
-        <div class="modal-title" id="modal-title">Exercício</div>
-        <div class="modal-sub" id="modal-sub">Demonstração</div>
-      </div>
-      <div class="btn-close-modal" onclick="closeModal()"><i class="ti ti-x"></i></div>
-    </div>
-    <div class="modal-media" id="modal-media">
-      <img id="modal-img" src="" alt="">
-    </div>
-    <div class="modal-footer">
-      <div class="modal-reps"><i class="ti ti-repeat"></i><span id="modal-reps">-</span></div>
-      <button class="btn-close-full" onclick="closeModal()">FECHAR</button>
-    </div>
-  </div>
-</div>
+<script defer="" src="./Modesk Alfa — Seleção de Perfil_files/events.js.download" data-artifact-kind="static_preview" data-artifact-id="8cea21cf" data-commit-sha="8cea21cf" data-context-token="v1.eyJwcm9qZWN0X2lkIjoiMWFkZjBhY2YtZmQ2Yi00NGZmLWFiMzEtYTFiMWQ4MzQzZGEwIiwiYXJ0aWZhY3Rfa2luZCI6InN0YXRpY19wcmV2aWV3IiwiYXJ0aWZhY3RfaWQiOiI4Y2VhMjFjZiIsImNvbW1pdF9zaGEiOiI4Y2VhMjFjZiIsImV4cCI6MTc4MTcyNTIzMX0.HHpX7sjduKwdSFetnu1gz4cs5fPiRBUWUuiNU95_bD8" data-track-url="/__l5e/trackevents?__lovable_sha=8cea21cf" data-replay="rrweb" data-replay-sample-rate="1" data-replay-crash-sample-rate="1" data-replay-url="/__l5e/replay?__lovable_sha=8cea21cf" data-replay-script-url="/__l5e/rrweb-record.js?__lovable_sha=8cea21cf&amp;__l5e_v=0.1.2-error-event-hardening"></script><meta name="twitter:title" content="Modesk Alfa"><meta name="twitter:description" content="Gestão de treino e nutrição."><meta property="og:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b7cda0b6-5155-427f-9a93-53345abf3f69/id-preview-8d445939--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app-1781721595484.png"><meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/b7cda0b6-5155-427f-9a93-53345abf3f69/id-preview-8d445939--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app-1781721595484.png"><script async="" src="./Modesk Alfa — Seleção de Perfil_files/rrweb-record.js.download"></script></head><body><!--$--><div class="min-h-screen bg-background text-foreground"><header class="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md"><div class="mx-auto flex max-w-3xl items-center justify-between px-4 py-3"><a class="flex items-center gap-2 select-none active" href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/" data-status="active" aria-current="page"><span class="font-display text-2xl text-marcio animate-pulse">MO</span><span class="font-display text-2xl text-foreground">WORKOUT</span></a><nav class="flex items-center gap-1"><a class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition border-foreground/30 bg-surface-2 text-foreground active" href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/" data-status="active" aria-current="page"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house size-4" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span class="hidden xs:inline sm:inline">Perfis</span></a><a href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/config" class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition border-border bg-surface text-muted-foreground hover:text-foreground"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings size-4" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg><span class="hidden xs:inline sm:inline">Config</span></a><span class="hidden sm:inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-bold tracking-widest uppercase bg-surface-2 text-muted-foreground border-border">SELECIONE</span></nav></div></header><main class="mx-auto max-w-3xl px-4 pt-6 pb-16"><section class="py-8 text-center"><p class="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground">Programa de treino &amp; nutrição</p><h1 class="mt-3 font-display text-5xl leading-none sm:text-6xl">ESCOLHA<br>SEU <span class="text-marcio">PERFIL</span></h1></section><div class="grid gap-4 sm:grid-cols-2"><div class="group relative overflow-hidden rounded-2xl border border-border bg-surface p-5 transition hover:-translate-y-0.5 hover:border-marcio/50"><div class="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100 bg-gradient-to-br from-marcio/20 to-transparent"></div><div class="relative flex items-center gap-4"><div class="grid size-14 place-items-center rounded-full border font-display text-xl border-marcio/40 bg-marcio/15 text-marcio">M</div><div class="flex-1"><div class="font-display text-2xl text-marcio">MÁRCIO</div><div class="text-sm font-medium text-muted-foreground">Definição &amp; Força</div><div class="mt-2 flex gap-2"><span class="rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wider bg-marcio/15 text-marcio">3 TREINOS</span><span class="rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wider bg-marcio/15 text-marcio">A · B · C</span></div></div></div><div class="relative mt-5 grid grid-cols-2 gap-2"><a href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/treino/marcio" class="flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition border-marcio/40 bg-marcio/10 text-marcio hover:bg-marcio hover:text-marcio-foreground"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dumbbell size-4" aria-hidden="true"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg> Treino</a><a href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/macros/marcio" class="flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition border-marcio/40 bg-marcio/10 text-marcio hover:bg-marcio hover:text-marcio-foreground"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-apple size-4" aria-hidden="true"><path d="M12 6.528V3a1 1 0 0 1 1-1h0"></path><path d="M18.237 21A15 15 0 0 0 22 11a6 6 0 0 0-10-4.472A6 6 0 0 0 2 11a15.1 15.1 0 0 0 3.763 10 3 3 0 0 0 3.648.648 5.5 5.5 0 0 1 5.178 0A3 3 0 0 0 18.237 21"></path></svg> Macros</a></div></div><div class="group relative overflow-hidden rounded-2xl border border-border bg-surface p-5 transition hover:-translate-y-0.5 hover:border-manu/50"><div class="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100 bg-gradient-to-br from-manu/20 to-transparent"></div><div class="relative flex items-center gap-4"><div class="grid size-14 place-items-center rounded-full border font-display text-xl border-manu/40 bg-manu/15 text-manu">MA</div><div class="flex-1"><div class="font-display text-2xl text-manu">MANUELLA</div><div class="text-sm font-medium text-muted-foreground">Hipertrofia &amp; Precisão</div><div class="mt-2 flex gap-2"><span class="rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wider bg-manu/15 text-manu">3 TREINOS</span><span class="rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wider bg-manu/15 text-manu">A · B · C</span></div></div></div><div class="relative mt-5 grid grid-cols-2 gap-2"><a href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/treino/manu" class="flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition border-manu/40 bg-manu/10 text-manu hover:bg-manu hover:text-manu-foreground"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dumbbell size-4" aria-hidden="true"><path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"></path><path d="m2.5 21.5 1.4-1.4"></path><path d="m20.1 3.9 1.4-1.4"></path><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"></path><path d="m9.6 14.4 4.8-4.8"></path></svg> Treino</a><a href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/macros/manu" class="flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-bold transition border-manu/40 bg-manu/10 text-manu hover:bg-manu hover:text-manu-foreground"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-apple size-4" aria-hidden="true"><path d="M12 6.528V3a1 1 0 0 1 1-1h0"></path><path d="M18.237 21A15 15 0 0 0 22 11a6 6 0 0 0-10-4.472A6 6 0 0 0 2 11a15.1 15.1 0 0 0 3.763 10 3 3 0 0 0 3.648.648 5.5 5.5 0 0 1 5.178 0A3 3 0 0 0 18.237 21"></path></svg> Macros</a></div></div></div><div class="mt-10"><h2 class="font-display text-2xl text-muted-foreground mb-3">FERRAMENTAS</h2><a href="https://id-preview-8cea21cf--1adf0acf-fd6b-44ff-ab31-a1b1d8343da0.lovable.app/config" class="flex items-center gap-3 rounded-2xl border border-border bg-surface p-5 transition hover:border-foreground/30"><span class="grid size-12 place-items-center rounded-xl bg-surface-2 text-foreground"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings size-5" aria-hidden="true"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg></span><div class="flex-1"><div class="font-display text-xl">CONFIGURAÇÕES</div><div class="text-sm text-muted-foreground">Cadastro e edição de exercícios, GIFs e metas</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-5 text-muted-foreground" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></a></div></main></div><!--/$--><script src="./Modesk Alfa — Seleção de Perfil_files/lovable.js.download" type="module"></script>
+<aside id="lovable-badge" role="complementary" dir="ltr" lang="en" aria-label="Edit with Lovable">
+	<a id="lovable-badge-cta" target="_blank" href="https://lovable.dev/projects/1adf0acf-fd6b-44ff-ab31-a1b1d8343da0?utm_source=lovable-badge" rel="noopener nofollow" aria-label="Edit with Lovable">
+		<span id="lovable-badge-text">Edit with</span>
+		<svg xmlns="http://www.w3.org/2000/svg" width="52" height="16" fill="none" viewBox="0 0 52 16">
+  <path fill="#FCFBF8" fill-rule="evenodd" d="M20.318 5.25c.643 0 1.206.14 1.69.418a2.81 2.81 0 0 1 1.118 1.191c.266.513.4 1.115.4 1.807s-.134 1.296-.4 1.812a2.81 2.81 0 0 1-1.118 1.193c-.484.278-1.047.418-1.69.418s-1.208-.14-1.695-.418a2.85 2.85 0 0 1-1.125-1.193c-.262-.516-.393-1.12-.393-1.812s.131-1.294.393-1.807a2.848 2.848 0 0 1 1.125-1.191c.487-.279 1.052-.418 1.695-.418Zm0 1.425c-.27 0-.504.076-.7.228-.193.147-.34.37-.443.67-.102.295-.153.66-.153 1.093 0 .435.05.801.153 1.1.102.3.25.524.443.676.196.147.43.22.7.22.27 0 .502-.073.694-.22.193-.152.341-.375.443-.67.103-.299.153-.667.153-1.106 0-.65-.112-1.145-.337-1.481a1.08 1.08 0 0 0-.953-.51ZM32.7 5.25c.61 0 1.127.1 1.549.3.422.197.74.48.953.849.217.368.325.809.325 1.32v2.704c0 .29.02.562.062.812.044.245.108.4.19.466V12h-1.935a5.895 5.895 0 0 1-.105-.684 7.745 7.745 0 0 1-.02-.228 2.293 2.293 0 0 1-.151.203c-.205.242-.47.437-.793.584-.32.143-.685.215-1.094.215-.406 0-.77-.08-1.094-.24a1.845 1.845 0 0 1-.756-.682 1.984 1.984 0 0 1-.27-1.045c0-.606.178-1.069.535-1.388.356-.324.87-.534 1.542-.633l1.125-.16c.225-.032.403-.074.534-.123a.622.622 0 0 0 .288-.196.549.549 0 0 0 .093-.327.65.65 0 0 0-.11-.367.702.702 0 0 0-.32-.27c-.14-.07-.31-.105-.51-.105-.32 0-.576.083-.768.251-.193.164-.298.39-.314.676h-1.923c.016-.434.147-.82.393-1.155.25-.34.596-.604 1.039-.792.442-.189.954-.283 1.535-.283Zm.99 3.498a.98.98 0 0 1-.215.14 2.49 2.49 0 0 1-.584.178l-.473.092c-.315.061-.553.156-.713.283-.155.127-.233.305-.233.534 0 .23.084.412.252.547.168.135.383.203.645.203s.494-.058.694-.173c.201-.118.355-.282.461-.49.11-.21.166-.448.166-.714v-.6Zm4.526-2.375c.065-.125.138-.243.221-.349.197-.25.437-.44.719-.571.282-.135.6-.203.952-.203.528 0 .988.138 1.377.412.389.275.688.67.896 1.186.21.512.314 1.12.314 1.824 0 .7-.107 1.309-.32 1.825-.213.512-.518.906-.915 1.18-.393.275-.854.412-1.383.412-.352 0-.667-.062-.946-.184a1.832 1.832 0 0 1-.7-.554 2.2 2.2 0 0 1-.234-.383V12h-1.843V3h1.862v3.373Zm1.284.296c-.274 0-.51.085-.707.253-.192.163-.338.397-.436.7a3.376 3.376 0 0 0-.148 1.05c0 .406.05.759.148 1.058.098.299.243.53.436.694.197.164.433.246.707.246.279 0 .512-.082.7-.246.193-.164.336-.395.43-.694.099-.3.148-.652.148-1.058 0-.405-.05-.757-.147-1.056-.095-.299-.238-.53-.43-.694a1.015 1.015 0 0 0-.7-.253Zm9.416-1.419c.602 0 1.136.131 1.604.393.466.262.829.643 1.086 1.143.263.5.394 1.097.394 1.794 0 .25-.002.449-.006.596H47.51c.018.288.071.538.164.75a1.3 1.3 0 0 0 .491.596c.214.13.465.196.757.196.319 0 .583-.082.792-.246.209-.167.34-.403.393-.706h1.862a2.48 2.48 0 0 1-.485 1.235 2.54 2.54 0 0 1-1.051.805c-.439.188-.949.283-1.53.283-.655 0-1.225-.125-1.708-.375a2.672 2.672 0 0 1-1.13-1.143c-.267-.508-.4-1.137-.4-1.887 0-.712.14-1.327.418-1.843a2.86 2.86 0 0 1 1.155-1.186c.491-.27 1.051-.405 1.678-.405Zm-.044 1.345c-.274 0-.516.068-.725.203a1.29 1.29 0 0 0-.479.59 2.045 2.045 0 0 0-.132.498h2.562a1.873 1.873 0 0 0-.138-.602 1.061 1.061 0 0 0-.418-.516 1.243 1.243 0 0 0-.67-.173Z" clip-rule="evenodd"></path>
+  <path fill="#FCFBF8" d="m26.605 9.995 1.342-4.566h1.924L27.628 12h-2.07l-2.33-6.57h1.98l1.397 4.565Zm-13.013.143h2.256c1.632 0 1.421 1.837 1.418 1.861h-5.603V3h1.93v7.138Zm31.516 1.861h-1.862V3h1.862v8.999Z"></path>
+  <path fill="url(#a)" fill-rule="evenodd" d="M2.7 3c1.492 0 2.7 1.192 2.7 2.663v1.012h.9c1.49 0 2.7 1.192 2.7 2.662S7.791 12 6.3 12H0V5.663C0 4.193 1.209 3 2.7 3Z" clip-rule="evenodd"></path>
+  <defs>
+    <radialgradient id="a" cx="0" cy="0" r="1" gradientTransform="matrix(-1.54236 7.07838 -10.231 -2.15602 4.627 5.022)" gradientUnits="userSpaceOnUse">
+      <stop offset=".106" stop-color="#FE7B02"></stop>
+      <stop offset=".394" stop-color="#FE3F21"></stop>
+      <stop offset=".608" stop-color="#F858BC"></stop>
+      <stop offset=".929" stop-color="#575ECF"></stop>
+    </radialgradient>
+  </defs>
+</svg>
+
+
+	</a>
+	
+	<span id="lovable-badge-divider" aria-hidden="true"></span>
+	
+	<button id="lovable-badge-close" aria-label="Dismiss" title="Dismiss" type="button">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+			<path d="M10.646 4.646a.5.5 0 1 1 .707.708L8.707 8l2.646 2.646a.5.5 0 1 1-.707.707L8 8.707l-2.646 2.646a.5.5 0 1 1-.708-.707L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708L8 7.293l2.646-2.647Z"></path>
+		</svg>
+	</button>
+</aside>
 <script>
-const GIF={
-  supino_incl_halter:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9B3l86AD33FFSlyPWIq-gopeitD74NYvNa79l1Y3uNkUsbz_2gilJAIEcUqC0W8AiAQ_CTwhi8yg8oEp9sB183TDS4gsbNrG8Z5nt2it9x0vapfHdYpfCaC1tnONawNzWv23Nsox9B-5rTK1fEkiCj_gunwonh0bFtEb-rms97G4ITQSOWAkwUsv9n92r/s320/supino-inclinado-com-halteres.gif",
-  supino_incl_barra:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhL24veOe4sgh_BYildDhkm5SLzriL1BOOa1gQMoXMd-TY-IHI-tSAhA_mCqgIBQgPzypjuru7Yja9bqRJgZAhT5veBo--IYpl2dF53X2iLwNayrc_lo9uNfIhFL646hLzPJnM9dUY2kewevFZonpIIqmisQjSJ8AulvdZAZMcKe_H7Rh1I6JKO6ycJvDw/s360/Supino%20Incl.%20Barra.gif",
-  supino_reto:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgqYfGMyxvNMKL0JetiKrUsg3sGuxtqYXcXWn3ee3MyeOFnrX9albAuUrQm70rbZ2DiuNIuX9XtF6DtEirARBNbU3jX8-FJxnIbcd8GlOhjFWHPgaOcuDZmDuHnuVp7Cn-8lAA8PMoPSZHRdt7F8goKCg0vOuZhXPWCHgyjYIN0EuVxssBtNg26CHnZzPIy/s320/supino-reto.gif",
-  voador_maquina:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjSOOmPmT1Tk26ToQXBjsPwecd2HhFcPMvrUGiYp4QkiRbm-5-pg9x7s_mJ5zQfG-EzW03YibxPqlkJcIVgYlEl74nubgOVVeK9JUrMys9De0QB-Z9UhRNRj5h11Sj8pXvnnkr8YQJ3NRtqzS8vWC5eJVjpk8MB9lK3ZdSAgNaXvSym9mghUBmh1GHYNDw/s360/Voador%20M%C3%A1quina.gif",
-  crossover_baixo:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjpfWwfQVUbpzVmSobNBo7UHWIdyheidWx3TEEP8AqyIAUzJGkKzNC7vDHCk76_448ZEM-3uMEPUUaD5ilsk59K1YAHcL0DZzqMk9zXtoFSVzYwHg0qS94y2iWfKSCa6RHhEDBV9iTChwPhhYuhBOoxQrDvDCfifNNKqk4OSTo8pFJSOd--KvYjRzhKYfc/s320/Crossover%20Baixo.webp",
-  desenv_maquina:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhDF2ZTnIb4uE18Twwp_Kmtb5ThJ9Nm09H0Z1Zh-nIELUZw-EmogWzS4AXL1189T_rOHcWAYAXV5QfNyJ3AP4mlURbG86p-VbbBjR7aO7VpCy9j7zBmIE4Ar5sWB_gt6J77_O9PHgNgCRp2hdP5cFqWvsQC2R8bmNqsPyA3RSpJtDWAguoPOLk4_xPnonIG/s1600/desenvolvimento-maquina.gif",
-  elev_lateral_polia:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgnXLxj_2SvthVwBdpBTSEOHotpRlp_ajwiKIhphyvGy_fHf-rrFa4D5et0j3GXWLTbTxsWMB0P4SqtO-W50htohr4G37jpdJlYLejnPVh3t9vIEBnkbpjYn8aMSun3bCR9eb3Bf6Vrg4ima9UOApCvSRqAeYCBToJCTxG7H6J0jXMQsVJYC8O0Er7LmKPk/s320/elevacao-lateral-na-polia-baixa.gif",
-  remada_alta_smith:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjv6o84Roy4RewB7A-xoaTFPKH3iPWgzbKNQQ8euAAv49q92Ii4M3G5YBVKMaUTXSL1jCulpljOH15c8I36Q-Fb8zeUJHB0L7zzlAnv_azEPeO-IPwBqeKUuqZwL-vW9ECVIjZiAiL2mIXu5B6qCk4PXSE7lwZFZ36mkuG1cXT_WZGTJ0ETHGoKS89w88jQ/s320/ombros-remada-alta-no-Smith.gif",
-  elev_frontal_polia:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiwB3kpsAVN1uIL3d0C7dkAJr2uYFk4vz2Bhmk-3kl5j9EVpOPrsYgNmQCyPJywnrKK0w4WD3TkSEQUoVPetC_ZvZdNaIAcyfIEJZR9LSQCLpIqgTpsxvIbZNBtoPFTss4Cld1LuEQkXqRQ4ecciC0VZLHC4KZIKvG3hgJ5jJXeBS8YBjXMjnUkCwaQM3c/s320/Elev.%20Frontal%20Uni.%20Polia.webp",
-  facepull:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMR68bycdUZKsBPdX0qgVT8t36Q1xVoiNV-FWIaCvdjsrOCEKBk3kjK-kGraRufca7-iwuOApL7iHLiHqg2VUUZ9hx9aDJp6W9xyJ9aUqWUaCzNHqGWom_swoAbVG4nM0ajTnlZYTAySGUIqJNxw3FBL6cmBnwviUWxaIz7GuD1Aeq6bws-twposdCjgsh/s320/cbe6a1d-25a4-aba6-cbe0-1eb8c8a8d351_cable-face-pull.webp",
-  triceps_barra_v:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgJmDUhXT8Kgi1559UK3jFuXJxNbr7Zglz5LmQ3AV7gmBl-SP5zfaCqV8vR5C5GKH_ocmhx4r2bLcRnnWdeSjOwKvgk2j8Om31Vn-OMBncEUfyoqhFApBJz1HZJp14SDO-quo4ukzCfQQ-p3at7gIIb1SaQppf1-gP_zWRvU4Gzf3o-nGUQvG82z4skS3ri/s320/triceps-na-polia.gif",
-  triceps_corda:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEijaq_IWkUwk19m3zszByIVQBZb4iyiVrFrx1QRR6N21cR8YL0A6O6ye9I9w96YuT3NtdD9jeldJSAGuhnSvgUQ0NUTvB4LUdCGzgiV101uMrz_s26syJchKhHrwEMs2h8zlCCLNwe75xXIXm2y88z963nv8AW_uOj1TGmtZ9TgijX_BrmFeP7SIvTsqb8/s550/Triceps%20Polia%20com%20Corda.webp",
-  triceps_uni_horiz:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjol3uFAHJm1v3RaEiD-9OLoU-Ke6sUapmK-4sdk5I6d6e-AoWUReFYJt4mvyHbTHxjWt4iZ2HS8dbtjYonX4WtaB7bfd45L_J9sul_L61Wkg37q5ZywDiNKvdCGuXleyjxzaSN_t9PIuK56Glbrv_l4GleLmX5dmI7c34ACB_KnnRru5X26ujHn3r2EWA/s720/Triceps%20Uni%20Horizontal.gif",
-  triceps_inverso_uni:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIbg0Ah_uY37Y4ZjXUblXwvDD-ckGqQ9GYxxULwWUD4cK6qRJJyuO3OKDMaxj5hm6JW6GLMjw1IX9JiuG0iGMqAvzeROYDdDv01s8mfR6CL2bo-Xfm8LgxRaznkKUNGrd3i6HJTi_Bi1E0vsvWhXhL2kI_vaYE6fn5xj9cpZpeT1w_uRurMLR4-oPGDT3p/s320/cable-standing-reverse-grip-one-arm-overhead-tricep-extension.gif",
-  triceps_testa_w:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjm-HSXN0CSSitycfBVF2DjO1ClDGtxWHFUdHtP8s2w9m1a--4GS0lmegz0ZtjOS1LiFgrVMK4_fpCcl5lv03TGr-8n2PCCwkkUVAuXkIWmDFh47DMPiKLTozFw7fR-HJo-2y7RQn7MS8wiUDt375uCm_dWP4JRSvAuvpaqgXPGiGWuOMMw1pxAa-fvwJWD/s320/barbell-lying-triceps-extension-skull-crusher.gif",
-  triceps_coice:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJzmmnakVOE8_4LSupi-ftQ2lehQhJCU0kuMc0FuXciqVL3ZCvNKrFI2obeUt68kItOVyecVrrbBvRbPwFFHwAAAhhoCeO8sxfQ0au3k7ugORvA7b8SubQC4XdYoe77Kd3nxmmvlrzVVpQcv5KZqU5j-uilSoFXuRzRIhkWauy9hSU_UlP4UbtiiU7GHcE/s320/triceps%20coice.gif",
-  triceps_banco:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhyxrIBeCclrggbt94EUC3KOa-_7zn77nXegYCcB5q0IBW3zSRAMFNL5-cDnAdBjs1glWU6UuIxKa5yWFj4Ucu2IW1mVR6RwnFQzAils2FPNIvODT57zFeMXiC9cAsnkYHYMnDg91cHoCS2B9HG5BuT1N0HASiPSEqjrnewdkGy5-c6CMXUVM5T85FKx7_U/s320/triceps%20afundo%20no%20banco.gif",
-  panturrilha_smith:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEivArgdhyQAUIkRm_P8XXP2VPRjlpCbtbfZ8QB_mxSk_TFhIkH12xqFhRT6wtw-cOyIe54vsK2sd6yqHt9o36Tr835rlNSlJeT-2BRO5-VpkIyKsVkB0vwD_NUb0Uk3KaFz2yhoa8IugDUCzbCrenfVBQ4KAba7fmjj_wOlGhyqiiLt7m7R_rpTZHZQlM4/s650/Panturrilha%20Smith.webp",
-  panturrilha_leg:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhCrQXJtxhmJDy9E8S0_w7dwpjp98HDG6Xr7Fs61__dRKr1cunyWrn-zcaQnLVG1wSvokGQm_hsyNjV5skx6uU1uQ_IlQNaCQtwhWx-YFnF9s-KvWo8-R9fvS9diZVQ77HVw4TKcSOOIffvCV8i9i4CUOKWq3Z6DKbXQL3ahdXKoaYUG_Y5uQAUWzkQpfc/s360/Panturrilha%20Leg.gif",
-  panturrilha_pe:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg4SEDZIWCLou3GR7DkP397WA246F_4kz8TvLJnMKk_W3ZZqISzbEik_uGWVRsjozzI6DLH4c2YUf4w0Sst4VVRbj8shMQTgYS8gHUmANuW3xg4OycphNUDy_YMVFWkzclsmBbMMAAmDUQfULeTwAaGAh173WchhoBZi7xqlSIGic54NBlirjFJsYr5MYwV/s320/penturriha%20em%20p%C3%A9%20sem%20peso.gif",
-  puxada_neutra:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEglxndj9PxD5m_l3iSPUG9MoIBGrgp8LeA0rFJJdOpwF4giqxQ5BVQDZjbUNv7kjwd8PdpoAWr8P-0lluiPaa1t3J9qJD1xSR3p78CRFvS5aaHkHH8guXkr15OM0CPQx3IGl3p4CdYwFcA7M_kekCq01ECq7xEsd_7sjdo2d5WZlezYBjy6-nIf2LyENval/s320/Puxada-frente-barra-romana.jpg.webp",
-  puxada_pronada:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhu6uoY5QzdMvnfHWXhfsF6Xs3VW0kg4H2MsEf8T8quHWsMVLVCHsvtlatyfWRxFcCl_cBxIo3vXPDX145D5XLd55iGZflvNFIPg7PMMOu4WnhYaoOwBZ5-bbjExdaEVy9hUu7gJbbeFhsXggxr8AsQf_sfx1rn4vUy4O9W-n6ba_vCT-AHx08JQUuij2Y/s320/Puxada%20Aberta%20Pronada.gif",
-  puxada_triangulo:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEizCHMaH1-CnjKdCTC4vizUwjBe_M4Fe3hNRnmQk27iqR83oQq6ksFupSKKu7iYgAOb_dYdC7cF2O3vfolGxI0BaToCJycKm3TA7qsdnVDkIB634TBWDPyerNDPuExgkAhCAZKtqM1r9cxdDyHUYsqiG1aXSV2sw2oVwydvMs-EqnEzV8FkgiVglg6iNVD/s320/puxada%20pegada%20neutra.webp",
-  remada_cabo:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiBRRezSBjDCOOX-ZkvqiB9IbuoHiVD4_6tkFEmAjweG6uSnWjr9Q2shwMOH08Wb_Uov4gYX4_a8BWNkzMAZXBVqknocer7pryANf5-A-3WMHf4MwyarzyH8HRyDRJuJo3V3wHtFUiqJbIQ1LkTDQCwsDbrraV0lmZ19kT1YfQxLdREDFUKtDA-5iF0QMmO/s320/remada-sentado-com-cabos-e-triangulo-para-costas.gif",
-  remada_robo_maquina:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhGKD7ho_parTAsF5liaIhNhBX6GqTDQQWlU2SGjnv-XSaxFXr7D4gA4TZj5t1Gg7isj7xgqdM3upuwAyZFGkqxr2qJbVnC5VUCedMTM24rxCzBfjb4V5eRBqxlUQhnccZhVsMbScG_vuJF3xZu2sRw9xlhuCWVPqZj3Pt3Hyrtc3mbPeyVO5EzhAQLh8U/s350/Remada%20Rob%C3%B4%20Maquina.gif",
-  remada_supinada:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgcUWqROMi45dCVfo4WmoK4pUV42jaH3_ltlLNg3xRGLJMtVxkAZ4Fxbb3fdWqiR-PvU4jch6rOJfFE17cw6MpyyEjIvGN6p-FkfN_5BWsZU6txxuvN33t8q4jUKLsLAPU3NcLBM6u99EKXOl_ZpOgYYd0Ls_IxLrafmhSn_k1gnijvTxyvuNExhy9uPaUm/s320/remada_75622.webp",
-  remada_neutra:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-iTTPtLpKol09520imNMNMJHiFMV0hWClg3FGqYnC1T2kzwOYfg3tt2dahdT01avLsCk70EkfHW-zuiYskmFV1QnOnF64G7MY_ojnPK7ZIXZiC2nt5OYZq5ABZFjzhKY_8aPhiCirJndO6JXG9EXCkULRi0EPaEoBfXsgZRuk0ZoQpzkquTT6sU5x6hk/s360/Remada%20Baixa%20Neutra.gif",
-  remada_halter:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhQLN29H1kdHcPsYAHctV9H5KDZc0LXdGKxH4sFfH6g6uybArmKK-IJMOZBslj2gsOt3jHGqSQAnQOW_49fy-hQfdCmQVG67CFYpA_8OUR82v0PLBqAYQ-YB4pmYbNbP5Jc17G4DHFC-fB5LvmxOM7jpXRwPEAEcZxolO99Di2EufNF_mnmQfe_YdWOm9aR/s320/remada%20baixa%20supinada.gif",
-  woodchopper:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEisanRoACXnWDYJXmUo20MZsK37i4PD7MzC6n45VZU04DKmXfmjkw942bnh2g5T_LiiHvDXAi6LrF8tsTvo7KmMtDHrK3g3GNqTSKNU12tBIGWU_BlFfFy9egi8oZ-q-cjSQyLe3XDmM-bQ2SmzZM798s-bFSI6myMh0V-zsznKUrTKTd_ZMgBoMB4-KSE/s360/Woodchopper.gif",
-  pallof_press:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiuhG-vgiiMuZJL0KUqgmNQvbiqnwqwF3A8GrFn25ipHqiGBqwbh19rOJDAP5YPOTs4o3eNleeO1PQHzYsGgbstXlT4WXZzYs5CY3FE-LLrqDRyLVtlsN9L6p3MQDsOfVjGvzpBe_08PHRFeMFH8GqBFXHSVJ_DewtkwGE3CeZBXIXpM-iLBKcqonNHfSw/s360/Pallof%20Press.gif",
-  russian_twist:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhKZTVtneoql1Ocq5LQy_cMMQ0FuyROt1qMp88itPVLay55q-3BL1IhrluILspU-9fh2aZKi7yCbR0LJE_QG7Aa1QWGV_qBJd8FZ4DmnZR_-urRRASvbhKGCptZ00dfQHzFf7qZdyTH6Pscl_AZAIJdMmelyNWRjozU68h2raYkxOdhYoYOGQGpRikd_Sk/s720/Russian%20Twist.gif",
-  prancha_aranha:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEioggFwYlgUbfyUTKaniQRutdzuciCYHM1qLFiTc41OtPSM62fllG4MBAXfhfP4EccoadG1u_Dow8a6bxxe_kWLMtC6wZvIlozTIG9RAgf8za8Ikf32ONzTycSX_lYJLkALN2FHQWzm87jYyFf8SqQoeLW2D0mTQrPWmdzQiqrFBaO8JjAlr3QhIyENJB_I/s320/prancha-com-elevacao-das-pernas-prancha-aranha.gif",
-  rosca_direta_w:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYS1giLHNnd-Z0YoLoA9bOtBJEbhBIzdmKjSn-vAEi-mHGzIOX-eBSSsLQtKfDJWuw2wNALGt_P10geppAn9S8ytCoHk_Xi-nToJ3awzSo91hNwUTWP69QRFIDsf4OyGn1u2VTkD9Yi7UT-XjT1Sf_uWyZAR23i8AkQYjVUvUAA3SWs_aChpwHMrmHnJ0L/s320/rosca-biceps-direta-na-barra-ez.gif",
-  rosca_direta_polia:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjzuDcFLYhp8UBKsHj4loNMekCBUs_28i2zr6UXqPgWhWQaT26X5hObkEKyF2JdFYgGimpU8nIxt1UPho925Qmf2sodh4lQ6Pf6rYfGAKfB6baylOxrW4n1HcQmI6vzR2MymLA9fAAFx8dGJ6pw4lqURewGHGv3lbxI7kD94SNaWPIONX7wW3wiQORHb_4/s360/Rosca%20Direta%20Polia.gif",
-  rosca_alternada:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMtWob3qOj_wZw8Kd0dJUOLcnSS7IIVZ25UGfIGraEJ3xBAwIT36Q2IEU7_U_DS7LA3NVZzeBToSbxVgTk-lUUBvqZseO8hqYoNYQ1y21SBgMbCDKIr2HRna9ExmVfxLx817NQ3usPsCYNSHSsKSR0F0se-D3ng-iwxL0aN-F9iFDHqHwRk9HAqZCE0CY/s360/Rosca%20Alternada.gif",
-  rosca_scott_polia:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiJdYmTYOmk69o-HnWVey7O0jdOJr7S4hmBzecxaH7cw8diFVphN8DCFbFYHVu2uI8c83mazwvKxHyVcP6A_FI8kbIvWBY1H3JAlbYHvFvkoiAG9L6rsqLySgnSwASiFjFHpObU2PHq5qssTvmXr2whlthIMYkjPHAjCt-uRQoNkeS142YhRYtYevnSAw0/s360/Rosca%20Scott%20Polia.gif",
-  rosca_martelo_halter:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgsqpE8SINUqvUebkf43mIEw_pekPCAPrzMmps8srja_o0gZeq9nOmiVh0PtieYFOutM597sgj1Dt1XJ64o2NYaR_VGcwGenJl2AOl786TnA1FFINc-kY1D8Mw-9D-80MISsw4bh4aPAI2TivQrNDhGcMQRD7XJnld7axg_Nx1arI9DIoxyD8kvxq_owx9q/s320/rosca-biceps-martelo-com-halteres.gif",
-  rosca_martelo_barra:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4KugCbisT5BuemnP74V58oZNcIJxnga3NoJ2wFO4A3w1ZCASHHNYogA656pfIWYGVYW2NTMKfad3VngwqMtW7MGS8raIt3tlIpx6w_7KCePe-OJ-j8CBisrqSC3lQmFip6ueT5JrGhmhQ8-VGfS1G9i8QciDTwCaqGP6rFtUewEWa6Gal6_xCbmozXI8/s660/Rosca%20Martelo%20Barra.webp",
-  rosca_inversa_w:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgc8tDuGs-YBQYJgQxVjjkYfpGdJfBeCPcoc1-fW1GGPXOi8wQEToWHTkHIU-1fdE7WTYzez1ji_7NSof1gbNnFApvrEdOaVlvxUmpIPaobGzOISgmLHY1tnpaGXANszyulg9AIRuH8k90SGjQUHWrfaEh_1zD389DuiVRJptSOxwuVdbtkvsdP_wTW8FZh/s320/rosca-inversa-barra-w.gif",
-  rosca_inversa_polia:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-6zY6d2wJO12jLdnGl02DEf-Xq361HtFJ0qEn-fn_DEjKj-t4eNi63kJu2g-GcqI9fVYvHl50Em-eMipMUxu58RdKP6vVF2zRNNfzkdex0q_zHtMP4E3xAyi2PXJdJcmq7Dxx-O7j_ANJ9TOnls7eoldQNewtmL5R2UkMZcVl57f4IqDgLwxbydvQB9w/s550/Rosca%20Inversa%20Polia.webp",
-  adutora:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjr8umZf0EOL_fmvJg7PUEekch0IVNyj-5Kq2Lrps4AYOnteL7_OKVabO1w5qvVxMwUHK68Pr9ScTqDBOg4EK5zYMdSKcxFeXmS1lS0dDEM5Uw5jvJVwVKbd_IgPGhLOH4Gs7YzNTKr_NEI9jFSujW8pvRcSIDW5FEGiwMedj49p4opHqRS1yACYKCkIsk/s320/Cadeira%20Adutora.gif",
-  abdutora:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhThVCxbDvJkK1BXa3wWspuzxtZDD3UXPZh4CiS7Ht4LhY3Pjn0AzymZTkJwHi1KPdITnfpYSAtmJQzTZWUBSAwEDYz0Pfh5TfusI_u0bVlDfR6xLeEfzQH-RNo24ajIh73xRBUy35gmxcLScOPSBbPgvZJJZ_h7qicxEMUDTwHbuvokiKC2BdJ3BBjWoc/s320/Cadeira%20Abdutora.gif",
-  agach_smith:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj5IE2wju_hKce1hHrZ2CohzqT6dRNiULSpjpqtM7mn6OnWJhPP9j_xM7SNpgYpSp7L8dZhPnF0bdI3VSafCAppg5sP76VJZSLm67tZ9TqzXbZe9XtACnbVuLAcIieHyLGHYi_8s-BefbSUsUSKQ2rqB8gzTeca_TW2CcCJuPPs3fIj0NG2XKCtsjpR4Igz/s320/smith-full-squat.gif",
-  agach_smith_frontal:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEihl_RIQEJJM6CVp3SREdLkT7wWtoZDQpp3YKJIyZTH2Tzhk28F-UtBYKnpyblM6lQsuJ5iafBcn9PIjIC83Kt8c5Zmz0C5S-ZiyfC4qIY7qHB_AkpQ8P7Rs_4_88r-rWN__kBbH6LwadiafzAVsuGBeIFOdJwljdOz1vIomk9WIvYnF0VyaLqf104nggQ/s320/Agachamento%20Smith%20Frontal.gif",
-  agach_taca:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg_-GOPuryUhELla4ijHcExnIUNG_6Bbwdu7Evq8RlvwP9-JBti7h3Jx1xgqAfw-9TkKED8Q2i8DW29VNapkPA55geyHipZyQosbJxyMAbWHvuo1OoPz73mDouejck_nNZXIbIg39Bhc5ilCEKLunXGsfvVzQZeRjrXMy8vPisX3GdIC6AHS9UY52N6CFE/s320/Agachamento%20Ta%C3%A7a.gif",
-  agach_sumo:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh-GEjmurbGLr3zTAV-dABvN0wobmfbM_OsbpCF5k2ZbHvNPZAPBiBVJyCPYt_JIZeh8znst5NxOkmN9EEOUcLHhRIPq0S7vJslC4OOECbGpZi2Xu-nKlCmejH714qosDEQ6w6uoV82Ictqi6HD9lCrfTTL7Zs7fUnw1g9__-8l68gJWwNqiFgQd3WAVhXC/s320/agachamento%20sumo.gif",
-  leg45_bi:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhOrXfwcMItcGjU4j0A_sQ69SYwJrKhzn835z31dyXigksQqeRmnPvr8gUh0vWWi0eJEXaan4a0O9D0tEnp088aIfd50I_qPNnqJS_5qeXkaDNpSP3uCCfgY5PWZRE7HNHS1wAdutvp2ve84ZWaOQpkk0kDcs8dMQM2ObcydYs_Aau996LQfJgwKu22gvPw/s320/pernas-leg-press-45-com-pes-distantes.gif",
-  leg45_uni:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjmOhyoJT4CiXzLFtS-e_3U_q7zBI_kokMlJ8TwqFPBpu2kPZBKM0aG96D9GWKn6Xse6Fiz5Frv1_JUviMssWHu1k4Y7O2tluHj-cSvW7U9duYETbH1HiSsWURXFF2oLbG5W_tbOR_tQmiMlxfcw5Z0o2L11kJb4bICqF-mcjO45Gp17FHV_D0IBl6aUJw/s360/Leg%2045%20Unilateral.gif",
-  extensora:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjQeImiVd8K4PDrfGSJTytt2BJGGa83b64LPbkqNab8bpFN6Da9OERMbV4JHVH_u2nPabgTgfZ5ptZg90C4FZL4MG9amYjkU_B-ywzr7-a0F4RySs5a32jpwNRiK6TYtD3Qs9BB1yhtZo7o87_XJtTKkxMFCHqQ78Ach7On1S3hi47wpUXh_urDU9bFfaop/s320/cadeira-extensora_75064.webp",
-  extensora_gif:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgkGL4Y7ZIBdFW7jOPWyVDh-3J4nQDEcf0ujxX1mwEh3SAm1QV1W8eYmUQx-yZelbO9m98Gwg_5ObHqM3kHwoQwZoKn6CM9SBF_gPqv4M7VGwTePqljiWZk71sqeAIEjH8YP_u6ThY24BBtZKMV_rUzNeDPvCJSANcEjBzTaYl0gh1AJe8F-slJxsUo4G4/s1600/Cadeira%20Extensora.gif",
-  sissy_squat:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjqphmX5rXZQaxtjbdV9LF-n4BIYk_Ke5_QNOUFgc3w5aXbPt7DHAqOazB07PMMuj3zbe3z9FfmjSy3VU_EyvKNwYiV3-NnrdFAPEMrFL7YWzPS7eQ_AfvgJJnAwW_F9s_rp28Y6RCKWVrbnnRXz9BvVG6-Bf0XoJxnEUYIBpUACoXJ01vqDpOXkZPzGnM/s360/Sissy%20Squat.gif",
-  flexora_deitada:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh0eDFeZfcpp6IhYeOdd3Hb_U3H-8EM-xRM7wbrM_bacWs2eafMLLWblrpw9PfgnbZE-l4p97hqx02z54GyV4q0BkRT34M7qbCM74YDtkPuWMnZHUJgKoH_LOgegrECzMubDFgMZsy7Ggthi_vXl8xuN_vmFD4RI8MrP9DbvpXPqtXdYgW_DKpDuN7m78bE/s320/mesa-flexora_75623.webp",
-  flexora_deitada_gif:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTznC3Iwje2aAw0jiVzxmbJbuYywMRr2y4k2Ssn49utOyxJPjRbreAqbTqmG8VE68-iX0cmWnLgRXDBkJWjvotFQggcyt0S_CU7RLQOeHSC6cDv1NIr9YKK0JGuBrIamzu-G_GAqtIrV0gS-1cTV7daZBMSxkBm5LmdGXRbq06Kb0fvb7FsORQQjKtgXo/s1600/Flexora%20Deitada%20(Bi-set).gif",
-  flexora_sentada:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh4Qrv0cawPVBWvdO19Ok-0cILXnp1yXU87WHNqFotvxHSuC6LACvl70hHaPjyNsoEMD1EhL2jQQjlZgh3W6hw3RBaEdGvaO-9X14Ova34G6-BJeNS95svdAJuI9R3vY-qdxhmY4Q4p0XdDyePDfdFO4QyPOwi12P2CCYWd-epomNI-SYzrPxDkM3qlXJI/s360/Flexora%20Sentada.gif",
-  stiff:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgKqEeulJx4YnXPYs7EQNz_rkhAq8WMJZgpqPbhigMuHyk8juPFEjstTNRTccC3_GiBaYEGkWRemZ0IGx0XR90YIULlLRClwI4Inbe7wJ8AhJ2v6SHD9kBj1NCRY1NZftxF_p66T-NML5vAf9Bh-vhGx2BBh4_UuWC_2aS6by59Rcxh-yomy16URxLIk9y3/s320/stiff-como-fazer.gif",
-  stiff_gif:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgWNQ0dvfVVYgFyGcUzQBNQNhamqa1Ra4h4Z8OCPZ0xyHXuhapsIYjEnTva0eUXi_b91XiQcpQsboxQIT7uXX-gTkX9WyEpoHboh7HBHltWGHdYah8Oq2rZIT5b59oyjCInJo9A2zicXslp0A8unS5m7iAhiTka-9vLqqK3Ltk_7l8_wf3CSjyfOnB-Ivk/s1080/Stiff.gif",
-  stiff_halter:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhkOD5O5cpiUhXZHh7I2J9d6Hkq4SinLpBNgx8ogOa0qv0o_n6PHKvN45dM5dIMR-TmJ8WINIbUMC44VCCKNPSGEbNeEQrRz5Hr8lIU_3chgobz0CBiuZREOoUvTwjegEa3vDwXu9_nYthk-Tj2aZj7SA2iUDQ-BC-p1SsjYRkDmaH91Y8g2nsRgXTzi0Cf/s360/levantamento-terra-deadlift-stiff-com-halteres-1.gif",
-  rdl_uni:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrkKt7Rm5XYo_9eFop0UfwlhvCUZMWulHVdU_CyZdpaNeZlvxub8NpLaax---1p9eaW8_2Eebi2oh6iI5i6DJT6HWQ9tjI5KYiHBUq2c2LpXUpBkCaiB1aM1w2cHzYIB1o50uXygmwAfOI5lxAgYHN8zGTwsfW7ZKmqoHSpfftmXj6QIAZryD5-jhbWgxL/s320/Terra%20unilateral.gif",
-  elev_pelvica:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9cIJ_fLt8r4DDbdg02eLArP6jryNLYiQgOpPoisEza-G6g4YgjYPYRdPcx74WDqf674hKBrV24MDSUnlFd9ut0Y_-Uae9313pUvhW3GECaQBOtY8jYE8qErTZSBuEy9Io-XrF3IWpEiHKyVlRH1_EVK2CaD20EtlcXBLYG30eXNKGkvo-olUIPVN9fus/s360/Eleva%C3%A7%C3%A3o%20P%C3%A9lvica.gif",
-  elev_pelvica_uni:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjllx8EOmVY5qe5Ip2GPYiB3B8QvzXtQj5Bz2Hwid9EKkAsc6YYI38SXMECTjhdWbOpM7PldYF6tVnwNaEgMq40kDOld3Gsv2zc0pKqYRozzGt3lyWLb5UTOoC4twbI4dku3c4ZJYU2fifKNSIOu2FBWezo1nY6eDtCKkyWEmiPuSv5iMLFdptD6wpRK8E/s360/Eleva%C3%A7%C3%A3o%20P%C3%A9lvica%20Unilateral.gif",
-  gluteo_maquina:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi17ndq2JIWA222RLVm2lwfXzGA_Pwe1IYpelwrWe0pAWWZ7D-wRj04q98VaY_-roI9F-A8Khg6k7MY9hvjeoemVAVVQ_WkjkPsEegfS4DS6lmORtE57GLw9ab0nHawjzSPWMGai33JKoYse7r1VKAjWZSiIs5xe-Ux_CUOHBlPrJexrNFHv6FBCmrYumqV/s300/Gluteo-maquina-4-apoios.gif",
-  gluteo_polia:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh8rlCdrHGiD50PhpYe2BL1Lcj_wuNyiJ0PkIEMyGEMyhHm5D0Puf5qe-VDeEsmDG5sLdWzbGJXgLMNpgNQG_rfCdBxk2JmCa6U2TFBSQ9QwlaBuBTaWp2e5JClXMdXHF_6WUTag5_dsQbSCBlqoC1bmUl72HhncIxnunuWTI8Jwo7DRTXUKuSpyeBkydMl/s1080/Gluteos%20na%20polia.webp",
-  abducao_polia:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi9KpleJn6BzZDuype4svX16vZMLV5IQ_bw-rWdigk2750SsJkffXbjTNL0E8tXcsS95wUU9-49XMGpRtHgyFjmuq7gwLIHkBqEG1CdLshSQtW--fTA1djzLg3lewL9iEczTgXEuqANHxiB2zxR84vkuKTHNLTnVdXtTs5JD6f5jY_d0B-EI4G5SrsivMU2/s320/62_Abducao-de-quadril-na-polia-baixa.webp",
-  crucifixo_maquina:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgkpJq6VdN1znPPE32gcNgoAIzmQN0AVKlnb29jnPGeb9SQXOUNAxT0O9jwtpRgDoJU05UnBYYjWHwr-5CxXLf8OfeiUlpnQ4-k_gRmnySZ-B1KOpIHIDWI29FniD_9BPn6383EOvszG0kU7kby12a0e4ZI5WvHMsfYXWZFur_lc7YKdLx2prZDTtaeogBH/s320/crussifixo%20reto%20na%20m%C3%A1quina.jpg",
-  rosca_martelo2:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg-LIENodNV5VcCsXmy2PUshJqOyG4JxQMnuJcG4_Ai3eBQ4O4XBl-kW2JPGYw7rINEAX_wzOLM8a3_HRMDq_0GCDNz6ZHpW4K0ZUZpGQ2zxHx2JKKqe9EVg2eYz7GTx9lHkdblAY5tVr8-P6J6AITSKw9QvOp9UOSycyL68jOOHjzjikkQdudjmE1bansi/s320/rosca%20martelo%202.gif",
-  rosca_direta_w2:"https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj9TMuUB7UzKTkHb25Iwr3f7zIUjORozrfqcTL3gAqo92Bmgk10LPxsxhkUVfnx3EEpD6dCKjv5YO0ld4XibkoD-N2iBAjk1iL1gPbf5WB1Kvxhr0oTyI9pnxJireJ4HXXAdVpM5Snt1JXUqSrYeS_jfewq0vPBu-D9hZllwMSr7c_DUQaZDORLAjsWYFeH/s320/rosca%20direta%20barra%20w.gif"
-};
-const LABELS={costas:'Costas',peito:'Peito',ombro:'Ombro',biceps:'Bíceps',triceps:'Tríceps',core:'Core',gluteo:'Glúteo',adut:'Adu/Abd',pant:'Panturrilha',posterior:'Posterior',quad:'Quadríceps'};
-const DB={
-  marcio:{nome:"MÁRCIO",sub:"Definição & Força",color:"red",defaultTheme:"dark",planos:[
-    {t:"A: PEITO / OMBRO / TRÍCEPS",grupos:['peito','ombro','triceps','pant'],ex:[
-      {biset:true,g1:"peito",n1:"Supino Incl. Halteres",r1:"3×10",i1:GIF.supino_incl_halter,g2:"peito",n2:"Supino Incl. Barra",r2:"3×10",i2:GIF.supino_incl_barra},
-      {biset:true,g1:"peito",n1:"Supino Reto Barra",r1:"12,10,8,6",i1:GIF.supino_reto,g2:"peito",n2:"Voador Máquina",r2:"3×12",i2:GIF.voador_maquina},
-      {biset:false,g1:"peito",n1:"Crossover Baixo",r1:"4×10",i1:GIF.crossover_baixo},
-      {biset:true,g1:"ombro",n1:"Desenv. Máquina (Uni+Bi)",r1:"4×10",i1:GIF.desenv_maquina,g2:"ombro",n2:"Elev. Lateral Polia",r2:"4×10",i2:GIF.elev_lateral_polia},
-      {biset:true,g1:"ombro",n1:"Remada Alta Smith",r1:"4×10",i1:GIF.remada_alta_smith,g2:"ombro",n2:"Elev. Frontal Polia",r2:"4×10",i2:GIF.elev_frontal_polia},
-      {biset:false,g1:"ombro",n1:"Facepull",r1:"4×10",i1:GIF.facepull},
-      {biset:true,g1:"triceps",n1:"Tríceps Barra V",r1:"3×12",i1:GIF.triceps_barra_v,g2:"triceps",n2:"Tríceps Corda",r2:"3×12",i2:GIF.triceps_corda},
-      {biset:true,g1:"triceps",n1:"Tríceps Uni Horizontal",r1:"3×12",i1:GIF.triceps_uni_horiz,g2:"triceps",n2:"Tríceps Inv. Unilateral",r2:"3×12",i2:GIF.triceps_inverso_uni},
-      {biset:true,g1:"triceps",n1:"Tríceps Testa Barra W",r1:"3×12",i1:GIF.triceps_testa_w,g2:"triceps",n2:"Tríceps Polia Corda",r2:"3×12",i2:GIF.triceps_corda},
-      {biset:false,g1:"pant",n1:"Panturrilha Smith",r1:"4×15",i1:GIF.panturrilha_smith}
-    ]},
-    {t:"B: COSTAS / CORE / BÍCEPS",grupos:['costas','core','biceps'],ex:[
-      {biset:true,g1:"costas",n1:"Puxada Neutra",r1:"3×10",i1:GIF.puxada_neutra,g2:"costas",n2:"Puxada Pronada",r2:"3×10",i2:GIF.puxada_pronada},
-      {biset:true,g1:"costas",n1:"Remada Robô Cabo",r1:"3×12",i1:GIF.remada_cabo,g2:"costas",n2:"Remada Robô Máquina",r2:"3×12",i2:GIF.remada_robo_maquina},
-      {biset:true,g1:"costas",n1:"Remada Baixa Supinada",r1:"3×10",i1:GIF.remada_supinada,g2:"costas",n2:"Remada Baixa Neutra",r2:"3×10",i2:GIF.remada_neutra},
-      {biset:true,g1:"core",n1:"Woodchopper",r1:"3×12",i1:GIF.woodchopper,g2:"core",n2:"Pallof Press",r2:"3×10",i2:GIF.pallof_press},
-      {biset:false,g1:"core",n1:"Russian Twist",r1:"3×15",i1:GIF.russian_twist},
-      {biset:true,g1:"biceps",n1:"Rosca Direta Barra W",r1:"3×10",i1:GIF.rosca_direta_w,g2:"biceps",n2:"Rosca Direta Polia",r2:"3×10",i2:GIF.rosca_direta_polia},
-      {biset:true,g1:"biceps",n1:"Rosca Alternada",r1:"3×10",i1:GIF.rosca_alternada,g2:"biceps",n2:"Rosca Scott Polia",r2:"3×10",i2:GIF.rosca_scott_polia},
-      {biset:true,g1:"biceps",n1:"Rosca Martelo Halteres",r1:"3×10",i1:GIF.rosca_martelo_halter,g2:"biceps",n2:"Rosca Martelo Barra",r2:"3×10",i2:GIF.rosca_martelo_barra},
-      {biset:true,g1:"biceps",n1:"Rosca Inversa Barra W",r1:"3×10",i1:GIF.rosca_inversa_w,g2:"biceps",n2:"Rosca Inversa Polia",r2:"3×10",i2:GIF.rosca_inversa_polia}
-    ]},
-    {t:"C: INFERIORES & GLÚTEO",grupos:['adut','quad','posterior','gluteo','pant'],ex:[
-      {biset:true,g1:"adut",n1:"Cadeira Adutora",r1:"4×15",i1:GIF.adutora,g2:"adut",n2:"Cadeira Adutora",r2:"4×15",i2:GIF.adutora},
-      {biset:true,g1:"quad",n1:"Agachamento Smith",r1:"4×10",i1:GIF.agach_smith,g2:"quad",n2:"Agach. Smith Frontal",r2:"4×10",i2:GIF.agach_smith_frontal},
-      {biset:true,g1:"quad",n1:"Leg 45 Bilateral",r1:"4×10",i1:GIF.leg45_bi,g2:"quad",n2:"Leg 45 Unilateral",r2:"4×10",i2:GIF.leg45_uni},
-      {biset:true,g1:"quad",n1:"Extensora",r1:"3×10",i1:GIF.extensora,g2:"quad",n2:"Sissy Squat",r2:"3×10",i2:GIF.sissy_squat},
-      {biset:true,g1:"posterior",n1:"Flexora Deitada",r1:"4×10",i1:GIF.flexora_deitada,g2:"posterior",n2:"Flexora Sentada",r2:"4×10",i2:GIF.flexora_sentada},
-      {biset:true,g1:"gluteo",n1:"Stiff",r1:"4×10",i1:GIF.stiff,g2:"gluteo",n2:"Agachamento Sumô",r2:"4×10",i2:GIF.agach_sumo},
-      {biset:true,g1:"gluteo",n1:"Elevação Pélvica",r1:"4×10",i1:GIF.elev_pelvica,g2:"gluteo",n2:"Elevação Pélvica Uni",r2:"4×10",i2:GIF.elev_pelvica_uni},
-      {biset:true,g1:"pant",n1:"Panturrilha Smith",r1:"4×15",i1:GIF.panturrilha_smith,g2:"pant",n2:"Panturrilha Leg Press",r2:"4×15",i2:GIF.panturrilha_leg}
-    ]}
-  ]},
-  manu:{nome:"MANUELLA",sub:"Hipertrofia & Precisão",color:"blue",defaultTheme:"light",planos:[
-    {t:"A: INFERIORES & GLÚTEO",grupos:['adut','quad','posterior','gluteo','pant'],ex:[
-      {biset:true,g1:"adut",n1:"Cadeira Adutora",r1:"3×20",i1:GIF.adutora,g2:"adut",n2:"Cadeira Abdutora",r2:"3×20",i2:GIF.abdutora},
-      {biset:true,g1:"quad",n1:"Cadeira Extensora",r1:"3×12",i1:GIF.extensora_gif,g2:"gluteo",n2:"Agachamento Taça",r2:"4×10",i2:GIF.agach_taca},
-      {biset:true,g1:"posterior",n1:"Flexora Sentada",r1:"4×10",i1:GIF.flexora_sentada,g2:"posterior",n2:"Flexora Deitada",r2:"4×10",i2:GIF.flexora_deitada_gif},
-      {biset:true,g1:"gluteo",n1:"Stiff",r1:"4×10",i1:GIF.stiff_gif,g2:"gluteo",n2:"Sumô",r2:"4×10",i2:GIF.agach_sumo},
-      {biset:true,g1:"gluteo",n1:"Glúteo Polia",r1:"4×10",i1:GIF.gluteo_polia,g2:"gluteo",n2:"Abdução Polia",r2:"4×10",i2:GIF.abducao_polia},
-      {biset:true,g1:"pant",n1:"Panturrilha em Pé",r1:"4×15",i1:GIF.panturrilha_pe,g2:"pant",n2:"Panturrilha Leg Press",r2:"4×15",i2:GIF.panturrilha_leg}
-    ]},
-    {t:"B: SUPERIORES / CORE",grupos:['costas','peito','biceps','triceps','core'],ex:[
-      {biset:true,g1:"costas",n1:"Puxada Triângulo",r1:"3×10",i1:GIF.puxada_triangulo,g2:"costas",n2:"Remada Triângulo",r2:"3×10",i2:GIF.remada_cabo},
-      {biset:true,g1:"peito",n1:"Voador Máquina",r1:"3×12",i1:GIF.crucifixo_maquina,g2:"costas",n2:"Remada Halteres",r2:"3×12",i2:GIF.remada_halter},
-      {biset:true,g1:"biceps",n1:"Rosca Martelo",r1:"3×10",i1:GIF.rosca_martelo2,g2:"biceps",n2:"Rosca Barra W",r2:"3×10",i2:GIF.rosca_direta_w2},
-      {biset:true,g1:"triceps",n1:"Tríceps Corda",r1:"3×12",i1:GIF.triceps_corda,g2:"triceps",n2:"Tríceps Coice",r2:"3×12",i2:GIF.triceps_coice},
-      {biset:true,g1:"triceps",n1:"Tríceps Banco",r1:"3×12",i1:GIF.triceps_banco,g2:"core",n2:"Prancha Aranha",r2:"3×45s",i2:GIF.prancha_aranha}
-    ]},
-    {t:"C: REFORÇO TRÊS GRUPOS",grupos:['ombro','core','gluteo','adut','posterior'],ex:[
-      {biset:true,g1:"ombro",n1:"Elev. Lateral + Rosca Alt.",r1:"3×12+10",i1:GIF.elev_lateral_polia,g2:"ombro",n2:"Elev. Frontal + Tríceps V",r2:"3×12+10",i2:GIF.elev_frontal_polia},
-      {biset:true,g1:"core",n1:"Pallof Press",r1:"3×12",i1:GIF.pallof_press,g2:"core",n2:"Prancha Isométrica",r2:"3×45s",i2:GIF.prancha_aranha},
-      {biset:true,g1:"gluteo",n1:"Glúteo Polia (Coice)",r1:"4×12",i1:GIF.gluteo_polia,g2:"gluteo",n2:"Glúteo na Máquina",r2:"4×12",i2:GIF.gluteo_maquina},
-      {biset:true,g1:"adut",n1:"Abdução Máquina",r1:"4×15",i1:GIF.abdutora,g2:"adut",n2:"Adução na Polia",r2:"4×12",i2:GIF.abducao_polia},
-      {biset:true,g1:"posterior",n1:"Stiff Halteres",r1:"3×10",i1:GIF.stiff_halter,g2:"posterior",n2:"RDL Terra Unilateral",r2:"3×10",i2:GIF.rdl_uni}
-    ]}
-  ]}
-};
-let manualOverride=false;
-function applyTheme(t){
-  const icon=document.getElementById('theme-icon'),label=document.getElementById('theme-label');
-  if(t==='light'){document.body.classList.add('light');icon.className='ti ti-moon';label.textContent='ESCURO';}
-  else{document.body.classList.remove('light');icon.className='ti ti-sun';label.textContent='CLARO';}
-}
-function toggleTheme(){manualOverride=true;applyTheme(document.body.classList.contains('light')?'dark':'light');}
-let currentProfile=null,currentPlan=0,checkedSet=new Set(),activeFilter=null;
-function showProfile(id){
-  currentProfile=id;currentPlan=0;checkedSet=new Set();activeFilter=null;
-  const u=DB[id];
-  if(!manualOverride)applyTheme(u.defaultTheme);
-  const hb=document.getElementById('hbadge');
-  hb.textContent=u.nome;hb.className='header-badge '+id;
-  document.getElementById('workout-name').textContent=u.nome;
-  document.getElementById('workout-name').className='workout-name '+u.color;
-  document.getElementById('workout-sub').textContent=u.sub;
-  document.getElementById('screen-select').classList.remove('active');
-  document.getElementById('screen-workout').classList.add('active');
-  renderTabs();renderPlan();
-}
-function goBack(){
-  currentProfile=null;manualOverride=false;applyTheme('dark');
-  const hb=document.getElementById('hbadge');hb.textContent='SELECIONE';hb.className='header-badge';
-  document.getElementById('screen-workout').classList.remove('active');
-  document.getElementById('screen-select').classList.add('active');
-}
-function renderTabs(){
-  const u=DB[currentProfile];
-  document.getElementById('plan-tabs').innerHTML=u.planos.map((p,i)=>
-    `<button class="tab-btn${i===0?' active '+u.color:''}" onclick="switchPlan(${i})">${p.t.split(':')[0]}</button>`
-  ).join('');
-}
-function switchPlan(i){
-  const u=DB[currentProfile];
-  document.querySelectorAll('.tab-btn').forEach((b,idx)=>{b.className='tab-btn'+(idx===i?' active '+u.color:'');});
-  currentPlan=i;checkedSet=new Set();activeFilter=null;renderPlan();
-}
-function toggleCheck(key){
-  if(checkedSet.has(key))checkedSet.delete(key);else checkedSet.add(key);
-  updateProgress();
-  const btn=document.getElementById('chk-'+key);if(!btn)return;
-  const done=checkedSet.has(key);
-  const col=DB[currentProfile].color==='red'?'#E8002D':'#00AAFF';
-  btn.style.borderColor=done?col:'var(--txt3)';btn.style.color=done?col:'var(--txt3)';
-  btn.innerHTML=`<i class="ti ${done?'ti-check':'ti-circle'}" aria-hidden="true"></i>${done?'FEITO':'MARCAR'}`;
-}
-function updateProgress(){
-  const plan=DB[currentProfile].planos[currentPlan];
-  const total=plan.ex.length,done=checkedSet.size;
-  document.getElementById('prog-val').textContent=`${done} / ${total} exercícios`;
-  const pct=total>0?Math.round((done/total)*100):0;
-  const fill=document.getElementById('prog-fill');
-  fill.style.width=pct+'%';
-  fill.className='progress-fill'+(DB[currentProfile].color==='blue'?' blue':'');
-}
-function renderPlan(){
-  const u=DB[currentProfile];const plan=u.planos[currentPlan];const acR=u.color==='red';
-  let html=`<div class="plan-header"><div class="plan-title">${plan.t}</div><div class="plan-count">${plan.ex.length} exercícios</div></div>`;
-  const grupos=[...new Set(plan.ex.flatMap(e=>e.biset?[e.g1,e.g2]:[e.g1]))];
-  html+=`<div class="groups-bar">${grupos.map(g=>`<span class="group-chip" onclick="filterGroup('${g}',this)" data-group="${g}">${LABELS[g]||g}</span>`).join('')}</div>`;
-  html+=`<div class="exercise-list" id="ex-list">`;
-  plan.ex.forEach((ex,idx)=>{
-    const key=`${currentPlan}-${idx}`;const done=checkedSet.has(key);
-    const col=acR?'#E8002D':'#00AAFF';const bc=done?col:'var(--txt3)';
-    const chkHtml=`<button id="chk-${key}" class="btn-check" onclick="toggleCheck('${key}')" style="border:1px solid ${bc};color:${bc};"><i class="ti ${done?'ti-check':'ti-circle'}" aria-hidden="true"></i>${done?'FEITO':'MARCAR'}</button>`;
-    const footer=`<div style="display:flex;align-items:center;justify-content:flex-end;padding:10px 16px;border-top:1px solid var(--bg4);">${chkHtml}</div>`;
-    if(ex.biset){
-      html+=`<div class="ex-card" data-groups="${ex.g1},${ex.g2}">
-        <div class="biset-label"><i class="ti ti-repeat" aria-hidden="true"></i> BI-SET</div>
-        <div class="ex-row row1">
-          <div class="ex-num r">1</div>
-          <div class="ex-info">
-            <span class="ex-gtag tag-${ex.g1}">${LABELS[ex.g1]||ex.g1}</span>
-            <span class="ex-name">${ex.n1}</span>
-            <span class="ex-reps"><i class="ti ti-repeat" aria-hidden="true"></i> ${ex.r1}</span>
-          </div>
-          <button class="btn-demo r" onclick="openModal('${ex.i1}','${ex.n1}','${ex.r1}')"><i class="ti ti-player-play" aria-hidden="true"></i></button>
-        </div>
-        <div class="ex-row row2">
-          <div class="ex-num b">2</div>
-          <div class="ex-info">
-            <span class="ex-gtag tag-${ex.g2}">${LABELS[ex.g2]||ex.g2}</span>
-            <span class="ex-name">${ex.n2}</span>
-            <span class="ex-reps"><i class="ti ti-repeat" aria-hidden="true"></i> ${ex.r2}</span>
-          </div>
-          <button class="btn-demo b" onclick="openModal('${ex.i2}','${ex.n2}','${ex.r2}')"><i class="ti ti-player-play" aria-hidden="true"></i></button>
-        </div>
-        ${footer}
-      </div>`;
-    }else{
-      html+=`<div class="ex-card" data-groups="${ex.g1}">
-        <div class="ex-row single">
-          <div class="ex-num r"><i class="ti ti-barbell" style="font-size:14px" aria-hidden="true"></i></div>
-          <div class="ex-info">
-            <span class="ex-gtag tag-${ex.g1}">${LABELS[ex.g1]||ex.g1}</span>
-            <span class="ex-name">${ex.n1}</span>
-            <span class="ex-reps"><i class="ti ti-repeat" aria-hidden="true"></i> ${ex.r1}</span>
-          </div>
-          <button class="btn-demo r" onclick="openModal('${ex.i1}','${ex.n1}','${ex.r1}')"><i class="ti ti-player-play" aria-hidden="true"></i></button>
-        </div>
-        ${footer}
-      </div>`;
-    }
-  });
-  html+=`</div>`;
-  document.getElementById('plan-content').innerHTML=html;
-  updateProgress();
-}
-function filterGroup(g,el){
-  const u=DB[currentProfile];const ac=u.color==='red'?'active-r':'active-b';
-  if(activeFilter===g){
-    activeFilter=null;
-    document.querySelectorAll('.group-chip').forEach(c=>c.classList.remove('active-r','active-b'));
-    document.querySelectorAll('.ex-card').forEach(c=>c.style.display='');
-  }else{
-    activeFilter=g;
-    document.querySelectorAll('.group-chip').forEach(c=>c.classList.remove('active-r','active-b'));
-    el.classList.add(ac);
-    document.querySelectorAll('.ex-card').forEach(c=>{c.style.display=(c.dataset.groups||'').includes(g)?'':'none';});
-  }
-}
-function openModal(imgUrl,name,reps){
-  document.getElementById('modal-title').textContent=name;
-  document.getElementById('modal-sub').textContent='Demonstração do exercício';
-  document.getElementById('modal-reps').textContent=reps;
-  const media=document.getElementById('modal-media');
-  media.innerHTML='';
-  const img=document.createElement('img');
-  img.src=imgUrl;img.alt=name;
-  img.onerror=function(){
-    media.innerHTML=`<div style="color:var(--txt3);font-size:14px;text-align:center;padding:20px"><i class="ti ti-photo-off" style="font-size:36px;display:block;margin-bottom:8px"></i>Demo não disponível</div>`;
-  };
-  media.appendChild(img);
-  document.getElementById('modal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
-function handleModalClick(e){if(e.target===document.getElementById('modal'))closeModal();}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+	// Don't show the lovable-badge if the page is in an iframe or if it's being rendered by puppeteer (screenshot service)
+	if (window.self !== window.top || navigator.userAgent.includes('puppeteer')) {
+		var badge = document.getElementById('lovable-badge');
+		if (badge) {
+			badge.style.display = 'none';
+		}
+	}
+
+	// Add click event listener to close button with animation
+	var closeButton = document.getElementById('lovable-badge-close');
+	if (closeButton) {
+		closeButton.addEventListener('click', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			var badge = document.getElementById('lovable-badge');
+			if (badge) {
+				badge.classList.add('closing');
+				setTimeout(function() {
+					if (badge) {
+						badge.style.display = 'none';
+					}
+				}, 240);
+			}
+		});
+	}
 </script>
-</body>
-</html>
+</body></html>
