@@ -413,7 +413,59 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
   font-size:14px;
 }
 
-/* RESPONSIVE */
+/* METAS HERO REDESIGN */
+.metas-hero{background:linear-gradient(160deg,var(--bg2),var(--bg3))}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.hero-eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--txt2)}
+.hero-kcal{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:1px;line-height:1;margin-top:6px;color:var(--txt)}
+.hero-kcal-sep{color:var(--txt3);margin:0 4px}
+.hero-kcal-unit{font-size:14px;color:var(--txt2);margin-left:6px;letter-spacing:1px}
+.hero-status{margin-top:6px;font-size:13px;font-weight:700;color:var(--txt2)}
+.hero-status.ok{color:#4ADE80}.hero-status.warn{color:#FBBF24}.hero-status.over{color:var(--red)}
+.ring-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
+.ring-svg{width:100%;height:100%;transition:all .3s}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--txt)}
+.hero-macros{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.hm-card{background:var(--bg);border:1px solid var(--bg4);border-radius:12px;padding:12px 8px;text-align:center}
+.hm-label{font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--txt3)}
+.hm-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--txt);margin-top:4px;line-height:1}
+.hm-goal{font-size:11px;color:var(--txt2);margin-top:2px}
+.evo-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.evo-tab{flex-shrink:0;background:var(--bg3);border:1px solid var(--bg4);color:var(--txt2);font-size:12px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer;letter-spacing:.5px}
+.evo-tab.active{background:var(--bg4);color:var(--txt);border-color:var(--txt3)}
+.evo-summary{display:flex;justify-content:space-around;margin-top:10px;font-size:12px;color:var(--txt2);flex-wrap:wrap;gap:8px}
+.evo-summary b{color:var(--txt);font-weight:700}
+
+
+@media(max-width:599px){
+  body{font-size:16px}
+  .workout-name{font-size:26px}
+  .workout-sub{font-size:14px}
+  .panel{padding:18px 16px}
+  .panel-title{font-size:14px}
+  .panel-sub{font-size:13px}
+  .ex-name{font-size:17px;line-height:1.25}
+  .ex-reps{font-size:14px}
+  .ex-reps i{font-size:14px}
+  .ex-num{font-size:13px;width:32px;height:32px}
+  .ex-tag{font-size:11px;padding:3px 9px}
+  .btn{font-size:15px;padding:14px 18px;min-height:48px}
+  .btn-back{width:44px;height:44px;font-size:22px}
+  .field label{font-size:13px}
+  .field input,.field select,.field textarea{font-size:16px;padding:12px 14px;min-height:46px}
+  .macro-label{font-size:13px}
+  .macro-val{font-size:26px}
+  .macro-goal{font-size:13px}
+  .topbar-btn{font-size:13px;padding:10px 14px}
+  .nav-btn{font-size:12px}
+  .nav-btn i{font-size:20px}
+  .mini-pill{font-size:12px;padding:6px 10px}
+  .progress-label,.progress-val{font-size:14px}
+  .stat-card .macro-val{font-size:22px}
+  .group-chip{font-size:13px;padding:8px 14px}
+  .tab-btn{font-size:15px;padding:10px 14px}
+  .toast{font-size:14px}
+}
 @media(min-width:600px){
   .exercise-list{grid-template-columns:1fr}
   .profile-grid{grid-template-columns:1fr 1fr}
@@ -421,7 +473,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
   .app-header{padding:16px 28px}
 }
 @media(min-width:900px){
-  .screen{padding:32px 40px 60px;max-width:700px;margin:0 auto}
+  .screen{padding:32px 40px 60px;max-width:780px;margin:0 auto}
 }
 </style>
 </head>
@@ -1115,7 +1167,7 @@ body.has-nav{padding-bottom:64px}
 <!-- NEW SCREENS -->
 <div class="screen" id="screen-ia">
   <div class="workout-topbar">
-    <div class="btn-back" onclick="goHome()"><i class="ti ti-arrow-left"></i></div>
+    <div class="btn-back" onclick="backToProfile()"><i class="ti ti-arrow-left"></i></div>
     <div>
       <div class="workout-name">REGISTRO IA</div>
       <div class="workout-sub">Linguagem natural</div>
@@ -1138,14 +1190,77 @@ body.has-nav{padding-bottom:64px}
 
 <div class="screen" id="screen-metas">
   <div class="workout-topbar">
-    <div class="btn-back" onclick="goHome()"><i class="ti ti-arrow-left"></i></div>
+    <div class="btn-back" onclick="backToProfile()"><i class="ti ti-arrow-left"></i></div>
     <div>
       <div class="workout-name">METAS DIÁRIAS</div>
       <div class="workout-sub" id="metas-date"></div>
     </div>
   </div>
+  <div class="panel metas-hero">
+    <div class="hero-top">
+      <div>
+        <div class="hero-eyebrow">CALORIAS HOJE</div>
+        <div class="hero-kcal"><span id="hero-kcal-cur">0</span><span class="hero-kcal-sep">/</span><span id="hero-kcal-goal">2000</span><span class="hero-kcal-unit">kcal</span></div>
+        <div class="hero-status" id="hero-status">Déficit · 0%</div>
+      </div>
+      <div class="ring-wrap">
+        <svg viewBox="0 0 120 120" class="ring-svg">
+          <circle cx="60" cy="60" r="52" stroke="var(--bg4)" stroke-width="10" fill="none"/>
+          <circle id="ring-fill" cx="60" cy="60" r="52" stroke="var(--red)" stroke-width="10" fill="none"
+                  stroke-dasharray="327" stroke-dashoffset="327" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="ring-pct" id="ring-pct">0%</div>
+      </div>
+    </div>
+    <div class="hero-macros">
+      <div class="hm-card"><div class="hm-label">PROT</div><div class="hm-val" id="hm-prot">0g</div><div class="hm-goal" id="hm-prot-g">/0g</div></div>
+      <div class="hm-card"><div class="hm-label">CARB</div><div class="hm-val" id="hm-carb">0g</div><div class="hm-goal" id="hm-carb-g">/0g</div></div>
+      <div class="hm-card"><div class="hm-label">GORD</div><div class="hm-val" id="hm-gord">0g</div><div class="hm-goal" id="hm-gord-g">/0g</div></div>
+    </div>
+  </div>
+
   <div class="panel">
-    <div class="panel-title"><i class="ti ti-target"></i>OBJETIVO</div>
+    <div class="panel-title"><i class="ti ti-plus"></i>NOVO LANÇAMENTO</div>
+    <div class="panel-sub">Use a IA (texto livre) ou entre com os números</div>
+    <div class="btn-row" style="margin-bottom:14px">
+      <button class="btn ghost full" onclick="goTab('ia')"><i class="ti ti-sparkles"></i>Lançar via IA</button>
+    </div>
+    <div class="field"><label>Descrição</label><input id="mn-desc" placeholder="Ex: Almoço"></div>
+    <div class="field-row">
+      <div class="field"><label>Proteína (g)</label><input type="number" step="0.1" id="mn-prot" inputmode="decimal"></div>
+      <div class="field"><label>Carbo (g)</label><input type="number" step="0.1" id="mn-carb" inputmode="decimal"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Gordura (g)</label><input type="number" step="0.1" id="mn-gord" inputmode="decimal"></div>
+      <div class="field"><label>Kcal</label><input type="number" id="mn-kcal" placeholder="auto" inputmode="numeric"></div>
+    </div>
+    <button class="btn full" onclick="manualMeal()"><i class="ti ti-device-floppy"></i>Adicionar ao dia</button>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-chart-line"></i>EVOLUÇÃO (7 DIAS)</div>
+    <div class="evo-tabs">
+      <button class="evo-tab active" data-evo="kcal" onclick="switchEvo('kcal')">Calorias</button>
+      <button class="evo-tab" data-evo="prot" onclick="switchEvo('prot')">Proteína</button>
+      <button class="evo-tab" data-evo="carb" onclick="switchEvo('carb')">Carbo</button>
+      <button class="evo-tab" data-evo="gord" onclick="switchEvo('gord')">Gordura</button>
+    </div>
+    <div class="chart-box"><svg class="chart-svg" id="metas-evo"></svg></div>
+    <div class="evo-summary" id="evo-summary"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-flame"></i>DETALHE DOS MACROS</div>
+    <div class="macro-grid" id="macro-grid"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-list"></i>REFEIÇÕES DE HOJE</div>
+    <div id="meals-today"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-target"></i>OBJETIVO & METAS</div>
     <div class="field">
       <label>Objetivo principal</label>
       <select id="obj-select" onchange="saveObjetivo()">
@@ -1161,37 +1276,13 @@ body.has-nav{padding-bottom:64px}
       <label>Início da meta</label>
       <input type="date" id="obj-start" onchange="saveObjetivo()">
     </div>
-    <div class="btn-row">
-      <button class="btn ghost" onclick="recalcMetas()"><i class="ti ti-calculator"></i>Recalcular metas</button>
-    </div>
-  </div>
-  <div class="panel">
-    <div class="panel-title"><i class="ti ti-flame"></i>MACROS DE HOJE</div>
-    <div class="macro-grid" id="macro-grid"></div>
-  </div>
-  <div class="panel">
-    <div class="panel-title"><i class="ti ti-plus"></i>LANÇAMENTO MANUAL</div>
-    <div class="panel-sub">Use quando preferir entrar com os números direto, sem IA</div>
-    <div class="field"><label>Descrição (opcional)</label><input id="mn-desc" placeholder="Ex: Almoço"></div>
-    <div class="field-row">
-      <div class="field"><label>Proteína (g)</label><input type="number" step="0.1" id="mn-prot"></div>
-      <div class="field"><label>Carbo (g)</label><input type="number" step="0.1" id="mn-carb"></div>
-    </div>
-    <div class="field-row">
-      <div class="field"><label>Gordura (g)</label><input type="number" step="0.1" id="mn-gord"></div>
-      <div class="field"><label>Kcal</label><input type="number" id="mn-kcal" placeholder="auto"></div>
-    </div>
-    <button class="btn full" onclick="manualMeal()"><i class="ti ti-device-floppy"></i>Adicionar ao dia</button>
-  </div>
-  <div class="panel">
-    <div class="panel-title"><i class="ti ti-list"></i>REFEIÇÕES DE HOJE</div>
-    <div id="meals-today"></div>
+    <button class="btn ghost full" onclick="recalcMetas()"><i class="ti ti-calculator"></i>Recalcular metas</button>
   </div>
 </div>
 
 <div class="screen" id="screen-bio">
   <div class="workout-topbar">
-    <div class="btn-back" onclick="goHome()"><i class="ti ti-arrow-left"></i></div>
+    <div class="btn-back" onclick="backToProfile()"><i class="ti ti-arrow-left"></i></div>
     <div>
       <div class="workout-name">BIOMETRIA</div>
       <div class="workout-sub">Peso · Altura · IMC</div>
@@ -1227,7 +1318,7 @@ body.has-nav{padding-bottom:64px}
 
 <div class="screen" id="screen-dash">
   <div class="workout-topbar">
-    <div class="btn-back" onclick="goHome()"><i class="ti ti-arrow-left"></i></div>
+    <div class="btn-back" onclick="backToProfile()"><i class="ti ti-arrow-left"></i></div>
     <div>
       <div class="workout-name">DASHBOARD</div>
       <div class="workout-sub">Evolução completa</div>
@@ -1257,7 +1348,7 @@ body.has-nav{padding-bottom:64px}
 
 <div class="screen" id="screen-config">
   <div class="workout-topbar">
-    <div class="btn-back" onclick="goHome()"><i class="ti ti-arrow-left"></i></div>
+    <div class="btn-back" onclick="backToProfile()"><i class="ti ti-arrow-left"></i></div>
     <div>
       <div class="workout-name">CONFIGURAÇÕES</div>
       <div class="workout-sub">Área administrativa</div>
@@ -1387,6 +1478,10 @@ const toast = (msg, type='') => {
 };
 
 /* ============== NAV ============== */
+function backToProfile(){
+  if(currentProfile){ goTab('workout'); }
+  else { goHome(); }
+}
 function goHome(){
   ['ia','metas','bio','dash','config','workout'].forEach(s=>{
     const el=document.getElementById('screen-'+s); if(el) el.classList.remove('active');
@@ -1776,6 +1871,34 @@ function todayMacros(){
     gord:a.gord+(m.gordura||0), kcal:a.kcal+(m.calorias_estimadas||0),
   }),{prot:0,carb:0,gord:0,kcal:0});
 }
+let _evoMetric='kcal';
+function switchEvo(m){
+  _evoMetric=m;
+  document.querySelectorAll('.evo-tab').forEach(b=>b.classList.toggle('active',b.dataset.evo===m));
+  renderEvo();
+}
+function renderEvo(){
+  const meals=LS.get('meals_'+currentProfile,{});
+  const today=new Date(); const days=[];
+  for(let i=6;i>=0;i--){
+    const d=new Date(today); d.setDate(today.getDate()-i);
+    const k=d.toISOString().slice(0,10);
+    const list=meals[k]||[];
+    const sum={prot:0,carb:0,gord:0,kcal:0};
+    list.forEach(m=>{sum.prot+=m.proteina||0;sum.carb+=m.carboidrato||0;sum.gord+=m.gordura||0;sum.kcal+=m.calorias_estimadas||0});
+    days.push({k,...sum,label:d.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','')});
+  }
+  const vals=days.map(d=>d[_evoMetric]);
+  drawBars('metas-evo', vals, currentProfile==='manu'?'#00AAFF':'#E8002D');
+  const tot=vals.reduce((a,b)=>a+b,0);
+  const avg=tot/7;
+  const max=Math.max(...vals);
+  const unit=_evoMetric==='kcal'?'kcal':'g';
+  document.getElementById('evo-summary').innerHTML=
+    `<span>Média <b>${Math.round(avg)}${unit}</b></span>`+
+    `<span>Pico <b>${Math.round(max)}${unit}</b></span>`+
+    `<span>Total <b>${Math.round(tot)}${unit}</b></span>`;
+}
 function renderMetas(){
   const o=getObjetivo();
   document.getElementById('obj-select').value=o.tipo;
@@ -1783,6 +1906,26 @@ function renderMetas(){
   document.getElementById('metas-date').textContent=new Date().toLocaleDateString('pt-BR');
   if(!o.goals) recalcMetas();
   const cur=todayMacros(); const g=o.goals||{kcal:2000,prot:150,carb:200,gord:60};
+
+  // HERO
+  const kpct=Math.min(150, g.kcal?Math.round(cur.kcal/g.kcal*100):0);
+  document.getElementById('hero-kcal-cur').textContent=Math.round(cur.kcal);
+  document.getElementById('hero-kcal-goal').textContent=g.kcal;
+  const ring=document.getElementById('ring-fill');
+  const off=327*(1-Math.min(1,kpct/100));
+  ring.style.strokeDashoffset=off;
+  const color=currentProfile==='manu'?'#00AAFF':'#E8002D';
+  ring.setAttribute('stroke', kpct>110?'#E8002D':kpct>=95?'#4ADE80':color);
+  document.getElementById('ring-pct').textContent=kpct+'%';
+  const st=document.getElementById('hero-status');
+  const stTxt = kpct>110?'Excesso':kpct>=95?'Meta atingida':kpct>=60?'Em andamento':'Déficit';
+  st.textContent=stTxt+' · '+kpct+'%';
+  st.className='hero-status '+(kpct>110?'over':kpct>=95?'ok':kpct>=60?'warn':'');
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  set('hm-prot',Math.round(cur.prot)+'g'); set('hm-prot-g','/ '+g.prot+'g');
+  set('hm-carb',Math.round(cur.carb)+'g'); set('hm-carb-g','/ '+g.carb+'g');
+  set('hm-gord',Math.round(cur.gord)+'g'); set('hm-gord-g','/ '+g.gord+'g');
+
   const rows=[
     {l:'Proteína',u:'g',c:cur.prot,t:g.prot},
     {l:'Carboidratos',u:'g',c:cur.carb,t:g.carb},
@@ -1795,12 +1938,13 @@ function renderMetas(){
     const status = pct>110?'Excesso' : pct>=95?'Meta atingida' : pct>=60?'Em andamento' : 'Déficit';
     return `<div class="macro-card">
       <div class="macro-label">${r.l}</div>
-      <div class="macro-val">${Math.round(r.c)}<span style="font-size:13px;color:var(--txt2)">/${r.t}${r.u}</span></div>
+      <div class="macro-val">${Math.round(r.c)}<span style="font-size:14px;color:var(--txt2)">/${r.t}${r.u}</span></div>
       <div class="macro-goal">${pct}% · ${status}</div>
       <div class="macro-bar"><div class="macro-bar-fill ${cls}" style="width:${Math.min(100,pct)}%"></div></div>
     </div>`;
   }).join('');
   renderMealsToday();
+  renderEvo();
 }
 function renderMealsToday(){
   const el=document.getElementById('meals-today'); if(!el) return;
