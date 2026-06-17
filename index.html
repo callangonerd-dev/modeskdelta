@@ -146,6 +146,22 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
   display:flex;align-items:center;gap:12px;
   margin-bottom:24px;
 }
+.topbar-actions{margin-left:auto;display:flex;gap:8px}
+.topbar-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 12px;border-radius:999px;font-size:12px;font-weight:600;
+  background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);cursor:pointer;
+  transition:all .2s;
+}
+.topbar-btn:hover{background:var(--bg4)}
+.topbar-btn.r{background:var(--red-dim);color:var(--red);border-color:var(--red-border)}
+.topbar-btn.b{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-border)}
+.topbar-mini{
+  display:flex;gap:6px;align-items:center;margin-left:auto;font-size:11px;color:var(--txt2)
+}
+.topbar-mini .mini-pill{
+  padding:4px 8px;border-radius:999px;background:var(--bg3);border:1px solid var(--bg4)
+}
 .btn-back{
   width:38px;height:38px;border-radius:50%;
   background:var(--bg3);border:1px solid var(--bg4);
@@ -464,6 +480,30 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
       <div class="workout-name" id="workout-name">MÁRCIO</div>
       <div class="workout-sub" id="workout-sub">Definição & Força</div>
     </div>
+    <div class="topbar-actions">
+      <button class="topbar-btn" id="hdr-meta-btn" onclick="goTab('metas')" title="Controle de metas do dia">
+        <i class="ti ti-target"></i><span id="hdr-meta-label">Meta</span>
+      </button>
+      <button class="topbar-btn" id="hdr-dash-btn" onclick="goTab('dash')" title="Gráficos e evolução">
+        <i class="ti ti-chart-line"></i>Gráfico
+      </button>
+    </div>
+  </div>
+  <div id="hdr-meta-summary" style="margin:-12px 0 18px;display:none">
+    <div class="panel" style="padding:14px 16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--txt2)">META DO DIA</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="mini-pill" id="hdr-prot">Prot 0/0g</span>
+          <span class="mini-pill" id="hdr-carb">Carb 0/0g</span>
+          <span class="mini-pill" id="hdr-gord">Gord 0/0g</span>
+          <span class="mini-pill" id="hdr-kcal">Kcal 0/0</span>
+        </div>
+      </div>
+      <div style="margin-top:10px;height:6px;background:var(--bg3);border-radius:4px;overflow:hidden">
+        <div id="hdr-kcal-bar" style="height:100%;background:linear-gradient(90deg,var(--red),var(--blue));width:0%;transition:width .3s"></div>
+      </div>
+    </div>
   </div>
 
   <div class="plan-tabs" id="plan-tabs"></div>
@@ -663,6 +703,28 @@ function showProfile(id) {
   document.getElementById('screen-workout').classList.add('active');
   renderTabs();
   renderPlan();
+  updateHeaderMeta();
+}
+
+function updateHeaderMeta(){
+  if(!currentProfile) return;
+  const box=document.getElementById('hdr-meta-summary'); if(!box) return;
+  box.style.display='block';
+  const u=DB[currentProfile];
+  const cls=u.color==='blue'?'b':'r';
+  const mb=document.getElementById('hdr-meta-btn'), db=document.getElementById('hdr-dash-btn');
+  if(mb){ mb.className='topbar-btn '+cls; } if(db){ db.className='topbar-btn '+cls; }
+  const o=(typeof getObjetivo==='function')?getObjetivo():null;
+  const g=(o&&o.goals)||{kcal:2000,prot:150,carb:200,gord:60};
+  const cur=(typeof todayMacros==='function')?todayMacros():{prot:0,carb:0,gord:0,kcal:0};
+  const set=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t;};
+  set('hdr-prot',`Prot ${Math.round(cur.prot)}/${g.prot}g`);
+  set('hdr-carb',`Carb ${Math.round(cur.carb)}/${g.carb}g`);
+  set('hdr-gord',`Gord ${Math.round(cur.gord)}/${g.gord}g`);
+  set('hdr-kcal',`Kcal ${Math.round(cur.kcal)}/${g.kcal}`);
+  const pct=Math.min(100, g.kcal?Math.round(cur.kcal/g.kcal*100):0);
+  const bar=document.getElementById('hdr-kcal-bar'); if(bar) bar.style.width=pct+'%';
+  set('hdr-meta-label',`Meta ${pct}%`);
 }
 
 function goBack() {
@@ -672,6 +734,7 @@ function goBack() {
   hb.className = 'header-badge';
   document.getElementById('screen-workout').classList.remove('active');
   document.getElementById('screen-select').classList.add('active');
+  const box=document.getElementById('hdr-meta-summary'); if(box) box.style.display='none';
   Object.values(bisetTimers).forEach(t => clearInterval(t));
   bisetTimers = {};
 }
@@ -1106,6 +1169,24 @@ body.has-nav{padding-bottom:64px}
     <div class="panel-title"><i class="ti ti-flame"></i>MACROS DE HOJE</div>
     <div class="macro-grid" id="macro-grid"></div>
   </div>
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-plus"></i>LANÇAMENTO MANUAL</div>
+    <div class="panel-sub">Use quando preferir entrar com os números direto, sem IA</div>
+    <div class="field"><label>Descrição (opcional)</label><input id="mn-desc" placeholder="Ex: Almoço"></div>
+    <div class="field-row">
+      <div class="field"><label>Proteína (g)</label><input type="number" step="0.1" id="mn-prot"></div>
+      <div class="field"><label>Carbo (g)</label><input type="number" step="0.1" id="mn-carb"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Gordura (g)</label><input type="number" step="0.1" id="mn-gord"></div>
+      <div class="field"><label>Kcal</label><input type="number" id="mn-kcal" placeholder="auto"></div>
+    </div>
+    <button class="btn full" onclick="manualMeal()"><i class="ti ti-device-floppy"></i>Adicionar ao dia</button>
+  </div>
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-list"></i>REFEIÇÕES DE HOJE</div>
+    <div id="meals-today"></div>
+  </div>
 </div>
 
 <div class="screen" id="screen-bio">
@@ -1337,6 +1418,7 @@ function goTab(tab){
   if(tab==='bio') renderBio();
   if(tab==='dash') renderDash();
   if(tab==='config') openConfig();
+  updateHeaderMeta();
 }
 
 /* Hook into existing showProfile to reveal nav */
@@ -1684,6 +1766,7 @@ function recalcMetas(){
   o.goals = {kcal, prot, carb, gord};
   setObjetivo(o);
   renderMetas();
+  updateHeaderMeta();
   toast('Metas recalculadas','success');
 }
 function todayMacros(){
@@ -1717,6 +1800,38 @@ function renderMetas(){
       <div class="macro-bar"><div class="macro-bar-fill ${cls}" style="width:${Math.min(100,pct)}%"></div></div>
     </div>`;
   }).join('');
+  renderMealsToday();
+}
+function renderMealsToday(){
+  const el=document.getElementById('meals-today'); if(!el) return;
+  const list=LS.get('meals_'+currentProfile,{})[todayKey()]||[];
+  if(!list.length){ el.innerHTML='<div style="color:var(--txt3);font-size:13px">Nenhuma refeição registrada hoje</div>'; return; }
+  el.innerHTML=list.map((m,i)=>`<div style="display:flex;justify-content:space-between;padding:10px;border:1px solid var(--bg4);border-radius:8px;margin-bottom:6px;background:var(--bg3)">
+    <div><div style="font-weight:600;font-size:13px">${m.desc||m.raw||'Refeição'}</div>
+    <div style="font-size:11px;color:var(--txt2)">P ${Math.round(m.proteina||0)}g · C ${Math.round(m.carboidrato||0)}g · G ${Math.round(m.gordura||0)}g · ${Math.round(m.calorias_estimadas||0)} kcal</div></div>
+    <button class="btn ghost" style="padding:4px 8px" onclick="delMeal(${i})"><i class="ti ti-trash"></i></button>
+  </div>`).join('');
+}
+function delMeal(i){
+  const all=LS.get('meals_'+currentProfile,{}); const k=todayKey();
+  (all[k]||[]).splice(i,1); LS.set('meals_'+currentProfile,all);
+  renderMetas(); updateHeaderMeta();
+}
+function manualMeal(){
+  const prot=parseFloat(document.getElementById('mn-prot').value)||0;
+  const carb=parseFloat(document.getElementById('mn-carb').value)||0;
+  const gord=parseFloat(document.getElementById('mn-gord').value)||0;
+  let kcal=parseFloat(document.getElementById('mn-kcal').value);
+  if(!kcal||isNaN(kcal)) kcal=Math.round(prot*4+carb*4+gord*9);
+  if(!prot&&!carb&&!gord&&!kcal){ toast('Preencha pelo menos um valor','error'); return; }
+  const desc=document.getElementById('mn-desc').value.trim();
+  const all=LS.get('meals_'+currentProfile,{}); const k=todayKey();
+  all[k]=all[k]||[];
+  all[k].push({ts:Date.now(),desc:desc||'Manual',proteina:prot,carboidrato:carb,gordura:gord,calorias_estimadas:kcal});
+  LS.set('meals_'+currentProfile,all);
+  ['mn-desc','mn-prot','mn-carb','mn-gord','mn-kcal'].forEach(id=>document.getElementById(id).value='');
+  toast('Refeição adicionada','success');
+  renderMetas(); updateHeaderMeta();
 }
 
 /* ============== BIOMETRIA ============== */
