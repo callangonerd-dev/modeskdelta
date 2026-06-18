@@ -209,19 +209,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 }
 .plan-count{font-size:13px;color:var(--txt3);font-weight:600}
 
-/* MUSCLE GROUPS */
+/* MUSCLE GROUPS — balões em grid limpo */
 .groups-bar{
-  display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:8px;margin-bottom:22px;
 }
 .group-chip{
-  font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
-  padding:4px 10px;border-radius:20px;
-  background:var(--bg3);color:var(--txt3);
+  font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+  padding:10px 14px;border-radius:14px;text-align:center;
+  background:var(--bg3);color:var(--txt2);
   border:1px solid var(--bg4);
   cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  min-height:44px;
 }
-.group-chip.active-r{background:var(--red-dim);color:var(--red);border-color:var(--red-border)}
-.group-chip.active-b{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-border)}
+.group-chip:hover{border-color:var(--txt3);color:var(--txt)}
+.group-chip.active-r{background:var(--red-dim);color:var(--red);border-color:var(--red-border);box-shadow:inset 0 0 0 1px var(--red-border)}
+.group-chip.active-b{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-border);box-shadow:inset 0 0 0 1px var(--blue-border)}
 
 /* EXERCISE CARDS */
 .exercise-list{display:grid;grid-template-columns:1fr;gap:12px}
@@ -1123,7 +1127,6 @@ function renderPlan() {
       html += `<div class="ex-card" data-groups="${ex.g1},${ex.g2}">
         <div class="biset-label"><i class="ti ti-repeat" aria-hidden="true"></i> BI-SET</div>
         <div class="ex-row row1">
-          <div class="ex-num r">1</div>
           <div class="ex-info">
             <span class="ex-gtag tag-${ex.g1}">${LABELS[ex.g1]||ex.g1}</span>
             <span class="ex-name">${ex.n1}</span>
@@ -1134,7 +1137,6 @@ function renderPlan() {
           </button>
         </div>
         <div class="ex-row row2">
-          <div class="ex-num b">2</div>
           <div class="ex-info">
             <span class="ex-gtag tag-${ex.g2}">${LABELS[ex.g2]||ex.g2}</span>
             <span class="ex-name">${ex.n2}</span>
@@ -1144,22 +1146,21 @@ function renderPlan() {
             <i class="ti ti-player-play" aria-hidden="true"></i>
           </button>
         </div>
-        <div style="display:flex;align-items:center;justify-content:flex-end;padding:8px 14px;border-top:1px solid var(--bg4);">
-          <button onclick="toggleCheck('${key}')" id="chk-${key}" style="
-            background:none;border:1px solid ${checkColor};border-radius:8px;
-            padding:5px 12px;cursor:pointer;font-size:13px;font-weight:700;
-            color:${checkColor};display:flex;align-items:center;gap:5px;
-            letter-spacing:.5px;transition:all .2s;
+        <div style="display:flex;align-items:center;justify-content:flex-end;padding:10px 14px;border-top:1px solid var(--bg4);">
+          <button onclick="toggleCheck('${key}')" id="chk-${key}" class="btn-feito ${checked?'on':''}" style="
+            background:${checked?checkColor:'transparent'};border:1.5px solid ${checkColor};border-radius:10px;
+            padding:9px 18px;cursor:pointer;font-weight:800;
+            color:${checked?'#fff':checkColor};display:flex;align-items:center;gap:8px;
+            letter-spacing:1px;transition:all .2s;text-transform:uppercase;
           ">
-            <i class="ti ${checked?'ti-check':'ti-circle'}" aria-hidden="true"></i>
-            ${checked?'FEITO':'MARCAR'}
+            <i class="ti ${checked?'ti-check':'ti-circle-dashed'}" aria-hidden="true"></i>
+            ${checked?'FEITO':'FAZER'}
           </button>
         </div>
       </div>`;
     } else {
       html += `<div class="ex-card" data-groups="${ex.g1}">
         <div class="ex-row single">
-          <div class="ex-num r"><i class="ti ti-barbell" style="font-size:13px" aria-hidden="true"></i></div>
           <div class="ex-info">
             <span class="ex-gtag tag-${ex.g1}">${LABELS[ex.g1]||ex.g1}</span>
             <span class="ex-name">${ex.n1}</span>
@@ -1169,15 +1170,15 @@ function renderPlan() {
             <i class="ti ti-player-play" aria-hidden="true"></i>
           </button>
         </div>
-        <div style="display:flex;align-items:center;justify-content:flex-end;padding:8px 14px;border-top:1px solid var(--bg4);">
-          <button onclick="toggleCheck('${key}')" id="chk-${key}" style="
-            background:none;border:1px solid ${checkColor};border-radius:8px;
-            padding:5px 12px;cursor:pointer;font-size:13px;font-weight:700;
-            color:${checkColor};display:flex;align-items:center;gap:5px;
-            letter-spacing:.5px;transition:all .2s;
+        <div style="display:flex;align-items:center;justify-content:flex-end;padding:10px 14px;border-top:1px solid var(--bg4);">
+          <button onclick="toggleCheck('${key}')" id="chk-${key}" class="btn-feito ${checked?'on':''}" style="
+            background:${checked?checkColor:'transparent'};border:1.5px solid ${checkColor};border-radius:10px;
+            padding:9px 18px;cursor:pointer;font-weight:800;
+            color:${checked?'#fff':checkColor};display:flex;align-items:center;gap:8px;
+            letter-spacing:1px;transition:all .2s;text-transform:uppercase;
           ">
-            <i class="ti ${checked?'ti-check':'ti-circle'}" aria-hidden="true"></i>
-            ${checked?'FEITO':'MARCAR'}
+            <i class="ti ${checked?'ti-check':'ti-circle-dashed'}" aria-hidden="true"></i>
+            ${checked?'FEITO':'FAZER'}
           </button>
         </div>
       </div>`;
@@ -1576,11 +1577,73 @@ body.has-nav{padding-bottom:64px}
     <div class="btn-back" onclick="backToProfile()"><i class="ti ti-arrow-left"></i></div>
     <div>
       <div class="workout-name">BIOMETRIA</div>
-      <div class="workout-sub">Peso · Altura · IMC</div>
+      <div class="workout-sub">Cadastro · Peso · Macros automáticos</div>
     </div>
   </div>
+
+  <!-- CADASTRO PESSOAL -->
   <div class="panel">
-    <div class="panel-title"><i class="ti ti-scale"></i>NOVO REGISTRO</div>
+    <div class="panel-title"><i class="ti ti-user-circle"></i>CADASTRO PESSOAL</div>
+    <div class="panel-sub">Usado para calcular calorias e macros pela fórmula Mifflin-St Jeor.</div>
+    <div class="field-row">
+      <div class="field"><label>Idade</label><input type="number" id="cad-idade" min="10" max="100"></div>
+      <div class="field"><label>Sexo</label>
+        <select id="cad-sexo"><option value="M">Masculino</option><option value="F">Feminino</option></select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Nível de atividade</label>
+        <select id="cad-atividade">
+          <option value="sedentario">Sedentário</option>
+          <option value="leve">Leve (1-3x/sem)</option>
+          <option value="moderado">Moderado (3-5x/sem)</option>
+          <option value="intenso">Intenso (6-7x/sem)</option>
+          <option value="atleta">Atleta</option>
+        </select>
+      </div>
+      <div class="field"><label>Peso alvo (kg)</label><input type="number" step="0.1" id="cad-pesoalvo" placeholder="ex: 95"></div>
+    </div>
+    <div class="field">
+      <label>Objetivo</label>
+      <select id="cad-objetivo">
+        <option value="emagrecimento">Emagrecimento</option>
+        <option value="hipertrofia">Hipertrofia</option>
+        <option value="recomposicao">Recomposição corporal</option>
+        <option value="manutencao">Manutenção</option>
+        <option value="ganho">Ganho de massa</option>
+        <option value="performance">Performance</option>
+      </select>
+    </div>
+    <div class="field" style="margin-top:10px">
+      <label>Como definir os macros?</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px">
+        <button type="button" id="mode-auto" class="btn ghost" onclick="setMacroMode('auto')"><i class="ti ti-wand"></i>Automático</button>
+        <button type="button" id="mode-manual" class="btn ghost" onclick="setMacroMode('manual')"><i class="ti ti-edit"></i>Preencher</button>
+      </div>
+      <input type="checkbox" id="cad-override" style="display:none">
+    </div>
+    <div id="cad-auto-box" style="margin-top:10px;padding:10px;border:1px dashed var(--bord);border-radius:10px;background:rgba(255,255,255,.02)">
+      <div style="font-size:12px;color:var(--txt2);margin-bottom:6px">Prévia baseada em peso, altura, idade, sexo, atividade e objetivo:</div>
+      <div id="cad-auto-preview" style="font-size:14px;color:var(--txt);text-align:center;font-weight:600">—</div>
+    </div>
+    <div id="cad-manual-box" style="display:none;margin-top:10px">
+      <div class="field-row">
+        <div class="field"><label>Proteína (g)</label><input type="number" id="cad-mProt" placeholder="180" oninput="updateManualKcal()"></div>
+        <div class="field"><label>Carbo (g)</label><input type="number" id="cad-mCarb" placeholder="200" oninput="updateManualKcal()"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Gordura (g)</label><input type="number" id="cad-mGord" placeholder="60" oninput="updateManualKcal()"></div>
+        <div class="field"><label>Calorias</label><input type="number" id="cad-mKcal" placeholder="auto"></div>
+      </div>
+      <div id="cad-manual-kcal" style="font-size:12px;color:var(--txt2);text-align:center;margin-top:4px"></div>
+    </div>
+    <button class="btn full" onclick="saveCadastro()" style="margin-top:10px"><i class="ti ti-calculator"></i>Salvar e aplicar metas</button>
+    <div id="cad-preview" style="margin-top:12px;font-size:14px;color:var(--txt2);text-align:center"></div>
+  </div>
+
+  <!-- NOVO REGISTRO DE PESO -->
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-scale"></i>NOVO REGISTRO DE PESO</div>
     <div class="field-row">
       <div class="field"><label>Peso (kg)</label><input type="number" step="0.1" id="bio-peso"></div>
       <div class="field"><label>Altura (cm)</label><input type="number" id="bio-altura"></div>
@@ -1595,6 +1658,7 @@ body.has-nav{padding-bottom:64px}
     </div>
     <button class="btn full" onclick="bioSave()"><i class="ti ti-device-floppy"></i>Salvar registro</button>
   </div>
+
   <div class="panel">
     <div class="panel-title"><i class="ti ti-chart-line"></i>EVOLUÇÃO</div>
     <div class="stat-grid">
@@ -2147,38 +2211,59 @@ function renderIaHistory(){
 }
 
 /* ============== METAS / OBJETIVOS ============== */
+/* Multiplicadores de atividade (Mifflin-St Jeor) */
+const ACT_MULT = {sedentario:1.2, leve:1.375, moderado:1.55, intenso:1.725, atleta:1.9};
+/* Ajuste calórico por objetivo (kcal/dia em relação ao TDEE) */
 const OBJ_PRESETS = {
-  emagrecimento:{kcal:-400,pPerKg:2.0,gPct:0.25},
-  hipertrofia:  {kcal:+300,pPerKg:2.0,gPct:0.25},
-  recomposicao: {kcal:0,   pPerKg:2.2,gPct:0.25},
-  manutencao:   {kcal:0,   pPerKg:1.6,gPct:0.30},
-  ganho:        {kcal:+500,pPerKg:2.0,gPct:0.25},
-  performance:  {kcal:+200,pPerKg:1.8,gPct:0.25},
+  emagrecimento:{kcal:-500, pPerKg:1.83, gPerKg:0.65},  // proteína 1.83 g/kg peso alvo · gordura ~0.65 g/kg
+  hipertrofia:  {kcal:+300, pPerKg:1.83, gPerKg:0.70},
+  recomposicao: {kcal:-200, pPerKg:2.00, gPerKg:0.65},
+  manutencao:   {kcal:0,    pPerKg:1.60, gPerKg:0.80},
+  ganho:        {kcal:+500, pPerKg:1.80, gPerKg:0.80},
+  performance:  {kcal:+200, pPerKg:1.80, gPerKg:0.75},
 };
 function getObjetivo(){
   return LS.get('obj_'+currentProfile, {tipo:'manutencao', start:todayKey(), goals:null});
 }
 function setObjetivo(o){ LS.set('obj_'+currentProfile, o); }
+function getCadastro(){
+  return LS.get('cadastro_'+currentProfile, {idade:30, sexo:'M', atividade:'moderado', pesoAlvo:null, override:false, mProt:0, mCarb:0, mGord:0, mKcal:0});
+}
+function setCadastro(c){ LS.set('cadastro_'+currentProfile, c); }
 function saveObjetivo(){
   const o=getObjetivo();
-  o.tipo=document.getElementById('obj-select').value;
-  o.start=document.getElementById('obj-start').value || todayKey();
+  const sel=document.getElementById('obj-select'); if(sel) o.tipo=sel.value;
+  const st=document.getElementById('obj-start'); if(st) o.start=st.value || todayKey();
   setObjetivo(o); recalcMetas();
 }
 function recalcMetas(){
   const o=getObjetivo();
+  const c=getCadastro();
   const bio=LS.get('bio_'+currentProfile,[]);
   const last=bio[0] || {};
   const peso = last.peso || 75;
   const altura = last.altura || 170;
-  /* Mifflin-St Jeor (assume homem adulto 30 anos) */
-  const bmr = 10*peso + 6.25*altura - 5*30 + 5;
-  const tdee = bmr*1.55;
-  const preset = OBJ_PRESETS[o.tipo];
-  const kcal = Math.round(tdee + preset.kcal);
-  const prot = Math.round(peso * preset.pPerKg);
-  const gord = Math.round((kcal * preset.gPct) / 9);
-  const carb = Math.round((kcal - prot*4 - gord*9)/4);
+
+  // Override manual: aplica direto sem fórmula
+  if(c.override){
+    const prot=+c.mProt||0, carb=+c.mCarb||0, gord=+c.mGord||0;
+    const kcal=+c.mKcal||Math.round(prot*4+carb*4+gord*9);
+    o.goals={kcal,prot,carb,gord};
+    setObjetivo(o); renderMetas(); updateHeaderMeta();
+    toast('Metas aplicadas (manual)','success'); return;
+  }
+
+  // Peso usado nos cálculos: peso alvo > peso atual
+  const pesoCalc = (+c.pesoAlvo) || peso;
+  const preset = OBJ_PRESETS[o.tipo] || OBJ_PRESETS.manutencao;
+  // Mifflin-St Jeor com sexo + idade
+  const s = c.sexo==='F' ? -161 : 5;
+  const bmr = 10*peso + 6.25*altura - 5*(+c.idade||30) + s;
+  const tdee = bmr * (ACT_MULT[c.atividade] || 1.55);
+  const kcal = Math.max(1200, Math.round(tdee + preset.kcal));
+  const prot = Math.round(pesoCalc * preset.pPerKg);
+  const gord = Math.round(pesoCalc * preset.gPerKg);
+  const carb = Math.max(0, Math.round((kcal - prot*4 - gord*9)/4));
   o.goals = {kcal, prot, carb, gord};
   setObjetivo(o);
   renderMetas();
@@ -2228,12 +2313,15 @@ function switchHub(tab){
   document.querySelectorAll('.hub-panel').forEach(p=>p.classList.toggle('active', p.id==='hub-'+tab));
   if(tab==='evo') renderEvo();
 }
-function macroStatus(pct){
-  // Retorna {cls, badge, icon}
-  if(pct>110) return {cls:'over', badge:'Excedeu', icon:'alert-triangle'};
-  if(pct>=95) return {cls:'hit',  badge:'Bateu!',  icon:'circle-check'};
-  if(pct>=60) return {cls:'warn', badge:'Quase',   icon:'progress'};
-  return {cls:'', badge:'Faltam '+(100-pct)+'%', icon:'arrow-up-right'};
+function macroStatus(pct, diffAbs, unit){
+  // pct = % consumido da meta; diffAbs = consumido-meta (negativo = falta, positivo = sobra)
+  unit = unit || 'g';
+  const remain = Math.max(0, -Math.round(diffAbs||0));
+  const over   = Math.max(0,  Math.round(diffAbs||0));
+  if(pct>110) return {cls:'over', badge:'Passou '+over+unit, icon:'alert-triangle'};
+  if(pct>=95) return {cls:'hit',  badge:'Meta batida ✓',     icon:'circle-check'};
+  if(pct>=60) return {cls:'warn', badge:'Faltam '+remain+unit, icon:'progress'};
+  return {cls:'', badge:'Faltam '+remain+unit, icon:'arrow-up-right'};
 }
 function renderMetas(){
   const o=getObjetivo();
@@ -2274,12 +2362,12 @@ function renderMetas(){
     ];
     chipsBox.innerHTML=mini.map(m=>{
       const p=m.t?Math.round(m.v/m.t*100):0;
-      const s=macroStatus(p);
+      const s=macroStatus(p, m.v-m.t, 'g');
       return `<span class="mini-chip ${s.cls}"><i class="ti ti-${s.icon}"></i>${m.l} ${Math.round(m.v)}/${m.t}g</span>`;
     }).join('');
   }
 
-  // CARDS DE MACRO COM HIT/MISS
+  // CARDS DE MACRO COM HIT/MISS + saldo (falta/sobra)
   const rows=[
     {l:'Proteína',u:'g',c:cur.prot,t:g.prot,i:'meat'},
     {l:'Carboidratos',u:'g',c:cur.carb,t:g.carb,i:'bread'},
@@ -2288,7 +2376,13 @@ function renderMetas(){
   ];
   document.getElementById('macro-grid').innerHTML=rows.map(r=>{
     const pct=Math.min(150, r.t?Math.round(r.c/r.t*100):0);
-    const s=macroStatus(pct);
+    const diff=r.c-r.t;
+    const s=macroStatus(pct, diff, r.u);
+    const saldoTxt = diff<0
+      ? `Falta <b>${Math.round(-diff)}${r.u}</b>`
+      : diff>0
+        ? `Passou <b>${Math.round(diff)}${r.u}</b>`
+        : `No ponto`;
     return `<div class="ms-card ${s.cls}">
       <div class="ms-head">
         <div class="ms-name">${r.l}</div>
@@ -2296,7 +2390,7 @@ function renderMetas(){
       </div>
       <div class="ms-val">${Math.round(r.c)}<small>/ ${r.t}${r.u}</small></div>
       <div class="ms-bar"><div class="ms-bar-fill" style="width:${Math.min(100,pct)}%"></div></div>
-      <div class="ms-pct">${pct}% da meta</div>
+      <div class="ms-pct">${pct}% · ${saldoTxt}</div>
     </div>`;
   }).join('');
   renderMealsToday();
@@ -2367,6 +2461,92 @@ function renderBio(){
     document.getElementById('bio-stat-delta').textContent=(d>=0?'+':'')+d.toFixed(1)+'kg';
   } else document.getElementById('bio-stat-delta').textContent='—';
   drawLine('bio-chart', arr.slice().reverse().filter(r=>r.peso).map(r=>r.peso), currentProfile==='manu'?'#00AAFF':'#E8002D');
+
+  // CADASTRO: popular campos e objetivo
+  const c=getCadastro(); const o=getObjetivo();
+  const $=id=>document.getElementById(id);
+  if($('cad-idade')) $('cad-idade').value=c.idade||'';
+  if($('cad-sexo')) $('cad-sexo').value=c.sexo||'M';
+  if($('cad-atividade')) $('cad-atividade').value=c.atividade||'moderado';
+  if($('cad-pesoalvo')) $('cad-pesoalvo').value=c.pesoAlvo||'';
+  if($('cad-objetivo')) $('cad-objetivo').value=o.tipo||'manutencao';
+  if($('cad-override')) $('cad-override').checked=!!c.override;
+  if($('cad-mProt')) $('cad-mProt').value=c.mProt||'';
+  if($('cad-mCarb')) $('cad-mCarb').value=c.mCarb||'';
+  if($('cad-mGord')) $('cad-mGord').value=c.mGord||'';
+  if($('cad-mKcal')) $('cad-mKcal').value=c.mKcal||'';
+  setMacroMode(c.override?'manual':'auto');
+  renderCadPreview();
+  updateAutoPreview();
+  updateManualKcal();
+  ['cad-idade','cad-sexo','cad-atividade','cad-pesoalvo','cad-objetivo'].forEach(id=>{
+    const el=$(id); if(el && !el._autoBound){ el._autoBound=true; el.addEventListener('input', updateAutoPreview); el.addEventListener('change', updateAutoPreview); }
+  });
+}
+
+function setMacroMode(mode){
+  const ov=document.getElementById('cad-override'); if(ov) ov.checked = (mode==='manual');
+  const mb=document.getElementById('cad-manual-box'); if(mb) mb.style.display = (mode==='manual')?'block':'none';
+  const ab=document.getElementById('cad-auto-box'); if(ab) ab.style.display = (mode==='manual')?'none':'block';
+  const ba=document.getElementById('mode-auto'), bm=document.getElementById('mode-manual');
+  if(ba) ba.classList.toggle('active', mode==='auto');
+  if(bm) bm.classList.toggle('active', mode==='manual');
+  if(ba) ba.style.background = mode==='auto' ? 'var(--accent)' : '';
+  if(bm) bm.style.background = mode==='manual' ? 'var(--accent)' : '';
+  if(mode==='auto') updateAutoPreview();
+}
+
+function updateAutoPreview(){
+  const el=document.getElementById('cad-auto-preview'); if(!el) return;
+  const $=id=>document.getElementById(id);
+  const bio=LS.get('bio_'+currentProfile,[]);
+  const last=bio[0]||{};
+  const peso=last.peso||75, altura=last.altura||170;
+  const idade=+($('cad-idade')?.value)||30;
+  const sexo=$('cad-sexo')?.value||'M';
+  const ativ=$('cad-atividade')?.value||'moderado';
+  const pesoAlvo=+($('cad-pesoalvo')?.value)||peso;
+  const tipo=$('cad-objetivo')?.value||'manutencao';
+  const preset=OBJ_PRESETS[tipo]||OBJ_PRESETS.manutencao;
+  const s=sexo==='F'?-161:5;
+  const bmr=10*peso+6.25*altura-5*idade+s;
+  const tdee=bmr*(ACT_MULT[ativ]||1.55);
+  const kcal=Math.max(1200,Math.round(tdee+preset.kcal));
+  const prot=Math.round(pesoAlvo*preset.pPerKg);
+  const gord=Math.round(pesoAlvo*preset.gPerKg);
+  const carb=Math.max(0,Math.round((kcal-prot*4-gord*9)/4));
+  el.innerHTML=`<b>${kcal} kcal</b> · P <b>${prot}g</b> · C <b>${carb}g</b> · G <b>${gord}g</b>`;
+}
+
+function updateManualKcal(){
+  const $=id=>document.getElementById(id);
+  const el=document.getElementById('cad-manual-kcal'); if(!el) return;
+  const p=+($('cad-mProt')?.value)||0, c=+($('cad-mCarb')?.value)||0, g=+($('cad-mGord')?.value)||0;
+  const auto=p*4+c*4+g*9;
+  el.textContent = auto ? `Calorias calculadas: ${auto} kcal (deixe o campo vazio para usar este valor)` : '';
+function renderCadPreview(){
+  const o=getObjetivo(); const g=o.goals;
+  const el=document.getElementById('cad-preview'); if(!el) return;
+  if(!g){ el.innerHTML='Preencha e clique em <b>Salvar</b> para gerar suas metas.'; return; }
+  el.innerHTML=`Meta atual: <b>${g.kcal} kcal</b> · P <b>${g.prot}g</b> · C <b>${g.carb}g</b> · G <b>${g.gord}g</b>`;
+}
+function saveCadastro(){
+  const $=id=>document.getElementById(id);
+  const c={
+    idade: +$('cad-idade').value||30,
+    sexo: $('cad-sexo').value||'M',
+    atividade: $('cad-atividade').value||'moderado',
+    pesoAlvo: +$('cad-pesoalvo').value||null,
+    override: $('cad-override').checked,
+    mProt: +$('cad-mProt').value||0,
+    mCarb: +$('cad-mCarb').value||0,
+    mGord: +$('cad-mGord').value||0,
+    mKcal: +$('cad-mKcal').value||0,
+  };
+  setCadastro(c);
+  const o=getObjetivo(); o.tipo=$('cad-objetivo').value||'manutencao'; setObjetivo(o);
+  recalcMetas();
+  renderCadPreview();
 }
 
 /* ============== DASHBOARD CHARTS ============== */
@@ -2630,143 +2810,151 @@ img,svg,video,canvas{max-width:100%;height:auto}
 }
 </style>
 <!-- ============================================================
-     FONT-SCALER — controle A- / A+ / Auto + auto-fit responsivo
+     FONT-SCALER POR GRUPO — rodapé fixo · letra grande
+     Grupos: ex (exercícios) · tabs (ABC/Meta) · meta (macros) · head (títulos) · all
      ============================================================ -->
 <style>
+/* ---- Variáveis de escala por grupo (1 = padrão) ---- */
+:root{ --fs-ex:1; --fs-tabs:1; --fs-meta:1; --fs-head:1; }
+
+/* Aplica multiplicadores nas classes-alvo. !important para vencer regras inline existentes. */
+.ex-name   { font-size: calc(15px * var(--fs-ex)) !important; }
+.ex-reps   { font-size: calc(15px * var(--fs-ex)) !important; }
+.ex-gtag   { font-size: calc(13px * var(--fs-ex)) !important; padding: calc(4px * var(--fs-ex)) calc(10px * var(--fs-ex)) !important; }
+.biset-label{ font-size: calc(13px * var(--fs-ex)) !important; }
+.btn-feito { font-size: calc(13px * var(--fs-ex)) !important; }
+
+.tab-btn   { font-size: calc(15px * var(--fs-tabs)) !important; padding: calc(10px * var(--fs-tabs)) calc(18px * var(--fs-tabs)) !important; }
+.topbar-btn{ font-size: calc(14px * var(--fs-tabs)) !important; padding: calc(9px * var(--fs-tabs)) calc(14px * var(--fs-tabs)) !important; }
+.hub-tab,.evo-tab{ font-size: calc(14px * var(--fs-tabs)) !important; }
+
+.hero-kcal     { font-size: calc(60px * var(--fs-meta)) !important; }
+.hero-eyebrow  { font-size: calc(14px * var(--fs-meta)) !important; }
+.hero-status   { font-size: calc(14px * var(--fs-meta)) !important; }
+.ms-val        { font-size: calc(46px * var(--fs-meta)) !important; }
+.ms-name       { font-size: calc(14px * var(--fs-meta)) !important; }
+.ms-badge,.ms-pct { font-size: calc(13px * var(--fs-meta)) !important; }
+.mini-chip,.mini-pill { font-size: calc(13px * var(--fs-meta)) !important; }
+.hm-val        { font-size: calc(28px * var(--fs-meta)) !important; }
+.macro-val     { font-size: calc(28px * var(--fs-meta)) !important; }
+.macro-label   { font-size: calc(13px * var(--fs-meta)) !important; }
+
+.workout-name  { font-size: calc(30px * var(--fs-head)) !important; }
+.workout-sub   { font-size: calc(13px * var(--fs-head)) !important; }
+.plan-title,.panel-title { font-size: calc(15px * var(--fs-head)) !important; letter-spacing: 1.5px; }
+.hub-head h3   { font-size: calc(26px * var(--fs-head)) !important; }
+.group-chip    { font-size: calc(14px * var(--fs-head)) !important; }
+.select-title  { font-size: calc(40px * var(--fs-head)) !important; }
+
+/* ---- Footer fixo de controle ---- */
 .font-scaler{
   position:fixed;left:50%;bottom:14px;transform:translateX(-50%);
-  z-index:95;
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(20,20,24,.96);
-  border:1px solid var(--bg4);
-  box-shadow:0 6px 24px rgba(0,0,0,.35);
-  backdrop-filter:blur(14px);
-  border-radius:999px;padding:4px;
-  font-family:'Inter',sans-serif;
+  z-index:95;display:flex;align-items:center;gap:6px;
+  background:rgba(20,20,24,.96);border:1px solid var(--bg4);
+  box-shadow:0 8px 28px rgba(0,0,0,.45);backdrop-filter:blur(14px);
+  border-radius:999px;padding:6px 8px;font-family:'Inter',sans-serif;
+  max-width:calc(100vw - 16px);
 }
 :root[data-theme="light"] .font-scaler{background:rgba(255,255,255,.96)}
-body.has-nav .font-scaler{bottom:74px}
+body.has-nav .font-scaler{bottom:78px}
+
+.font-scaler .fs-group-sel{
+  background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);
+  border-radius:999px;padding:8px 14px;font-weight:800;font-size:13px;
+  letter-spacing:.6px;text-transform:uppercase;cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%239A98A6' d='M0 0l5 6 5-6z'/></svg>");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:24px;
+}
 .font-scaler button{
   background:transparent;border:0;color:var(--txt);
-  width:34px;height:34px;border-radius:50%;cursor:pointer;
-  font-weight:800;font-size:14px;line-height:1;
+  width:46px;height:46px;border-radius:50%;cursor:pointer;
+  font-weight:900;font-size:20px;line-height:1;
   display:inline-flex;align-items:center;justify-content:center;
   transition:background .18s,transform .15s;
 }
 .font-scaler button:hover{background:var(--bg4)}
 .font-scaler button:active{transform:scale(.92)}
-.font-scaler button.fs-minus{font-size:13px}
-.font-scaler button.fs-plus{font-size:13px}
-.font-scaler button.fs-auto{
-  width:auto;padding:0 12px;font-size:11px;letter-spacing:1.2px;
+.font-scaler button.fs-reset{
+  width:auto;padding:0 14px;font-size:12px;letter-spacing:1.2px;
   text-transform:uppercase;color:var(--txt2);font-weight:800;
 }
-.font-scaler button.fs-auto.on{background:var(--red-dim);color:var(--red)}
-.profile-manu .font-scaler button.fs-auto.on{background:var(--blue-dim);color:var(--blue)}
 .font-scaler .fs-val{
-  font-size:12px;font-weight:700;color:var(--txt2);
-  min-width:38px;text-align:center;letter-spacing:.5px;
-}
-.font-scaler .fs-toggle{
-  display:none;width:34px;height:34px;border-radius:50%;
-  background:rgba(20,20,24,.96);border:1px solid var(--bg4);
-  color:var(--txt);cursor:pointer;align-items:center;justify-content:center;
-  font-size:16px;
+  font-size:15px;font-weight:800;color:var(--txt);
+  min-width:54px;text-align:center;letter-spacing:.5px;
 }
 .fs-toast{
-  position:fixed;left:50%;bottom:130px;transform:translateX(-50%);
+  position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(8px);
   background:var(--bg2);border:1px solid var(--bg4);color:var(--txt);
-  padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;
+  padding:10px 18px;border-radius:999px;font-size:14px;font-weight:700;
   letter-spacing:.5px;z-index:1000;opacity:0;pointer-events:none;
   transition:opacity .25s,transform .25s;
 }
-.fs-toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.fs-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:420px){
-  .font-scaler{padding:3px;gap:2px;bottom:12px}
-  body.has-nav .font-scaler{bottom:70px}
-  .font-scaler button{width:32px;height:32px;font-size:13px}
-  .font-scaler button.fs-auto{padding:0 10px;font-size:10px}
-  .font-scaler .fs-val{font-size:11px;min-width:34px}
+  .font-scaler{gap:4px;padding:5px 6px}
+  .font-scaler button{width:42px;height:42px;font-size:18px}
+  .font-scaler .fs-group-sel{font-size:12px;padding:7px 22px 7px 10px}
+  .font-scaler .fs-val{font-size:14px;min-width:48px}
 }
 </style>
 
 <script>
 (function(){
-  const LS_KEY = 'morest.fontScale';
-  const LS_AUTO = 'morest.fontScaleAuto';
-  const MIN = 0.85, MAX = 1.40, STEP = 0.05;
+  const LS_KEY = 'morest.fontScales.v2';   // {ex:1, tabs:1, meta:1, head:1}
+  const LS_GROUP = 'morest.fontGroup';     // 'all' | 'ex' | 'tabs' | 'meta' | 'head'
+  const GROUPS = ['ex','tabs','meta','head'];
+  const LABELS = {all:'Tudo', ex:'Exercícios', tabs:'Botões ABC/Meta', meta:'Meta do dia', head:'Títulos'};
+  const MIN = 0.80, MAX = 1.80, STEP = 0.10;
 
-  function autoFit(){
-    const w = Math.max(320, Math.min(window.innerWidth, 1400));
-    // 320px → 0.92 | 384px → 1.00 | 768px → 1.08 | 1200px+ → 1.15
-    let s;
-    if(w < 360)      s = 0.90;
-    else if(w < 420) s = 0.96;
-    else if(w < 600) s = 1.00;
-    else if(w < 900) s = 1.06;
-    else             s = 1.12;
-    return s;
+  function loadScales(){
+    try{ return Object.assign({ex:1,tabs:1,meta:1,head:1}, JSON.parse(localStorage.getItem(LS_KEY)||'{}')); }
+    catch(e){ return {ex:1,tabs:1,meta:1,head:1}; }
   }
-
-  function apply(scale){
-    scale = Math.max(MIN, Math.min(MAX, +scale.toFixed(2)));
-    document.documentElement.style.setProperty('--font-scale', scale);
-    // zoom funciona em Chromium/Safari/Firefox modernos sem quebrar layout
-    document.documentElement.style.zoom = scale;
-    const val = document.querySelector('.font-scaler .fs-val');
-    if(val) val.textContent = Math.round(scale*100) + '%';
-    return scale;
+  function saveScales(s){ localStorage.setItem(LS_KEY, JSON.stringify(s)); }
+  function apply(s){
+    GROUPS.forEach(g => document.documentElement.style.setProperty('--fs-'+g, (s[g]||1).toFixed(2)));
   }
-
   function showToast(msg){
     let t = document.querySelector('.fs-toast');
-    if(!t){
-      t = document.createElement('div');
-      t.className = 'fs-toast';
-      document.body.appendChild(t);
+    if(!t){ t = document.createElement('div'); t.className='fs-toast'; document.body.appendChild(t); }
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 1400);
+  }
+  function currentGroup(){ return localStorage.getItem(LS_GROUP) || 'all'; }
+  function setGroup(g){ localStorage.setItem(LS_GROUP, g); refreshUI(); }
+
+  function getScalesForView(){
+    const s = loadScales(); const g = currentGroup();
+    if(g === 'all'){
+      // valor "comum": média se iguais, senão o do primeiro
+      const v = s.ex; const eq = GROUPS.every(k => Math.abs(s[k]-v) < 0.005);
+      return {scale:eq?v:1, mixed:!eq};
     }
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(t._h);
-    t._h = setTimeout(()=>t.classList.remove('show'), 1200);
-  }
-
-  function getAutoMode(){
-    return localStorage.getItem(LS_AUTO) !== '0';
-  }
-  function setAutoMode(on){
-    localStorage.setItem(LS_AUTO, on ? '1' : '0');
-    document.querySelector('.fs-auto')?.classList.toggle('on', on);
-  }
-
-  function getScale(){
-    if(getAutoMode()) return autoFit();
-    const v = parseFloat(localStorage.getItem(LS_KEY));
-    return isNaN(v) ? autoFit() : v;
+    return {scale:s[g]||1, mixed:false};
   }
 
   function adjust(delta){
-    let s = getScale() + delta;
-    s = Math.max(MIN, Math.min(MAX, s));
-    setAutoMode(false);
-    localStorage.setItem(LS_KEY, s.toFixed(2));
-    s = apply(s);
-    showToast('Fonte: ' + Math.round(s*100) + '%');
+    const s = loadScales(); const g = currentGroup();
+    const targets = g==='all' ? GROUPS : [g];
+    targets.forEach(k => { s[k] = Math.max(MIN, Math.min(MAX, +(s[k]+delta).toFixed(2))); });
+    saveScales(s); apply(s); refreshUI();
+    const v = g==='all' ? s.ex : s[g];
+    showToast(LABELS[g] + ': ' + Math.round(v*100) + '%');
+  }
+  function reset(){
+    const s = loadScales(); const g = currentGroup();
+    (g==='all'?GROUPS:[g]).forEach(k => s[k]=1);
+    saveScales(s); apply(s); refreshUI();
+    showToast(LABELS[g] + ' · 100%');
   }
 
-  function toggleAuto(){
-    const next = !getAutoMode();
-    setAutoMode(next);
-    if(next){
-      localStorage.removeItem(LS_KEY);
-      const s = apply(autoFit());
-      showToast('Auto · ' + Math.round(s*100) + '%');
-    } else {
-      const s = apply(getScale());
-      localStorage.setItem(LS_KEY, s.toFixed(2));
-      showToast('Manual · ' + Math.round(s*100) + '%');
-    }
+  function refreshUI(){
+    const sel = document.querySelector('.fs-group-sel'); if(sel) sel.value = currentGroup();
+    const {scale, mixed} = getScalesForView();
+    const val = document.querySelector('.font-scaler .fs-val');
+    if(val) val.textContent = mixed ? 'misto' : (Math.round(scale*100) + '%');
   }
 
   function mount(){
@@ -2774,42 +2962,38 @@ body.has-nav .font-scaler{bottom:74px}
     const el = document.createElement('div');
     el.className = 'font-scaler';
     el.setAttribute('role','group');
-    el.setAttribute('aria-label','Ajustar tamanho da fonte');
+    el.setAttribute('aria-label','Ajustar tamanho da fonte por grupo');
     el.innerHTML = `
-      <button class="fs-minus" type="button" title="Diminuir fonte" aria-label="Diminuir fonte">A−</button>
+      <select class="fs-group-sel" title="Escolher grupo">
+        <option value="all">Tudo</option>
+        <option value="ex">Exercícios</option>
+        <option value="tabs">ABC / Meta</option>
+        <option value="meta">Meta do dia</option>
+        <option value="head">Títulos</option>
+      </select>
+      <button class="fs-minus" type="button" title="Diminuir" aria-label="Diminuir fonte">A−</button>
       <span class="fs-val">100%</span>
-      <button class="fs-plus" type="button" title="Aumentar fonte" aria-label="Aumentar fonte">A+</button>
-      <button class="fs-auto" type="button" title="Ajuste automático" aria-label="Ajuste automático">Auto</button>
+      <button class="fs-plus" type="button" title="Aumentar" aria-label="Aumentar fonte">A+</button>
+      <button class="fs-reset" type="button" title="Reset" aria-label="Restaurar 100%">100%</button>
     `;
     document.body.appendChild(el);
     el.querySelector('.fs-minus').addEventListener('click', ()=>adjust(-STEP));
     el.querySelector('.fs-plus').addEventListener('click',  ()=>adjust(+STEP));
-    el.querySelector('.fs-auto').addEventListener('click',  toggleAuto);
-    el.querySelector('.fs-auto').classList.toggle('on', getAutoMode());
-    apply(getScale());
+    el.querySelector('.fs-reset').addEventListener('click', reset);
+    el.querySelector('.fs-group-sel').addEventListener('change', e=>setGroup(e.target.value));
+    apply(loadScales()); refreshUI();
   }
 
-  // Atalhos de teclado: Ctrl/⌘ + + / − / 0
-  window.addEventListener('keydown', (e)=>{
-    if(!(e.ctrlKey || e.metaKey)) return;
-    if(e.key === '=' || e.key === '+'){ e.preventDefault(); adjust(+STEP); }
-    else if(e.key === '-' || e.key === '_'){ e.preventDefault(); adjust(-STEP); }
-    else if(e.key === '0'){ e.preventDefault(); setAutoMode(true); localStorage.removeItem(LS_KEY); apply(autoFit()); showToast('Auto'); }
+  // Atalhos: Ctrl/⌘ + + / − / 0 (afeta grupo atual)
+  window.addEventListener('keydown', e=>{
+    if(!(e.ctrlKey||e.metaKey)) return;
+    if(e.key==='='||e.key==='+'){ e.preventDefault(); adjust(+STEP); }
+    else if(e.key==='-'||e.key==='_'){ e.preventDefault(); adjust(-STEP); }
+    else if(e.key==='0'){ e.preventDefault(); reset(); }
   });
 
-  // Reajuste em resize se estiver em modo Auto
-  let rT;
-  window.addEventListener('resize', ()=>{
-    if(!getAutoMode()) return;
-    clearTimeout(rT);
-    rT = setTimeout(()=>apply(autoFit()), 120);
-  });
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', mount);
-  } else {
-    mount();
-  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', mount);
+  else mount();
 })();
 </script>
 </body>
