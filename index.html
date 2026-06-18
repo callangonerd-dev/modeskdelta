@@ -1,3 +1,6 @@
+v2.5.2.html
+HTML
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -176,7 +179,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 
 /* PLAN TABS */
 .plan-tabs{
-  display:flex;gap:8px;margin-bottom:22px;
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;
   overflow-x:auto;padding-bottom:4px;
   scrollbar-width:none;
 }
@@ -226,6 +229,77 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .group-chip:hover{border-color:var(--txt3);color:var(--txt)}
 .group-chip.active-r{background:var(--red-dim);color:var(--red);border-color:var(--red-border);box-shadow:inset 0 0 0 1px var(--red-border)}
 .group-chip.active-b{background:var(--blue-dim);color:var(--blue);border-color:var(--blue-border);box-shadow:inset 0 0 0 1px var(--blue-border)}
+
+/* SELETOR ABC1 / ABC2 */
+.series-tabs{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 6px;
+  flex:0 0 100%;width:100%;
+}
+.series-btn{
+  border:2px solid transparent;
+  border-radius:14px;padding:14px 12px;font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:2px;cursor:pointer;text-align:center;
+  transition:all .2s;min-height:54px;color:#fff;
+  opacity:.55;filter:saturate(.6);
+}
+.series-btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.series-btn.blue{background:var(--blue);border-color:var(--blue);color:#fff}
+.series-btn.active{opacity:1;filter:none;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.series-btn:hover{opacity:1;filter:none}
+/* Filtra rows por série (ABC1 esconde azul, ABC2 esconde vermelho) */
+
+/* === Bolinha de exercício feito === */
+.ex-done-wrap{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:8px 14px;border-top:1px solid var(--bg4)}
+.ex-done-wrap .ex-done-label{font-size:12px;color:var(--txt3);letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.bolinha{
+  width:34px;height:34px;border-radius:50%;border:2.5px solid var(--txt3);
+  background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .18s ease;color:transparent;font-size:18px;padding:0;
+}
+.bolinha:hover{transform:scale(1.06)}
+.bolinha.on.red{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 4px 14px rgba(232,0,45,.45)}
+.bolinha.on.blue{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(0,170,255,.45)}
+.bolinha.red{border-color:var(--red)}
+.bolinha.blue{border-color:var(--blue)}
+
+/* === Descanso (rest timer) === */
+.rest-ctrl{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  background:var(--bg2);border:1px solid var(--bg4);border-radius:14px;
+  padding:10px 12px;margin:0 0 10px 0;
+}
+.rest-ctrl .rest-toggle{
+  display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  background:var(--bg3);border:1px solid var(--bg4);border-radius:10px;
+  padding:8px 12px;font-weight:700;color:var(--txt2);
+}
+.rest-ctrl .rest-toggle.on{background:#16a34a;color:#fff;border-color:#16a34a}
+.rest-ctrl .rest-time{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--txt2)}
+.rest-ctrl input.rest-num{
+  width:54px;background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);
+  border-radius:8px;padding:6px 8px;text-align:center;font-weight:700;
+}
+.rest-overlay{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--bg4);border-radius:16px;
+  padding:14px 18px;display:none;z-index:9999;min-width:240px;text-align:center;
+  box-shadow:0 14px 40px rgba(0,0,0,.55);
+}
+.rest-overlay.show{display:block}
+.rest-overlay .rt-title{font-size:12px;letter-spacing:1.5px;color:var(--txt3);text-transform:uppercase;font-weight:800;margin-bottom:6px}
+.rest-overlay .rt-time{font-size:38px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.rest-overlay .rt-sub{font-size:12px;color:var(--txt2);margin-top:4px}
+.rest-overlay .rt-actions{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.rest-overlay button{background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);border-radius:10px;padding:6px 12px;cursor:pointer;font-weight:700}
+.rest-overlay button.primary{background:var(--red);border-color:var(--red);color:#fff}
+.profile-manu .rest-overlay button.primary{background:var(--blue);border-color:var(--blue)}
+
+.exercise-list.series-1 .ex-row.row2{display:none}
+.exercise-list.series-2 .ex-row.row1{display:none}
+.exercise-list.series-1 .ex-card .biset-label,
+.exercise-list.series-2 .ex-card .biset-label{opacity:.55}
+.exercise-list.series-2 .ex-row.single{opacity:.6}
+.exercise-list.series-2 .ex-row.single{border-left-color:var(--blue)}
 
 /* EXERCISE CARDS */
 .exercise-list{display:grid;grid-template-columns:1fr;gap:12px}
@@ -838,7 +912,27 @@ body{font-size:15px;line-height:1.45}
     <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
   </div>
 
+  <div class="rest-ctrl" id="rest-ctrl">
+    <label class="rest-toggle" id="rest-toggle-btn" onclick="toggleRestTimer()">
+      <i class="ti ti-player-play"></i><span id="rest-toggle-lbl">Iniciar treino · descanso OFF</span>
+    </label>
+    <div class="rest-time"><i class="ti ti-barbell"></i>Grande<input type="number" class="rest-num" id="rest-big" value="90" min="10" max="600" onchange="saveRestCfg()">s</div>
+    <div class="rest-time"><i class="ti ti-hand-finger"></i>Pequeno<input type="number" class="rest-num" id="rest-small" value="60" min="10" max="600" onchange="saveRestCfg()">s</div>
+  </div>
+
   <div id="plan-content"></div>
+</div>
+
+<!-- REST TIMER OVERLAY -->
+<div class="rest-overlay" id="rest-overlay">
+  <div class="rt-title" id="rt-title">Descanso</div>
+  <div class="rt-time" id="rt-time">01:00</div>
+  <div class="rt-sub" id="rt-sub">músculo</div>
+  <div class="rt-actions">
+    <button onclick="restAdd(15)">+15s</button>
+    <button onclick="restAdd(-15)">-15s</button>
+    <button class="primary" onclick="restStop()">Pular</button>
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -1007,12 +1101,15 @@ const DB = {
 
 let currentProfile = null;
 let currentPlan = 0;
+let currentSeries = '1';
 let checkedSet = new Set();
 let bisetTimers = {};
 
 function showProfile(id) {
   currentProfile = id;
   currentPlan = 0;
+  currentSeries = '1';
+  activeFilter = null;
   checkedSet = new Set();
   const u = DB[id];
   const hb = document.getElementById('hbadge');
@@ -1064,27 +1161,141 @@ function goBack() {
 function renderTabs() {
   const u = DB[currentProfile];
   const tabs = document.getElementById('plan-tabs');
-  tabs.innerHTML = u.planos.map((p, i) => 
-    `<button class="tab-btn ${i===0?'active '+u.color:''}" onclick="switchPlan(${i})" id="tab-${i}">${p.t.split(':')[0]}</button>`
-  ).join('');
+  const seriesHtml = `<div class="series-tabs">
+    <button class="series-btn red ${currentSeries==='1'?'active':''}" onclick="switchSeries('1')">ABC1</button>
+    <button class="series-btn blue ${currentSeries==='2'?'active':''}" onclick="switchSeries('2')">ABC2</button>
+  </div>`;
+  const hasSeries = u.planos.some(p => /[12]$/.test(p.t.split(':')[0]));
+  const planHtml = u.planos.map((p, i) => {
+    const raw = p.t.split(':')[0];
+    const planSeries = (raw.match(/[12]$/)||[currentSeries])[0];
+    if(hasSeries && planSeries !== currentSeries) return '';
+    const label = p.t.split(':')[0].replace(/[12]$/,'');
+    return `<button class="tab-btn ${i===currentPlan?'active '+u.color:''}" onclick="switchPlan(${i})" id="tab-${i}">${label}</button>`;
+  }).join('');
+  tabs.innerHTML = seriesHtml + planHtml;
+}
+
+function switchSeries(series){
+  currentSeries = series;
+  const desired = currentPlanLabel() + series;
+  const idx = DB[currentProfile].planos.findIndex(p => p.t.split(':')[0] === desired);
+  currentPlan = idx >= 0 ? idx : 0;
+  activeFilter = null;
+  checkedSet = new Set();
+  renderTabs();
+  renderPlan();
+}
+
+function currentPlanLabel(){
+  const raw = DB[currentProfile].planos[currentPlan]?.t?.split(':')[0] || 'A1';
+  return raw.charAt(0);
 }
 
 function switchPlan(i) {
   const u = DB[currentProfile];
+  currentSeries = (u.planos[i]?.t?.split(':')[0]?.match(/[12]$/)||['1'])[0];
   document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
     btn.className = 'tab-btn' + (idx===i?' active '+u.color:'');
   });
   currentPlan = i;
+  activeFilter = null;
   checkedSet = new Set();
+  renderTabs();
   renderPlan();
   document.getElementById('screen-workout').scrollTop = 0;
 }
 
 function toggleCheck(key) {
-  if(checkedSet.has(key)) checkedSet.delete(key);
+   const wasChecked = checkedSet.has(key);
+   if(wasChecked) checkedSet.delete(key);
   else checkedSet.add(key);
-  updateProgress();
-}
+   // re-render to refresh bolinha state
+   renderPlan();
+   // start rest timer if turning ON
+   if(!wasChecked) startRestForKey(key);
+ }
+
+ // ===== Rest timer =====
+ const SMALL_MUSCLES = ['biceps','triceps','ombro','pant','core','adut'];
+ const LARGE_MUSCLES = ['peito','costas','quad','posterior','gluteo'];
+ let restEnabled = false;
+ let restInterval = null;
+ let restRemaining = 0;
+ function loadRestCfg(){
+   try{
+     const c = JSON.parse(localStorage.getItem('morest.rest')||'{}');
+     if(c.big) document.getElementById('rest-big').value = c.big;
+     if(c.small) document.getElementById('rest-small').value = c.small;
+     restEnabled = !!c.on;
+     reflectRestToggle();
+   }catch(e){}
+ }
+ function saveRestCfg(){
+   localStorage.setItem('morest.rest', JSON.stringify({
+     big: +document.getElementById('rest-big').value||90,
+     small: +document.getElementById('rest-small').value||60,
+     on: restEnabled
+   }));
+ }
+ function reflectRestToggle(){
+   const btn = document.getElementById('rest-toggle-btn');
+   const lbl = document.getElementById('rest-toggle-lbl');
+   if(!btn) return;
+   btn.classList.toggle('on', restEnabled);
+   lbl.textContent = restEnabled ? 'Treino iniciado · descanso ON' : 'Iniciar treino · descanso OFF';
+ }
+ function toggleRestTimer(){
+   restEnabled = !restEnabled;
+   reflectRestToggle();
+   saveRestCfg();
+   if(!restEnabled) restStop();
+ }
+ function muscleSizeForKey(key){
+   const u = DB[currentProfile]; const plan = u.planos[currentPlan];
+   const idx = +key.split('-').pop();
+   const ex = plan.ex[idx]; if(!ex) return 'big';
+   const groups = ex.biset ? [ex.g1, ex.g2] : [ex.g1];
+   const isLarge = groups.some(g => LARGE_MUSCLES.includes(g));
+   return isLarge ? 'big' : 'small';
+ }
+ function startRestForKey(key){
+   if(!restEnabled) return;
+   const size = muscleSizeForKey(key);
+   const secs = size==='big'
+     ? (+document.getElementById('rest-big').value||90)
+     : (+document.getElementById('rest-small').value||60);
+   const sub = size==='big' ? 'Músculo grande' : 'Músculo pequeno';
+   document.getElementById('rt-sub').textContent = sub;
+   document.getElementById('rt-title').textContent = 'Descanso';
+   restRemaining = secs;
+   renderRest();
+   document.getElementById('rest-overlay').classList.add('show');
+   if(restInterval) clearInterval(restInterval);
+   restInterval = setInterval(()=>{
+     restRemaining--;
+     renderRest();
+     if(restRemaining<=0){
+       clearInterval(restInterval); restInterval=null;
+       document.getElementById('rt-title').textContent='Vamos!';
+       try{ navigator.vibrate && navigator.vibrate([200,80,200]); }catch(e){}
+       setTimeout(()=>document.getElementById('rest-overlay').classList.remove('show'), 2500);
+     }
+   },1000);
+ }
+ function renderRest(){
+   const m = Math.max(0,Math.floor(restRemaining/60));
+   const s = Math.max(0,restRemaining%60);
+   document.getElementById('rt-time').textContent =
+     String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+ }
+ function restAdd(delta){ restRemaining = Math.max(0, restRemaining+delta); renderRest(); }
+ function restStop(){
+   if(restInterval){ clearInterval(restInterval); restInterval=null; }
+   document.getElementById('rest-overlay').classList.remove('show');
+ }
+ // initialize after DOM ready
+ setTimeout(loadRestCfg, 0);
 
 function updateProgress() {
   const u = DB[currentProfile];
@@ -1117,7 +1328,7 @@ function renderPlan() {
   });
   html += `</div>`;
 
-  html += `<div class="exercise-list" id="ex-list">`;
+  html += `<div class="exercise-list series-${currentSeries}" id="ex-list">`;
   plan.ex.forEach((ex, idx) => {
     const key = `${currentPlan}-${idx}`;
     const checked = checkedSet.has(key);
@@ -1146,17 +1357,7 @@ function renderPlan() {
             <i class="ti ti-player-play" aria-hidden="true"></i>
           </button>
         </div>
-        <div style="display:flex;align-items:center;justify-content:flex-end;padding:10px 14px;border-top:1px solid var(--bg4);">
-          <button onclick="toggleCheck('${key}')" id="chk-${key}" class="btn-feito ${checked?'on':''}" style="
-            background:${checked?checkColor:'transparent'};border:1.5px solid ${checkColor};border-radius:10px;
-            padding:9px 18px;cursor:pointer;font-weight:800;
-            color:${checked?'#fff':checkColor};display:flex;align-items:center;gap:8px;
-            letter-spacing:1px;transition:all .2s;text-transform:uppercase;
-          ">
-            <i class="ti ${checked?'ti-check':'ti-circle-dashed'}" aria-hidden="true"></i>
-            ${checked?'FEITO':'FAZER'}
-          </button>
-        </div>
+        <div class="ex-done-wrap"><span class="ex-done-label">${checked?'Feito':'Marcar como feito'}</span><button onclick="toggleCheck('${key}')" id="chk-${key}" class="bolinha ${color} ${checked?'on':''}" title="Marcar como feito" aria-label="Marcar como feito"><i class="ti ti-check"></i></button></div>
       </div>`;
     } else {
       html += `<div class="ex-card" data-groups="${ex.g1}">
@@ -1170,17 +1371,7 @@ function renderPlan() {
             <i class="ti ti-player-play" aria-hidden="true"></i>
           </button>
         </div>
-        <div style="display:flex;align-items:center;justify-content:flex-end;padding:10px 14px;border-top:1px solid var(--bg4);">
-          <button onclick="toggleCheck('${key}')" id="chk-${key}" class="btn-feito ${checked?'on':''}" style="
-            background:${checked?checkColor:'transparent'};border:1.5px solid ${checkColor};border-radius:10px;
-            padding:9px 18px;cursor:pointer;font-weight:800;
-            color:${checked?'#fff':checkColor};display:flex;align-items:center;gap:8px;
-            letter-spacing:1px;transition:all .2s;text-transform:uppercase;
-          ">
-            <i class="ti ${checked?'ti-check':'ti-circle-dashed'}" aria-hidden="true"></i>
-            ${checked?'FEITO':'FAZER'}
-          </button>
-        </div>
+        <div class="ex-done-wrap"><span class="ex-done-label">${checked?'Feito':'Marcar como feito'}</span><button onclick="toggleCheck('${key}')" id="chk-${key}" class="bolinha ${color} ${checked?'on':''}" title="Marcar como feito" aria-label="Marcar como feito"><i class="ti ti-check"></i></button></div>
       </div>`;
     }
   });
@@ -1569,6 +1760,20 @@ body.has-nav{padding-bottom:64px}
       <input type="date" id="obj-start" onchange="saveObjetivo()">
     </div>
     <button class="btn ghost full" onclick="recalcMetas()"><i class="ti ti-calculator"></i>Recalcular metas</button>
+    <button class="btn ghost full" style="margin-top:8px" onclick="goTab('bio')"><i class="ti ti-user-circle"></i>Cadastro base (altura · peso · idade · atividade)</button>
+    <button class="btn ghost full" style="margin-top:8px" onclick="goTab('ia')"><i class="ti ti-sparkles"></i>Lançar lote diário por texto (IA)</button>
+  </div>
+
+  <!-- HISTÓRICO DE METAS DIÁRIAS -->
+  <div class="panel">
+    <div class="panel-title"><i class="ti ti-history"></i>HISTÓRICO DE METAS (14 DIAS)</div>
+    <div id="metas-history" style="display:flex;flex-direction:column;gap:6px"></div>
+  </div>
+
+  <!-- HÁBITOS DIÁRIOS: creatina (Márcio) + água -->
+  <div class="panel" id="habits-panel">
+    <div class="panel-title"><i class="ti ti-bell"></i>HÁBITOS DE HOJE</div>
+    <div id="habits-content"></div>
   </div>
 </div>
 
@@ -2261,9 +2466,9 @@ function recalcMetas(){
   const bmr = 10*peso + 6.25*altura - 5*(+c.idade||30) + s;
   const tdee = bmr * (ACT_MULT[c.atividade] || 1.55);
   const kcal = Math.max(1200, Math.round(tdee + preset.kcal));
-  const prot = Math.round(pesoCalc * preset.pPerKg);
-  const gord = Math.round(pesoCalc * preset.gPerKg);
-  const carb = Math.max(0, Math.round((kcal - prot*4 - gord*9)/4));
+  const carb = Math.round((kcal * 0.40) / 4);
+  const prot = Math.round((kcal * 0.30) / 4);
+  const gord = Math.round((kcal * 0.30) / 9);
   o.goals = {kcal, prot, carb, gord};
   setObjetivo(o);
   renderMetas();
@@ -2330,7 +2535,10 @@ function renderMetas(){
   const dateStr=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'short'});
   document.getElementById('metas-date').textContent=dateStr;
   const hd=document.getElementById('hub-date'); if(hd) hd.textContent=dateStr;
-  if(!o.goals) recalcMetas();
+  if(!o.goals){
+    recalcMetas();
+    return;
+  }
   const cur=todayMacros(); const g=o.goals||{kcal:2000,prot:150,carb:200,gord:60};
 
   // HERO
@@ -2395,6 +2603,8 @@ function renderMetas(){
   }).join('');
   renderMealsToday();
   renderEvo();
+  renderMetasHistory();
+  renderHabits();
 }
 
 function renderMealsToday(){
@@ -2427,6 +2637,91 @@ function manualMeal(){
   ['mn-desc','mn-prot','mn-carb','mn-gord','mn-kcal'].forEach(id=>document.getElementById(id).value='');
   toast('Refeição adicionada','success');
   renderMetas(); updateHeaderMeta();
+}
+
+
+/* ============== HISTÓRICO DE METAS + HÁBITOS ============== */
+function metasForDay(k){
+  const meals = (LS.get('meals_'+currentProfile,{})[k])||[];
+  return meals.reduce((a,m)=>({
+    prot:a.prot+(m.proteina||0), carb:a.carb+(m.carboidrato||0),
+    gord:a.gord+(m.gordura||0), kcal:a.kcal+(m.calorias_estimadas||0),
+  }),{prot:0,carb:0,gord:0,kcal:0});
+}
+function renderMetasHistory(){
+  const el=document.getElementById('metas-history'); if(!el) return;
+  const o=getObjetivo(); const g=(o&&o.goals)||{kcal:2000,prot:150,carb:200,gord:60};
+  const today=new Date(); const rows=[];
+  for(let i=0;i<14;i++){
+    const d=new Date(today); d.setDate(today.getDate()-i);
+    const k=d.toISOString().slice(0,10);
+    const cur=metasForDay(k);
+    const pct=g.kcal?Math.round(cur.kcal/g.kcal*100):0;
+    const hit=pct>=95 && pct<=110;
+    const over=pct>110;
+    const label=d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'}).replace('.','');
+    const cls = over?'over':hit?'hit':(pct>=60?'warn':'');
+    const status = over?'Excesso':hit?'Bateu ✓':(pct>=60?'Parcial':'Não bateu');
+    const color = over?'#E8002D':hit?'#22c55e':(pct>=60?'#f59e0b':'var(--txt3)');
+    rows.push(`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid var(--bg4);border-radius:10px;background:var(--bg3)">
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--txt);text-transform:capitalize">${label}</div>
+        <div style="font-size:12px;color:var(--txt2)">P${Math.round(cur.prot)} · C${Math.round(cur.carb)} · G${Math.round(cur.gord)} · ${Math.round(cur.kcal)}kcal</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:13px;font-weight:800;color:${color}">${status}</div>
+        <div style="font-size:11px;color:var(--txt3)">${pct}% da meta</div>
+      </div>
+    </div>`);
+  }
+  el.innerHTML=rows.join('');
+}
+
+function getHabits(){
+  const all=LS.get('habits_'+currentProfile,{});
+  return all[todayKey()]||{cr1:false,cr2:false,water:0};
+}
+function setHabits(h){
+  const all=LS.get('habits_'+currentProfile,{});
+  all[todayKey()]=h; LS.set('habits_'+currentProfile,all);
+}
+function toggleHabit(key){
+  const h=getHabits(); h[key]=!h[key]; setHabits(h); renderHabits();
+}
+function addWater(n){
+  const h=getHabits(); h.water=Math.max(0,(h.water||0)+n); setHabits(h); renderHabits();
+}
+function renderHabits(){
+  const el=document.getElementById('habits-content'); if(!el) return;
+  const h=getHabits();
+  const isMarcio = currentProfile==='marcio';
+  const cr = isMarcio ? `
+    <div style="padding:12px;border:1px solid var(--bg4);border-radius:12px;background:var(--bg3);margin-bottom:10px">
+      <div style="font-size:13px;font-weight:800;color:var(--txt);margin-bottom:8px">
+        <i class="ti ti-pill"></i> Tomou suas DUAS creatinas hoje?
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn ${h.cr1?'':'ghost'}" onclick="toggleHabit('cr1')">
+          <i class="ti ti-${h.cr1?'check':'circle'}"></i> Creatina 1
+        </button>
+        <button class="btn ${h.cr2?'':'ghost'}" onclick="toggleHabit('cr2')">
+          <i class="ti ti-${h.cr2?'check':'circle'}"></i> Creatina 2
+        </button>
+      </div>
+      ${(!h.cr1||!h.cr2)?'<div style="font-size:12px;color:#f59e0b;margin-top:8px"><i class="ti ti-alert-triangle"></i> Não esqueça da creatina!</div>':'<div style="font-size:12px;color:#22c55e;margin-top:8px"><i class="ti ti-circle-check"></i> Creatina em dia ✓</div>'}
+    </div>` : '';
+  const water = `
+    <div style="padding:12px;border:1px solid var(--bg4);border-radius:12px;background:var(--bg3)">
+      <div style="font-size:13px;font-weight:800;color:var(--txt);margin-bottom:8px">
+        <i class="ti ti-droplet"></i> Beber muita água — copos hoje: <b>${h.water||0}</b> / 12
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn" onclick="addWater(1)"><i class="ti ti-plus"></i> +1 copo</button>
+        <button class="btn ghost" onclick="addWater(-1)"><i class="ti ti-minus"></i></button>
+      </div>
+      ${(h.water||0)<8?'<div style="font-size:12px;color:#00AAFF;margin-top:8px"><i class="ti ti-alert-circle"></i> Beba mais água!</div>':'<div style="font-size:12px;color:#22c55e;margin-top:8px"><i class="ti ti-circle-check"></i> Hidratação no caminho ✓</div>'}
+    </div>`;
+  el.innerHTML = cr + water;
 }
 
 /* ============== BIOMETRIA ============== */
@@ -2512,9 +2807,9 @@ function updateAutoPreview(){
   const bmr=10*peso+6.25*altura-5*idade+s;
   const tdee=bmr*(ACT_MULT[ativ]||1.55);
   const kcal=Math.max(1200,Math.round(tdee+preset.kcal));
-  const prot=Math.round(pesoAlvo*preset.pPerKg);
-  const gord=Math.round(pesoAlvo*preset.gPerKg);
-  const carb=Math.max(0,Math.round((kcal-prot*4-gord*9)/4));
+  const carb=Math.round((kcal*0.40)/4);
+  const prot=Math.round((kcal*0.30)/4);
+  const gord=Math.round((kcal*0.30)/9);
   el.innerHTML=`<b>${kcal} kcal</b> · P <b>${prot}g</b> · C <b>${carb}g</b> · G <b>${gord}g</b>`;
 }
 
@@ -2524,6 +2819,7 @@ function updateManualKcal(){
   const p=+($('cad-mProt')?.value)||0, c=+($('cad-mCarb')?.value)||0, g=+($('cad-mGord')?.value)||0;
   const auto=p*4+c*4+g*9;
   el.textContent = auto ? `Calorias calculadas: ${auto} kcal (deixe o campo vazio para usar este valor)` : '';
+}
 function renderCadPreview(){
   const o=getObjetivo(); const g=o.goals;
   const el=document.getElementById('cad-preview'); if(!el) return;
@@ -2860,31 +3156,31 @@ body.has-nav .font-scaler{bottom:78px}
 
 .font-scaler .fs-group-sel{
   background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);
-  border-radius:999px;padding:8px 14px;font-weight:800;font-size:13px;
+  border-radius:999px;padding:10px 18px;font-weight:800;font-size:15px;
   letter-spacing:.6px;text-transform:uppercase;cursor:pointer;
   appearance:none;-webkit-appearance:none;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%239A98A6' d='M0 0l5 6 5-6z'/></svg>");
-  background-repeat:no-repeat;background-position:right 10px center;padding-right:24px;
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:28px;
 }
 .font-scaler button{
   background:transparent;border:0;color:var(--txt);
-  width:46px;height:46px;border-radius:50%;cursor:pointer;
-  font-weight:900;font-size:20px;line-height:1;
+  width:52px;height:52px;border-radius:50%;cursor:pointer;
+  font-weight:900;font-size:24px;line-height:1;
   display:inline-flex;align-items:center;justify-content:center;
   transition:background .18s,transform .15s;
 }
 .font-scaler button:hover{background:var(--bg4)}
 .font-scaler button:active{transform:scale(.92)}
 .font-scaler button.fs-reset{
-  width:auto;padding:0 14px;font-size:12px;letter-spacing:1.2px;
+  width:auto;padding:0 16px;font-size:14px;letter-spacing:1.2px;
   text-transform:uppercase;color:var(--txt2);font-weight:800;
 }
 .font-scaler .fs-val{
-  font-size:15px;font-weight:800;color:var(--txt);
-  min-width:54px;text-align:center;letter-spacing:.5px;
+  font-size:18px;font-weight:800;color:var(--txt);
+  min-width:62px;text-align:center;letter-spacing:.5px;
 }
 .fs-toast{
-  position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(8px);
+  position:fixed;left:50%;bottom:108px;transform:translateX(-50%) translateY(8px);
   background:var(--bg2);border:1px solid var(--bg4);color:var(--txt);
   padding:10px 18px;border-radius:999px;font-size:14px;font-weight:700;
   letter-spacing:.5px;z-index:1000;opacity:0;pointer-events:none;
@@ -2893,11 +3189,31 @@ body.has-nav .font-scaler{bottom:78px}
 .fs-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:420px){
-  .font-scaler{gap:4px;padding:5px 6px}
-  .font-scaler button{width:42px;height:42px;font-size:18px}
-  .font-scaler .fs-group-sel{font-size:12px;padding:7px 22px 7px 10px}
-  .font-scaler .fs-val{font-size:14px;min-width:48px}
+  .font-scaler{gap:5px;padding:6px 8px}
+  .font-scaler button{width:48px;height:48px;font-size:22px}
+  .font-scaler .fs-group-sel{font-size:14px;padding:9px 26px 9px 12px}
+  .font-scaler .fs-val{font-size:17px;min-width:56px}
 }
+/* Garante espaço para o rodapé fixo */
+body{padding-bottom:96px}
+body.has-nav{padding-bottom:160px}
+
+/* ----- Balões de grupo muscular (filtro) mais limpos ----- */
+.groups-bar{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin:14px 0 18px;padding:4px 0;
+}
+.group-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 16px;border-radius:999px;
+  background:var(--bg3);border:1.5px solid var(--bg4);
+  color:var(--txt2);font-weight:700;letter-spacing:.5px;
+  cursor:pointer;transition:all .18s;text-transform:capitalize;
+  user-select:none;
+}
+.group-chip:hover{border-color:var(--txt3);color:var(--txt)}
+.group-chip.active-r{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.group-chip.active-b{background:var(--blue-dim);border-color:var(--blue);color:var(--blue)}
 </style>
 
 <script>
