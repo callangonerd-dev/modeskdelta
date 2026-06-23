@@ -928,12 +928,11 @@ body{font-size:15px;line-height:1.45}
 <body>
 
 <header class="app-header">
-  <div class="header-left">
-    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Alternar tema" aria-label="Alternar tema"><i class="ti ti-moon" id="theme-icon"></i></button>
-  </div>
+  <div class="header-left"></div>
   <div class="logo"><span class="logo-mo">MO</span><span class="logo-rest">TRAINING</span></div>
   <div class="header-right">
     <div class="header-badge" id="hbadge" aria-hidden="true"></div>
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Alternar tema" aria-label="Alternar tema"><i class="ti ti-moon" id="theme-icon"></i></button>
   </div>
 </header>
 
@@ -5718,11 +5717,16 @@ function mpAddByUrl(){
     document.body.appendChild(fab);
     function tick(){
       const ws = document.getElementById('screen-workout');
-      const visible = ws && ws.classList.contains('active');
+      const screenActive = ws && ws.classList.contains('active');
+      // Only show when TREINO tab in the menu is active AND menu is expanded
+      const treinoBtn = document.querySelector('.bottom-nav .nav-btn[data-tab="workout"]');
+      const tabActive = treinoBtn && treinoBtn.classList.contains('active');
+      const navCollapsed = document.body.classList.contains('nav-collapsed');
+      const visible = screenActive && tabActive && !navCollapsed;
       fab.style.display = visible ? 'inline-flex' : 'none';
       fab.classList.toggle('manu', window.currentProfile==='manu');
     }
-    setInterval(tick, 400); tick();
+    setInterval(tick, 250); tick();
   }
   if(document.readyState!=='loading') injectFab();
   else document.addEventListener('DOMContentLoaded', injectFab);
@@ -8321,6 +8325,97 @@ body.has-nav .font-scaler{ bottom:98px !important; }
 })();
 </script>
 
+<!-- v5 dock toggle removed — superseded by left-side drawer below -->
+
+<!-- ============== FOOTER NAV + LEFT TOGGLE ============== -->
+<style>
+  /* Theme toggle pinned at top-right */
+  .app-header .header-right{ gap:10px; }
+  .app-header .header-right .theme-toggle{ margin-right:0 !important; display:inline-flex !important; }
+
+  /* Bottom nav stays at the footer; we just slide it in/out smoothly */
+  .bottom-nav{
+    transform: translateY(calc(100% + 20px));
+    opacity: 0;
+    pointer-events: none;
+    transition: transform .42s cubic-bezier(.22,1,.36,1), opacity .25s ease;
+    will-change: transform;
+  }
+  body.dock-open .bottom-nav{
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  /* Force visible even if legacy code sets .hidden */
+  body.dock-open .bottom-nav.hidden{ display:flex !important; }
+
+  /* Red toggle button fixed on the LEFT wall — always visible on every screen */
+  .side-dock-toggle{
+    position: fixed;
+    left: 0;
+    bottom: 24px;
+    width: 42px;
+    height: 56px;
+    background: var(--red);
+    color: #fff;
+    border: 0;
+    border-radius: 0 14px 14px 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 140;
+    box-shadow: 0 10px 26px -8px rgba(255,0,0,.55), 0 2px 0 rgba(0,0,0,.25);
+    transition: background .2s, transform .25s ease;
+  }
+  body.is-manu .side-dock-toggle{ background: var(--blue); box-shadow: 0 10px 26px -8px rgba(0,120,255,.55), 0 2px 0 rgba(0,0,0,.25); }
+  .side-dock-toggle:hover{ transform: translateX(2px); }
+  .side-dock-toggle i{ font-size: 22px; transition: transform .35s cubic-bezier(.22,1,.36,1); }
+  body.dock-open .side-dock-toggle i{ transform: rotate(180deg); }
+
+  /* Reset bottom padding — nav is hidden by default */
+  body.has-nav{ padding-bottom: 0; }
+  body.has-nav.dock-open{ padding-bottom: 70px; }
+</style>
+
+<button class="side-dock-toggle" id="side-dock-toggle" aria-label="Abrir menu" aria-expanded="false" type="button">
+  <i class="ti ti-chevron-right"></i>
+</button>
+
+<script>
+(function(){
+  function init(){
+    var btn = document.getElementById('side-dock-toggle');
+    var nav = document.getElementById('bnav');
+    if(!btn || !nav) return;
+    var icon = btn.querySelector('i');
+
+    function setOpen(open){
+      document.body.classList.toggle('dock-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+      icon.className = open ? 'ti ti-chevron-left' : 'ti ti-chevron-right';
+    }
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      setOpen(!document.body.classList.contains('dock-open'));
+    });
+    document.addEventListener('click', function(e){
+      if(!document.body.classList.contains('dock-open')) return;
+      if(nav.contains(e.target) || btn.contains(e.target)) return;
+      setOpen(false);
+    });
+    nav.addEventListener('click', function(e){
+      if(e.target.closest('.nav-btn')) setOpen(false);
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') setOpen(false);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
 </body>
 </html>
 
