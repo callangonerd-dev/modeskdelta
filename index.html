@@ -6,6 +6,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" rel="stylesheet">
+<script>
+/* Lazy-load do Tesseract.js (~3MB): carrega apenas quando o OCR for usado */
+window.ensureTesseract = function(){
+  if(window.__tesseractPromise) return window.__tesseractPromise;
+  window.__tesseractPromise = new Promise(function(resolve, reject){
+    if(typeof Tesseract !== 'undefined'){ resolve(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+    s.onload = function(){ resolve(); };
+    s.onerror = function(){ window.__tesseractPromise = null; reject(new Error('load-failed')); };
+    document.head.appendChild(s);
+  });
+  return window.__tesseractPromise;
+};
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
  :root{
@@ -306,6 +321,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .exercise-list.series-2 .ex-card .biset-label{opacity:.55}
 .exercise-list.series-2 .ex-row.single{opacity:.6}
 .exercise-list.series-2 .ex-row.single{border-left-color:var(--blue)}
+.exercise-list.series-2 .ex-row.single{border-left:3px solid var(--blue) !important;border-image:none !important}
 
 /* EXERCISE CARDS */
 .exercise-list{display:grid;grid-template-columns:1fr;gap:12px}
@@ -315,6 +331,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
   border:1px solid var(--bg4);
   overflow:hidden;
   transition:border-color .2s;
+ border-left: 7px solid var(--blue) !important;
 }
 .ex-card:hover{border-color:var(--bg4)}
 
@@ -1905,6 +1922,11 @@ body.has-nav{padding-bottom:64px}
         <div class="qa-field"><label>Gordura (g)</label><input type="number" step="0.1" id="mn-gord" inputmode="decimal" placeholder="0"></div>
         <div class="qa-field"><label>Calorias</label><input type="number" id="mn-kcal" inputmode="numeric" placeholder="auto"></div>
       </div>
+      <div class="qa-field" style="margin-top:10px">
+        <label><i class="ti ti-camera"></i> Reconhecer macros por foto (OCR)</label>
+        <input id="meal-ocr-file" type="file" accept="image/*" capture="environment" onchange="runMealOCR(this.files[0])" style="display:block;width:100%;padding:10px;background:var(--bg3);border:1px solid var(--bg4);border-radius:8px;color:var(--txt);font-size:15px">
+        <div id="meal-ocr-status" style="margin-top:8px;font-size:13px;color:var(--txt2)"></div>
+      </div>
       <div class="qa-actions">
         <button class="btn full" onclick="manualMeal()"><i class="ti ti-device-floppy"></i>Adicionar</button>
         <button class="btn ghost" onclick="goTab('ia')" title="Lançar via IA"><i class="ti ti-sparkles"></i>IA</button>
@@ -1936,10 +1958,10 @@ body.has-nav{padding-bottom:64px}
   </div>
 
 
-  <!-- COLAR TEXTO DE MACROS (IA local) -->
+  <!-- COLAR / RECONHECER TEXTO DE MACROS (IA local + OCR) -->
   <div class="panel">
-    <div class="panel-title"><i class="ti ti-clipboard-text"></i>COLAR MACROS POR TEXTO</div>
-    <div class="panel-sub">Cole a refeição ou o fechamento do dia. O reconhecedor identifica perfil, data e valores.</div>
+    <div class="panel-title"><i class="ti ti-clipboard-text"></i>RECONHECIMENTO DE TEXTO — MACROS</div>
+    <div class="panel-sub">Cole o texto, digite ou envie uma foto/print. O reconhecedor identifica perfil, data e valores.</div>
     <div class="field">
       <label>Perfil</label>
       <select id="macro-paste-profile">
@@ -1948,8 +1970,13 @@ body.has-nav{padding-bottom:64px}
       </select>
     </div>
     <div class="field">
-      <label>Texto</label>
-      <textarea id="macro-paste-input" rows="5" placeholder="Ex (refeição): Almoço: 40p 60c 15g 520kcal&#10;Ex (total): Total do dia: P180 C220 G60 2100kcal&#10;Pode incluir @marcio / @manu e 'ontem' ou data dd/mm."></textarea>
+      <label>Texto reconhecido</label>
+      <textarea id="macro-paste-input" rows="10" style="font-size:22px;line-height:1.4;font-weight:600;min-height:220px;letter-spacing:.5px" placeholder="Ex (refeição): Almoço: 40p 60c 15g 520kcal&#10;Ex (total): Total do dia: P180 C220 G60 2100kcal&#10;Pode incluir @marcio / @manu e 'ontem' ou data dd/mm."></textarea>
+    </div>
+    <div class="field">
+      <label>Reconhecer texto a partir de imagem (OCR)</label>
+      <input id="macro-ocr-file" type="file" accept="image/*" capture="environment" onchange="runMacroOCR(this.files[0])" style="display:block;width:100%;padding:10px;background:var(--bg3);border:1px solid var(--bg4);border-radius:8px;color:var(--txt);font-size:15px">
+      <div id="macro-ocr-status" style="margin-top:8px;font-size:13px;color:var(--txt2)"></div>
     </div>
     <div class="sf-actions" style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn" style="flex:1;min-width:140px" onclick="pasteMacrosSmart('meal')"><i class="ti ti-plus"></i>Somar refeição</button>
@@ -2639,81 +2666,8 @@ body.has-nav{padding-bottom:64px}
 </div>
 
 
-<!-- BIBLIOTECA DE EXERCÍCIOS -->
-<div class="screen" id="screen-biblioteca">
-  <div class="bib-head">
-    <div class="bib-title"><i class="ti ti-books"></i>Biblioteca de Exercícios</div>
-    <div class="bib-search">
-      <i class="ti ti-search"></i>
-      <input id="bib-search-input" type="text" placeholder="Buscar exercício..." oninput="renderBiblioteca()">
-    </div>
-    <div class="bib-filters" id="bib-filters"></div>
-     <div class="bib-toolbar">
-       <span class="bib-count" id="bib-count">0 exercícios</span>
-       <button class="bib-import-btn" onclick="openBibOnline()"><i class="ti ti-world-search"></i>Buscar Online</button>
-       <button class="bib-import-btn" onclick="openBibImport()"><i class="ti ti-upload"></i>Importar JSON</button>
-     </div>
-  </div>
-  <div class="bib-grid" id="bib-grid"></div>
-</div>
+<!-- BIBLIOTECA DE EXERCÍCIOS removida -->
 
-<!-- Modal detalhe exercício -->
-<div class="bib-modal" id="bib-modal" onclick="if(event.target===this)closeBibModal()">
-  <div class="bib-modal-content">
-    <div class="bib-modal-head">
-      <h3 id="bib-modal-name">—</h3>
-      <button class="bib-close" onclick="closeBibModal()"><i class="ti ti-x"></i></button>
-    </div>
-    <div class="bib-modal-body">
-      <img id="bib-modal-gif" class="bib-modal-gif" alt="">
-      <div class="bib-modal-mg" id="bib-modal-mg">—</div>
-      <div class="bib-modal-instr" id="bib-modal-instr">—</div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal importador -->
-<div class="bib-modal bib-import-modal" id="bib-import-modal" onclick="if(event.target===this)closeBibImport()">
-  <div class="bib-modal-content">
-    <div class="bib-modal-head">
-      <h3>Importar Exercícios (JSON)</h3>
-      <button class="bib-close" onclick="closeBibImport()"><i class="ti ti-x"></i></button>
-    </div>
-    <div class="bib-modal-body">
-      <label for="bib-file" class="bib-drop" id="bib-drop">
-        <i class="ti ti-cloud-upload"></i>
-        <p><strong>Clique para escolher</strong> ou arraste o arquivo</p>
-        <small>Formato: [{ "name", "muscle_group", "gif_url", "instructions" }]</small>
-      </label>
-      <input id="bib-file" type="file" accept="application/json,.json" style="display:none" onchange="handleBibFile(this.files[0])">
-      <div class="bib-import-status" id="bib-import-status"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Buscar Online (gifdotreino.com) -->
-<div class="bib-modal bib-import-modal" id="bib-online-modal" onclick="if(event.target===this)closeBibOnline()">
-  <div class="bib-modal-content" style="max-width:760px;width:95%;max-height:90vh;display:flex;flex-direction:column">
-    <div class="bib-modal-head">
-      <h3><i class="ti ti-world-search"></i> Buscar em gifdotreino.com</h3>
-      <button class="bib-close" onclick="closeBibOnline()"><i class="ti ti-x"></i></button>
-    </div>
-    <div class="bib-modal-body" style="overflow:hidden;display:flex;flex-direction:column;gap:10px">
-      <div class="bib-search" style="margin:0">
-        <i class="ti ti-search"></i>
-        <input id="bib-online-q" type="text" placeholder="Ex.: agachamento, supino, biceps..." onkeydown="if(event.key==='Enter')bibOnlineSearch()">
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="bib-import-btn" onclick="bibOnlineSearch()"><i class="ti ti-search"></i>Buscar</button>
-        <button class="bib-import-btn" onclick="bibOnlineSelectAll(true)"><i class="ti ti-checks"></i>Selecionar todos</button>
-        <button class="bib-import-btn" onclick="bibOnlineSelectAll(false)"><i class="ti ti-square"></i>Limpar</button>
-        <button class="bib-import-btn" onclick="bibOnlineImport()" style="margin-left:auto;background:#2bd47a;color:#000"><i class="ti ti-download"></i>Importar selecionados</button>
-      </div>
-      <div class="bib-import-status" id="bib-online-status"></div>
-      <div id="bib-online-results" style="overflow:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:4px"></div>
-    </div>
-  </div>
-</div>
 
 
 
@@ -2725,7 +2679,7 @@ body.has-nav{padding-bottom:64px}
   <button class="nav-btn" data-tab="bio" onclick="goTab('bio')"><i class="ti ti-scale"></i>Bio</button>
   <button class="nav-btn" data-tab="dash" onclick="goTab('dash')"><i class="ti ti-chart-bar"></i>Dash</button>
   <button class="nav-btn" data-tab="builder" onclick="openBuilder()"><i class="ti ti-wand"></i>Montar</button>
-  <button class="nav-btn" data-tab="biblioteca" onclick="goTab('biblioteca')"><i class="ti ti-books"></i>Biblio</button>
+  
   <button class="nav-btn" data-tab="config" onclick="goTab('config')"><i class="ti ti-settings"></i>Config</button>
 <button class="nav-btn nav-btn-exit" data-tab="exit" onclick="goHome()"><i class="ti ti-logout"></i>Sair</button>
 </nav>
@@ -2751,7 +2705,7 @@ function backToProfile(){
   else { goHome(); }
 }
 function goHome(){
-  ['ia','metas','bio','dash','config','workout','biblioteca'].forEach(s=>{
+  ['ia','metas','bio','dash','config','workout'].forEach(s=>{
     const el=document.getElementById('screen-'+s); if(el) el.classList.remove('active');
   });
   document.getElementById('screen-select').classList.add('active');
@@ -2767,11 +2721,10 @@ function showNav(){
 }
 function goTab(tab){
   if(!currentProfile){ toast('Selecione um perfil primeiro','error'); return; }
-  ['workout','ia','metas','bio','dash','config','biblioteca'].forEach(s=>{
-    document.getElementById('screen-'+s).classList.remove('active');
+  ['workout','ia','metas','bio','dash','config'].forEach(s=>{
+    const el=document.getElementById('screen-'+s); if(el) el.classList.remove('active');
   });
-  document.getElementById('screen-'+tab).classList.add('active');
-  if(tab==='biblioteca') loadBiblioteca();
+  const target=document.getElementById('screen-'+tab); if(target) target.classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>{
     b.classList.toggle('active', b.dataset.tab===tab);
     b.classList.toggle('manu-mode', currentProfile==='manu');
@@ -5993,7 +5946,7 @@ h1,h2,h3,h4,.logo-mo,.logo-rest,.select-title,.pc-name,.workout-name,
 .workout-name{font-size:22px !important; letter-spacing:.03em !important}
 .ms-val{font-size:38px !important}
 .macro-val{font-size:26px !important}
-.rest-time{font-size:30px !important; letter-spacing:6px !important}
+.rest-time{font-size:19px !important; letter-spacing:6px !important}
 
 /* Metallic blue surfaces for Manu profile */
 body.is-manu .series-btn.blue,
@@ -6363,7 +6316,7 @@ body.is-manu .bottom-nav .nav-btn[data-tab="fstoggle"].on{ color:var(--blue); }
 (function(){
   const LS = 'morest.fontScalerHidden.v3';
   function applyState(){
-    const hidden = localStorage.getItem(LS)==='1';
+    const hidden = localStorage.getItem(LS)!=='0';
     const fs = document.querySelector('.font-scaler');
     if(fs) fs.classList.toggle('is-hidden', hidden);
     const btn = document.querySelector('.bottom-nav .nav-btn[data-tab="fstoggle"]');
@@ -6402,6 +6355,117 @@ body.is-manu .bottom-nav .nav-btn[data-tab="fstoggle"].on{ color:var(--blue); }
     if(e.target.closest('.nav-btn')) setTimeout(applyState, 50);
   });
 })();
+
+/* ====== OCR de macros (Tesseract.js) ====== */
+window.runMacroOCR = async function(file){
+  if(!file) return;
+  const status = document.getElementById('macro-ocr-status');
+  const ta = document.getElementById('macro-paste-input');
+  status.textContent = 'Carregando OCR...';
+  try{ await window.ensureTesseract(); }
+  catch(e){ status.textContent = 'OCR indisponível (sem conexão).'; return; }
+  status.textContent = 'Lendo imagem... 0%';
+  try{
+    const { data } = await Tesseract.recognize(file, 'por+eng', {
+      logger: m => {
+        if(m.status === 'recognizing text'){
+          status.textContent = 'Reconhecendo texto... ' + Math.round((m.progress||0)*100) + '%';
+        } else if(m.status){
+          status.textContent = m.status + '...';
+        }
+      }
+    });
+    const txt = (data && data.text ? data.text : '').trim();
+    if(!txt){ status.textContent = 'Nada reconhecido. Tente outra foto.'; return; }
+    ta.value = (ta.value ? ta.value.trim() + '\n' : '') + txt;
+    status.textContent = 'Texto reconhecido — revise e clique em Somar/Substituir.';
+    ta.focus();
+  }catch(err){
+    console.error(err);
+    status.textContent = 'Erro no OCR: ' + (err && err.message ? err.message : err);
+  }
+};
+
+/* ====== OCR direto no lançamento de refeição ====== */
+function _parseMacroText(text){
+  const result = {desc:'', prot:0, carb:0, gord:0, kcal:0};
+  const t = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+  // Descrição: primeira linha que parece nome de refeição
+  const firstLine = text.split(/\r?\n/)[0].trim();
+  const mealMatch = firstLine.match(/^[a-z][a-z\s]{1,30}\s*[:\-–]/i);
+  if(mealMatch) result.desc = firstLine.split(/[:\-–]/)[0].trim();
+
+  const num = s => Math.round(parseFloat((s||'0').replace(',','.'))*10)/10 || 0;
+
+  // Formato compacto: 40p 60c 15g 520kcal (ou P40 C60 G15 K520)
+  const compact = t.match(/(?:\b|[^a-z])(\d+(?:[.,]\d+)?)\s*p\b[\s\D]{0,10}(?:\b|[^a-z])(\d+(?:[.,]\d+)?)\s*c\b[\s\D]{0,10}(?:\b|[^a-z])(\d+(?:[.,]\d+)?)\s*g\b/);
+  if(compact){
+    result.prot = num(compact[1]); result.carb = num(compact[2]); result.gord = num(compact[3]);
+  }
+
+  // Padrões com rótulos (proteina, carboidrato, gordura, calorias)
+  if(!result.prot){
+    const m = t.match(/(?:prote[ií]na|prot|p)\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*(?:g|gramas)?\b/);
+    if(m) result.prot = num(m[1]);
+  }
+  if(!result.carb){
+    const m = t.match(/(?:carboidrato|carbo|carb|c)\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*(?:g|gramas)?\b/);
+    if(m) result.carb = num(m[1]);
+  }
+  if(!result.gord){
+    const m = t.match(/(?:gordura|gord|g)\s*[:=]?\s*(\d+(?:[.,]\d+)?)\s*(?:g|gramas)?\b/);
+    if(m) result.gord = num(m[1]);
+  }
+
+  // Calorias
+  const k = t.match(/(?:calorias|kcal|cal)\s*[:=]?\s*(\d+(?:[.,]\d+)?)/);
+  if(k) result.kcal = num(k[1]);
+
+  // Fallback por ordem de palavras: "40g de proteína, 60g de carboidrato..."
+  if(!result.prot){ const m=t.match(/(\d+(?:[.,]\d+)?)\s*(?:g|gramas)?\s*(?:de\s+)?prote[ií]na\b/); if(m) result.prot=num(m[1]); }
+  if(!result.carb){ const m=t.match(/(\d+(?:[.,]\d+)?)\s*(?:g|gramas)?\s*(?:de\s+)?carboidratos?\b/); if(m) result.carb=num(m[1]); }
+  if(!result.gord){ const m=t.match(/(\d+(?:[.,]\d+)?)\s*(?:g|gramas)?\s*(?:de\s+)?gordura\b/); if(m) result.gord=num(m[1]); }
+  if(!result.kcal){ const m=t.match(/(\d+(?:[.,]\d+)?)\s*(?:kcal|calorias)\b/); if(m) result.kcal=num(m[1]); }
+
+  // Se não achou kcal, calcula pelos macros
+  if(!result.kcal && (result.prot || result.carb || result.gord)){
+    result.kcal = Math.round(result.prot*4 + result.carb*4 + result.gord*9);
+  }
+  return result;
+}
+
+window.runMealOCR = async function(file){
+  if(!file) return;
+  const status = document.getElementById('meal-ocr-status');
+  status.textContent = 'Carregando OCR...';
+  try{ await window.ensureTesseract(); }
+  catch(e){ status.textContent = 'OCR indisponível (sem conexão).'; return; }
+  status.textContent = 'Lendo imagem... 0%';
+  try{
+    const { data } = await Tesseract.recognize(file, 'por+eng', {
+      logger: m => {
+        if(m.status === 'recognizing text'){
+          status.textContent = 'Reconhecendo texto... ' + Math.round((m.progress||0)*100) + '%';
+        } else if(m.status){
+          status.textContent = m.status + '...';
+        }
+      }
+    });
+    const txt = (data && data.text ? data.text : '').trim();
+    if(!txt){ status.textContent = 'Nada reconhecido. Tente outra foto.'; return; }
+    const p = _parseMacroText(txt);
+    if(p.desc) document.getElementById('mn-desc').value = p.desc;
+    if(p.prot) document.getElementById('mn-prot').value = p.prot;
+    if(p.carb) document.getElementById('mn-carb').value = p.carb;
+    if(p.gord) document.getElementById('mn-gord').value = p.gord;
+    if(p.kcal) document.getElementById('mn-kcal').value = p.kcal;
+    status.textContent = 'Reconhecido: P' + (p.prot||0) + ' · C' + (p.carb||0) + ' · G' + (p.gord||0) + ' · ' + (p.kcal||0) + ' kcal. Revise e adicione.';
+  }catch(err){
+    console.error(err);
+    status.textContent = 'Erro no OCR: ' + (err && err.message ? err.message : err);
+  }
+};
 </script>
 
 <!-- ============== APARÊNCIA: estilos e lógica ============== -->
@@ -6492,6 +6556,32 @@ body[data-ap-fab="off"] #bld-fab-btn{ display:none !important; }
 }
 .ap-save-bar .btn.full{flex:1;min-width:160px}
 
+/* ===== A11Y & MOBILE FIXES (overrides) ===== */
+/* 1. Inputs em 16px: elimina o zoom automático do iOS Safari */
+input, textarea, select,
+.qa-field input, .field input, .smart-form input, .smart-form select,
+.smart-form textarea, input.rest-num{
+  font-size:16px !important;
+}
+/* 2. 100vh -> 100dvh: evita corte na barra de URL do iOS */
+body{ min-height:100dvh; }
+.screen{ min-height:calc(100dvh - 57px); }
+.modal-box{ max-height:calc(100dvh - 32px); }
+/* 4. Minimo de texto funcional 14px (sem rotulos de 12/13px) */
+.ex-name{ font-size:15px; }
+.pc-sub, .ex-reps, .progress-label, .modal-sub,
+.ex-done-label, .rt-title{ font-size:14px; }
+/* 7. Logo responsivo em telas pequenas */
+@media (max-width:360px){
+  .logo{ font-size:40px !important; letter-spacing:3px !important; }
+}
+@media (max-width:320px){
+  .logo{ font-size:34px !important; letter-spacing:2px !important; }
+}
+/* 8. Fallback quando backdrop-filter nao e suportado */
+@supports not ((backdrop-filter:blur(14px)) or (-webkit-backdrop-filter:blur(14px))){
+  .app-header{ background:var(--bg) !important; }
+}
 </style>
 
 <script>
@@ -7063,8 +7153,20 @@ body[data-ap-fab="off"] #bld-fab-btn{ display:none !important; }
   width:5%;height:32px;background:transparent;border:none;color:var(--txt3);
   display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
   font-size:18px;opacity:.6;transition:opacity .2s,color .2s,background .2s;flex-shrink:0;
+  border-radius:0 !important;
 }
-.rest-time{font-size:20px !important;letter-spacing:6px !important}
+/* Garante que os nomes dos perfis fiquem visíveis (corrige texto em gradiente transparente) */
+.pc-name.red,.workout-name.red{
+  background:none !important;color:var(--red) !important;
+  -webkit-text-fill-color:var(--red) !important;
+}
+.pc-name.blue,.workout-name.blue{
+  background:none !important;color:var(--blue) !important;
+  -webkit-text-fill-color:var(--blue) !important;
+}
+.rest-time{font-size:19px !important;letter-spacing:6px !important}
+.exercise-list.series-1 .ex-row.single{border-left:3px solid var(--red) !important;border-image:none !important}
+.exercise-list.series-2 .ex-row.single{border-left:3px solid var(--blue) !important;border-image:none !important}
 .workout-name{font-size:30px !important;letter-spacing:.03em !important}
 .ex-name{font-size:calc(22px * var(--fs-ex, 1)) !important}
 .ex-reps{
@@ -7552,9 +7654,61 @@ html, body{
         h2.innerHTML='<i class="ti ti-photo-search"></i><span>Não tem o GIF? Busque em <b>GIF do Treino</b> e cole a URL acima.</span>'+
           '<a href="'+GD+'" target="_blank" rel="noopener"><i class="ti ti-external-link"></i>gifdotreino.com</a>';
         gifRow.parentNode.insertBefore(h2, gifRow.nextSibling);
+
+        // Botão + grade: escolher GIF da biblioteca cadastrada
+        if(!sf.querySelector('.exlib-pick')){
+          var pickWrap=document.createElement('div');
+          pickWrap.className='exlib-pick';
+          pickWrap.style.margin='10px 0 0';
+          pickWrap.innerHTML=
+            '<button class="btn ghost" type="button" style="width:100%;justify-content:center" onclick="exLibToggle()">'+
+              '<i class="ti ti-library-photo"></i>Escolher GIF da biblioteca cadastrada</button>'+
+            '<div id="exlib-box" style="display:none;margin-top:10px">'+
+              '<input id="exlib-search" placeholder="Buscar GIF na biblioteca..." oninput="exLibRender()" '+
+                'style="width:100%;margin-bottom:8px">'+
+              '<div id="exlib-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;max-height:260px;overflow:auto"></div>'+
+            '</div>';
+          h2.parentNode.insertBefore(pickWrap, h2.nextSibling);
+        }
       }
     }
   }
+
+  /* ---------- Picker de GIF da biblioteca para o "Novo exercício" ---------- */
+  window.exLibToggle=function(){
+    var box=document.getElementById('exlib-box'); if(!box) return;
+    var open=box.style.display==='none';
+    box.style.display=open?'block':'none';
+    if(open){
+      var nm=document.getElementById('ex-nome');
+      var s=document.getElementById('exlib-search');
+      if(s && nm && nm.value && !s.value) s.value=nm.value.trim();
+      exLibRender();
+    }
+  };
+  window.exLibRender=function(){
+    var grid=document.getElementById('exlib-grid'); if(!grid) return;
+    var q=norm((document.getElementById('exlib-search')||{}).value||'');
+    var lib=(typeof getLibrary==='function'?getLibrary():[]).filter(function(it){return it && it.gif;});
+    if(q) lib=lib.filter(function(it){return norm(it.name).indexOf(q)>=0;});
+    if(!lib.length){ grid.innerHTML='<div style="grid-column:1/-1;color:var(--txt3);font-size:13px;padding:8px">Nenhum GIF na biblioteca'+(q?' para "'+esc(q)+'"':'. Envie GIFs no painel "Biblioteca de GIFs".')+'</div>'; return; }
+    grid.innerHTML=lib.slice(0,60).map(function(it){
+      return '<div onclick="exLibChoose('+"'"+esc(it.id)+"'"+')" title="'+esc(it.name)+'" '+
+        'style="cursor:pointer;border:1px solid var(--bg4);border-radius:10px;overflow:hidden;background:var(--bg)">'+
+        '<img src="'+esc(it.gif)+'" loading="lazy" style="width:100%;height:72px;object-fit:cover;display:block">'+
+        '<div style="font-size:10.5px;padding:4px 5px;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(it.name)+'</div>'+
+      '</div>';
+    }).join('');
+  };
+  window.exLibChoose=function(id){
+    var it=(typeof getLibrary==='function'?getLibrary():[]).find(function(x){return x.id===id;});
+    if(!it) return;
+    var inp=document.getElementById('ex-gif'); if(inp){ inp.value=it.gif; }
+    var nm=document.getElementById('ex-nome'); if(nm && !nm.value.trim()) nm.value=it.name;
+    try{ if(typeof exGifPreview==='function') exGifPreview(); }catch(e){}
+    var box=document.getElementById('exlib-box'); if(box) box.style.display='none';
+    toast('GIF da biblioteca aplicado','success');
+  };
 
   /* ---------- Bootstrap ---------- */
   function boot(){
@@ -7566,6 +7720,96 @@ html, body{
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
+})();
+</script>
+
+<style id="redesign-appnav">
+/* ============ NAVEGAÇÃO INFERIOR FIXA — ESTILO APP ============ */
+.bottom-nav{
+  position:fixed !important;
+  left:0 !important; right:0 !important; bottom:0 !important;
+  transform:none !important;
+  width:100% !important; max-width:100% !important;
+  display:flex !important;
+  justify-content:space-around !important;
+  align-items:stretch !important;
+  gap:2px !important;
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom,0px)) !important;
+  background:color-mix(in srgb, var(--bg2) 94%, transparent) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(160%) !important;
+  backdrop-filter:blur(20px) saturate(160%) !important;
+  border:0 !important;
+  border-top:1px solid var(--bg4) !important;
+  border-radius:0 !important;
+  box-shadow:0 -10px 32px -14px rgba(0,0,0,.6) !important;
+  z-index:200 !important;
+}
+.bottom-nav .nav-btn{
+  flex:1 1 0 !important;
+  width:auto !important; min-width:0 !important; max-width:104px !important;
+  padding:7px 2px !important;
+  gap:4px !important;
+  border-radius:14px !important;
+  position:relative !important;
+  color:var(--txt2) !important;
+}
+.bottom-nav .nav-btn i{ font-size:22px !important; line-height:1 !important; }
+.bottom-nav .nav-btn span,.bottom-nav .nav-btn .lbl{
+  font-size:10.5px !important; font-weight:600 !important; letter-spacing:.01em !important;
+}
+/* aba ativa: pílula + indicador colorido no topo */
+.bottom-nav .nav-btn.active{ background:var(--red-dim) !important; color:var(--red) !important; }
+body.is-manu .bottom-nav .nav-btn.active{ background:var(--blue-dim) !important; color:var(--blue) !important; }
+.bottom-nav .nav-btn.active::before{
+  content:'' !important; position:absolute !important; top:-8px !important; left:50% !important;
+  transform:translateX(-50%) !important; width:24px !important; height:3px !important;
+  border-radius:0 0 3px 3px !important; background:var(--red) !important;
+}
+body.is-manu .bottom-nav .nav-btn.active::before{ background:var(--blue) !important; }
+.bottom-nav .nav-btn-exit{ color:var(--txt3) !important; }
+.bottom-nav .nav-btn-exit.active::before{ display:none !important; }
+
+/* clearance para a barra fixa + elementos flutuantes acima dela */
+.screen{ padding-bottom:108px !important; }
+body, body.has-nav{ padding-bottom:0 !important; }
+body.has-nav .font-scaler{ bottom:98px !important; }
+.fs-toast{ bottom:152px !important; }
+.bld-fab{ bottom:104px !important; }
+
+@media (max-width:360px){
+  .bottom-nav{ padding:6px 2px calc(6px + env(safe-area-inset-bottom,0px)) !important; }
+  .bottom-nav .nav-btn i{ font-size:20px !important; }
+  .bottom-nav .nav-btn span,.bottom-nav .nav-btn .lbl{ font-size:9.5px !important; }
+}
+</style>
+<script>
+/* ===== A11Y runtime: rotulos e teclado numerico ===== */
+(function(){
+  function applyA11y(){
+    /* 5. aria-label / role em botoes de icone */
+    document.querySelectorAll('.btn-back').forEach(function(el){
+      if(!el.getAttribute('aria-label')) el.setAttribute('aria-label','Voltar');
+      if(!el.getAttribute('role')) el.setAttribute('role','button');
+      if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','0');
+    });
+    document.querySelectorAll('.btn-close-modal, .bld-sheet-x').forEach(function(el){
+      if(!el.getAttribute('aria-label')) el.setAttribute('aria-label','Fechar');
+      if(!el.getAttribute('role')) el.setAttribute('role','button');
+      if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','0');
+    });
+    var tt = document.getElementById('theme-toggle');
+    if(tt && !tt.getAttribute('aria-label')) tt.setAttribute('aria-label','Alternar tema');
+    /* 3. teclado numerico correto em campos numericos */
+    document.querySelectorAll('input[type="number"]').forEach(function(inp){
+      if(!inp.getAttribute('inputmode')){
+        var dec = inp.getAttribute('step') && inp.getAttribute('step') !== '1';
+        inp.setAttribute('inputmode', dec ? 'decimal' : 'numeric');
+      }
+      if(!inp.getAttribute('pattern')) inp.setAttribute('pattern','[0-9]*');
+    });
+  }
+  if(document.readyState !== 'loading') applyA11y();
+  else document.addEventListener('DOMContentLoaded', applyA11y);
 })();
 </script>
 </body>
