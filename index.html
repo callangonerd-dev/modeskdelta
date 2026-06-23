@@ -318,8 +318,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 .exercise-list.series-1 .ex-row.row2{display:none}
 .exercise-list.series-2 .ex-row.row1{display:none}
 .exercise-list.series-1 .ex-card .biset-label,
-.exercise-list.series-2 .ex-card .biset-label{opacity:.55}
-.exercise-list.series-2 .ex-row.single{opacity:.6}
+.exercise-list.series-2 .ex-card .biset-label{opacity:1}
 .exercise-list.series-2 .ex-row.single{border-left-color:var(--blue)}
 .exercise-list.series-2 .ex-row.single{border-left:3px solid var(--blue) !important;border-image:none !important}
 
@@ -331,7 +330,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
   border:1px solid var(--bg4);
   overflow:hidden;
   transition:border-color .2s;
-
 }
 .ex-card:hover{border-color:var(--bg4)}
 
@@ -1837,7 +1835,19 @@ body.has-nav{padding-bottom:64px}
       <div class="field"><label>Observação (opcional)</label><input id="mp-obs" placeholder="Ex: pegada supinada"></div>
     </div>
     <div id="mp-selected-info" style="margin-top:8px;font-size:13px;color:var(--txt2)">Nenhum exercício selecionado.</div>
-    <button class="btn primary" onclick="mpAdd()" style="margin-top:10px;width:100%"><i class="ti ti-plus"></i> Adicionar ao Dia</button>
+    <div class="field" style="margin-top:10px">
+      <label>Como adicionar</label>
+      <select id="mp-mode" onchange="mpModeChange()">
+        <option value="append">Adicionar à lista — junta aos exercícios existentes</option>
+        <option value="replace-one">Trocar — substituir um exercício existente</option>
+        <option value="replace-all">Substituir o programa todo do dia</option>
+      </select>
+    </div>
+    <div class="field" id="mp-target-wrap" style="margin-top:10px;display:none">
+      <label>Exercício a substituir</label>
+      <select id="mp-target"></select>
+    </div>
+    <button class="btn primary" id="mp-add-btn" onclick="mpAdd()" style="margin-top:10px;width:100%"><i class="ti ti-plus"></i> Adicionar ao Dia</button>
   </div>
 
   <div class="panel">
@@ -2243,7 +2253,7 @@ body.has-nav{padding-bottom:64px}
         <label class="ap-toggle">
           <input type="checkbox" id="ap-fab-toggle" checked>
           <span class="ap-toggle-track"><span class="ap-toggle-thumb"></span></span>
-          <span class="ap-toggle-label">Mostrar botão "Montar do zero"</span>
+          <span class="ap-toggle-label">Mostrar botão "Editar Programa"</span>
         </label>
       </div>
 
@@ -2361,7 +2371,27 @@ body.has-nav{padding-bottom:64px}
 
      <div class="panel smart-form" data-block="exercicio">
       <div class="panel-title"><i class="ti ti-plus"></i>NOVO EXERCÍCIO</div>
-      <div class="panel-sub">Cadastre exercícios com seleção rápida por chips e níveis</div>
+      <div class="panel-sub">Cadastre exercícios com seleção rápida por chips e níveis. Tudo salvo aqui aparece na <b>Biblioteca de GIFs</b> e em <b>Montar Programa</b>.</div>
+
+      <div class="sf-section sf-smart-import" style="background:var(--bg);border:1px dashed var(--red-border);border-radius:12px;padding:12px;margin-bottom:12px">
+        <div class="sf-section-title" style="color:var(--red)"><i class="ti ti-scan"></i>Reconhecimento inteligente (OCR + texto)</div>
+        <div class="panel-sub" style="margin-bottom:8px">
+          Cole um texto descritivo do exercício, envie uma <b>foto/print</b> ou um <b>PDF</b> da ficha — o sistema lê e preenche os campos abaixo automaticamente (nome, grupo, equipamento, instruções, observações, URL do GIF).
+        </div>
+        <textarea id="ex-smart-text" rows="3" placeholder="Ex: Supino reto com barra · Peito · Equip: barra olímpica · 4x10 · GIF: https://...&#10;Cole o bloco de texto aqui..."></textarea>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+          <label class="btn ghost" style="cursor:pointer;flex:1;min-width:130px">
+            <i class="ti ti-camera"></i> Foto / Print
+            <input type="file" id="ex-smart-img" accept="image/*" style="display:none" onchange="exSmartOCR(event,'image')">
+          </label>
+          <label class="btn ghost" style="cursor:pointer;flex:1;min-width:130px">
+            <i class="ti ti-file-type-pdf"></i> PDF
+            <input type="file" id="ex-smart-pdf" accept="application/pdf" style="display:none" onchange="exSmartOCR(event,'pdf')">
+          </label>
+          <button class="btn" style="flex:1;min-width:130px" onclick="exSmartApply()"><i class="ti ti-wand"></i>Reconhecer e preencher</button>
+        </div>
+        <div id="ex-smart-status" style="margin-top:6px;font-size:12px;color:var(--txt2);min-height:16px"></div>
+      </div>
 
       <div class="sf-section">
         <div class="sf-section-title"><i class="ti ti-tag"></i>Nome do exercício</div>
@@ -2482,15 +2512,25 @@ body.has-nav{padding-bottom:64px}
         </div>
       </div>
       <div class="field">
-        <label>Exercício (da biblioteca cadastrada)</label>
+        <label>Exercício (cadastrados + biblioteca de GIFs)</label>
         <select id="pg-ex"></select>
       </div>
       <div class="field-row">
         <div class="field"><label>Séries × Reps</label><input id="pg-reps" placeholder="Ex: 4x12 ou 3x10,8,6"></div>
-        <div class="field" style="display:flex;align-items:flex-end">
-          <button class="btn full" onclick="pgAdd()"><i class="ti ti-plus"></i>Adicionar ao dia</button>
+      </div>
+      <div class="field">
+        <label>Como inserir?</label>
+        <div class="bld-chips" id="pg-mode-chips" style="display:flex;flex-wrap:wrap;gap:8px">
+          <div class="bld-chip active" data-mode="append" onclick="pgSetMode('append')"><i class="ti ti-plus"></i>Acrescentar ao final</div>
+          <div class="bld-chip" data-mode="replace" onclick="pgSetMode('replace')"><i class="ti ti-switch-horizontal"></i>Substituir exercício específico</div>
+          <div class="bld-chip" data-mode="replaceAll" onclick="pgSetMode('replaceAll')"><i class="ti ti-refresh"></i>Substituir o dia inteiro</div>
         </div>
       </div>
+      <div class="field" id="pg-replace-target-wrap" style="display:none">
+        <label>Qual exercício substituir?</label>
+        <select id="pg-replace-target"></select>
+      </div>
+      <button class="btn full" id="pg-add-btn" onclick="pgAdd()"><i class="ti ti-plus"></i>Acrescentar ao dia</button>
       <div id="pg-list" style="margin-top:12px"></div>
     </div>
 
@@ -2549,6 +2589,9 @@ body.has-nav{padding-bottom:64px}
 .bld-day-count{font-size:11px;color:var(--txt2);background:var(--bg3);padding:3px 8px;border-radius:6px}
 
 .bld-ex{display:flex;gap:10px;align-items:center;background:var(--bg2);border:1px solid var(--bg4);border-radius:10px;padding:8px;margin-bottom:6px}
+.bld-ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:6px}
+.bld-ex-grid .bld-ex{margin-bottom:0}
+@media(max-width:520px){.bld-ex-grid{grid-template-columns:repeat(2,1fr)}}
 .bld-ex-thumb{width:46px;height:46px;border-radius:8px;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .bld-ex-thumb img{width:100%;height:100%;object-fit:cover}
 .bld-ex-thumb i{color:var(--txt3);font-size:20px}
@@ -2615,13 +2658,13 @@ body.has-nav{padding-bottom:64px}
 .ex-gif-upload:hover{color:var(--red);border-color:var(--red)}
 </style>
 
-<!-- ============== BUILDER FROM SCRATCH (Montar do Zero) ============== -->
+<!-- ============== BUILDER (Editar Programa) ============== -->
 <div class="screen" id="screen-builder">
   <div class="workout-topbar">
     <div class="btn-back" onclick="bldBack()"><i class="ti ti-arrow-left"></i></div>
     <div>
-      <div class="workout-name">MONTAR DO ZERO</div>
-      <div class="workout-sub">Crie um treino completo em poucos passos</div>
+      <div class="workout-name">EDITAR PROGRAMA</div>
+      <div class="workout-sub">Acrescente, substitua exercícios específicos ou refaça o dia</div>
     </div>
   </div>
 
@@ -2851,7 +2894,28 @@ function exSave(){
   };
   const idx=list.findIndex(e=>e.id===id);
   if(idx>=0){ item.ativo = list[idx].ativo; list[idx]=item; } else list.push(item);
-  setExercises(list); exReset(); exRenderList(); toast('Exercício salvo','success');
+  setExercises(list);
+  // ---- Sincroniza automaticamente com a Biblioteca de GIFs ----
+  try{
+    if(item.gif && typeof getLibrary==='function' && typeof setLibrary==='function'){
+      var _lib = getLibrary();
+      var _key = (item.nome||'').toLowerCase().trim();
+      var _existing = _lib.find(function(x){
+        return (x.exId===item.id) || ((x.name||x.nome||'').toLowerCase().trim() === _key && (x.gif||x.url) === item.gif);
+      });
+      if(_existing){
+        _existing.name = item.nome; _existing.gif = item.gif; _existing.url = item.gif;
+        _existing.group = item.grupo; _existing.exId = item.id;
+      } else {
+        _lib.push({ id:'lib_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+                    name:item.nome, gif:item.gif, url:item.gif, group:item.grupo, exId:item.id });
+      }
+      setLibrary(_lib);
+      if(typeof libRender==='function'){ try{ libRender(); }catch(_){} }
+    }
+  }catch(_e){}
+  exReset(); exRenderList(); toast('Exercício salvo e adicionado à biblioteca','success');
+  if(typeof pgRender==='function'){ try{ pgRender(); }catch(_){} }
 }
 function exReset(){
   ['ex-nome','ex-equip','ex-instr','ex-obs','ex-gif','ex-id'].forEach(i=>document.getElementById(i).value='');
@@ -4158,9 +4222,7 @@ function findPlanIdx(profile, dayCode){
   if(idx<0) idx = u.planos.findIndex(p=>p.t.startsWith(letter+':'));
   return idx;
 }
-function programAddToDay(profile, dayCode, nome, reps){
-  const idx = findPlanIdx(profile, dayCode);
-  if(idx<0) return false;
+function buildExItem(profile, nome, reps){
   const ex = getExercises().find(e=>e.nome.toLowerCase()===nome.toLowerCase());
   const grupo = ex?ex.grupo:(detectGroup(nome)||'peito');
   let gif = ex?ex.gif:'';
@@ -4189,12 +4251,47 @@ function programAddToDay(profile, dayCode, nome, reps){
       if(best && bestScore >= 3) gif = best.gif;
     }catch(e){}
   }
-  DB[profile].planos[idx].ex.push({biset:false, g1:grupo, n1:nome, r1:reps||'3×10', i1:gif});
+  return {biset:false, g1:grupo, n1:nome, r1:reps||'3×10', i1:gif};
+}
+/* Salva a lista COMPLETA de exercícios do dia como override (substituição) */
+function programPersistDay(profile, dayCode){
+  const idx = findPlanIdx(profile, dayCode); if(idx<0) return;
+  const ov = getProgramOverrides(profile);
+  ov[dayCode] = {__full: JSON.parse(JSON.stringify(DB[profile].planos[idx].ex))};
+  setProgramOverrides(profile, ov);
+}
+function programAddToDay(profile, dayCode, nome, reps){
+  const idx = findPlanIdx(profile, dayCode);
+  if(idx<0) return false;
+  const item = buildExItem(profile, nome, reps);
+  DB[profile].planos[idx].ex.push(item);
   // persist overrides as appended items
   const ov = getProgramOverrides(profile);
-  ov[dayCode] = ov[dayCode] || [];
-  ov[dayCode].push({nome, reps:reps||'3×10', grupo, gif});
-  setProgramOverrides(profile, ov);
+  if(ov[dayCode] && ov[dayCode].__full){
+    programPersistDay(profile, dayCode);
+  } else {
+    ov[dayCode] = Array.isArray(ov[dayCode]) ? ov[dayCode] : [];
+    ov[dayCode].push({nome, reps:reps||'3×10', grupo:item.g1, gif:item.i1});
+    setProgramOverrides(profile, ov);
+  }
+  return true;
+}
+/* Substitui UM exercício (pelo índice) por um novo */
+function programReplaceInDay(profile, dayCode, index, nome, reps){
+  const idx = findPlanIdx(profile, dayCode);
+  if(idx<0) return false;
+  const arr = DB[profile].planos[idx].ex;
+  if(index<0 || index>=arr.length) return false;
+  arr[index] = buildExItem(profile, nome, reps);
+  programPersistDay(profile, dayCode);
+  return true;
+}
+/* Substitui TODO o programa do dia pelo novo exercício */
+function programReplaceDay(profile, dayCode, nome, reps){
+  const idx = findPlanIdx(profile, dayCode);
+  if(idx<0) return false;
+  DB[profile].planos[idx].ex = [buildExItem(profile, nome, reps)];
+  programPersistDay(profile, dayCode);
   return true;
 }
 function applyProgramOverrides(){
@@ -4202,7 +4299,11 @@ function applyProgramOverrides(){
     const ov = getProgramOverrides(profile);
     Object.entries(ov).forEach(([dayCode, items])=>{
       const idx = findPlanIdx(profile, dayCode); if(idx<0) return;
-      items.forEach(it=>{
+      if(items && items.__full){
+        DB[profile].planos[idx].ex = JSON.parse(JSON.stringify(items.__full));
+        return;
+      }
+      (Array.isArray(items)?items:[]).forEach(it=>{
         const exists = DB[profile].planos[idx].ex.some(e=>e.n1===it.nome && e.r1===it.reps);
         if(!exists) DB[profile].planos[idx].ex.push({biset:false, g1:it.grupo||'peito', n1:it.nome, r1:it.reps, i1:it.gif||''});
       });
@@ -5037,6 +5138,30 @@ function mpRender(){
   daySel.innerHTML = days.map(d=>`<option value="${d}" ${d===cur?'selected':''}>Dia ${d}</option>`).join('');
   mpRenderLib();
   mpRenderDayList();
+  mpModeChange();
+}
+function mpRenderTarget(){
+  const sel = document.getElementById('mp-target'); if(!sel) return;
+  const p = document.getElementById('mp-profile').value;
+  const d = document.getElementById('mp-day').value;
+  const idx = findPlanIdx(p, d);
+  const items = (idx>=0) ? DB[p].planos[idx].ex : [];
+  if(!items.length){ sel.innerHTML = '<option value="">Nenhum exercício neste dia</option>'; return; }
+  sel.innerHTML = items.map((e,i)=>`<option value="${i}">${i+1}. ${(e.n1||'').replace(/</g,'')}${e.biset?' + '+(e.n2||''):''}</option>`).join('');
+}
+function mpModeChange(){
+  const mode = (document.getElementById('mp-mode')||{}).value || 'append';
+  const wrap = document.getElementById('mp-target-wrap');
+  const btn = document.getElementById('mp-add-btn');
+  if(wrap) wrap.style.display = (mode==='replace-one') ? '' : 'none';
+  if(mode==='replace-one') mpRenderTarget();
+  if(btn){
+    const label = mode==='replace-one' ? 'Trocar Exercício'
+                : mode==='replace-all' ? 'Substituir Programa do Dia'
+                : 'Adicionar ao Dia';
+    const icon = mode==='append' ? 'ti-plus' : 'ti-replace';
+    btn.innerHTML = `<i class="ti ${icon}"></i> ${label}`;
+  }
 }
 function mpRenderLib(){
   const grid = document.getElementById('mp-lib'); if(!grid) return;
@@ -5077,11 +5202,23 @@ function mpAdd(){
                nivel:'intermediario', equip:'', instr:'', obs:obs, gif:lib.gif, ativo:true});
     setExercises(list);
   }
-  if(!programAddToDay(p, d, nome, reps)){ toast('Plano não encontrado para esse dia','error'); return; }
-  toast('Adicionado ao programa','success');
+  const mode = (document.getElementById('mp-mode')||{}).value || 'append';
+  if(mode==='replace-one'){
+    const tSel = document.getElementById('mp-target');
+    const ti = parseInt(tSel && tSel.value, 10);
+    if(isNaN(ti)){ toast('Selecione o exercício a substituir','error'); return; }
+    if(!programReplaceInDay(p, d, ti, nome, reps)){ toast('Não foi possível trocar','error'); return; }
+    toast('Exercício trocado','success');
+  } else if(mode==='replace-all'){
+    if(!programReplaceDay(p, d, nome, reps)){ toast('Plano não encontrado para esse dia','error'); return; }
+    toast('Programa do dia substituído','success');
+  } else {
+    if(!programAddToDay(p, d, nome, reps)){ toast('Plano não encontrado para esse dia','error'); return; }
+    toast('Adicionado ao programa','success');
+  }
   document.getElementById('mp-reps').value=''; document.getElementById('mp-obs').value='';
   mpSelectedLibId = null;
-  mpRenderLib(); mpRenderDayList();
+  mpRenderLib(); mpRenderDayList(); mpModeChange();
   try{ pgRender(); }catch(e){}
 }
 function mpRenderDayList(){
@@ -5109,13 +5246,8 @@ function mpRemove(i){
   const p = document.getElementById('mp-profile').value;
   const d = document.getElementById('mp-day').value;
   const idx = findPlanIdx(p, d); if(idx<0) return;
-  const item = DB[p].planos[idx].ex[i];
   DB[p].planos[idx].ex.splice(i,1);
-  const ov = getProgramOverrides(p);
-  if(ov[d] && item){
-    ov[d] = ov[d].filter(x=>!(x.nome===item.n1 && x.reps===item.r1));
-    setProgramOverrides(p, ov);
-  }
+  programPersistDay(p, d);
   mpRenderDayList();
   try{ pgRender(); }catch(e){}
 }
@@ -5141,15 +5273,8 @@ function mpEdit(i){
     const ex = exs.find(x => (x.nome||'').toLowerCase() === nm.toLowerCase());
     if(ex){ if(ex.gif) item.i1 = ex.gif; if(ex.grupo) item.g1 = ex.grupo; }
   }catch(e){}
-  // atualiza overrides
-  try{
-    const ov = getProgramOverrides(p);
-    if(!ov[d]) ov[d] = [];
-    const oi = ov[d].findIndex(x => x.nome === oldName);
-    const payload = {nome: nm, reps: rp, gif: item.i1||'', grupo: item.g1||''};
-    if(oi>=0) ov[d][oi] = payload; else ov[d].push(payload);
-    setProgramOverrides(p, ov);
-  }catch(e){}
+  // persiste a lista completa do dia
+  programPersistDay(p, d);
   toast('Exercício atualizado','success');
   mpRenderDayList();
   try{ pgRender(); }catch(e){}
@@ -5162,6 +5287,7 @@ function mpMove(i, dir){
   const j = i + dir;
   if(j<0 || j>=arr.length) return;
   [arr[i], arr[j]] = [arr[j], arr[i]];
+  programPersistDay(p, d);
   mpRenderDayList();
   try{ pgRender(); }catch(e){}
 }
@@ -5236,10 +5362,41 @@ function mpAddByUrl(){
   ];
   const MUSC_NAMES = Object.fromEntries(MUSC.map(m=>[m.k,m.n]));
 
+  // Seed builder state from the user's CURRENT pre-built program (DB.planos),
+  // so adding a new exercise appends to the existing list and the "replace"
+  // mode can consult the actual current exercises of that day.
+  function bldSeedFromDB(){
+    try{
+      const p = builderState.profile;
+      const days = (SCHEMES[builderState.scheme]||SCHEMES.abc12).days;
+      const out = {};
+      days.forEach(d=>{
+        const idx = (typeof findPlanIdx==='function') ? findPlanIdx(p,d) : -1;
+        const arr = (idx>=0 && DB[p] && DB[p].planos[idx] && Array.isArray(DB[p].planos[idx].ex)) ? DB[p].planos[idx].ex : [];
+        const flat = [];
+        arr.forEach(e=>{
+          if(!e) return;
+          if(e.n1) flat.push({nome:e.n1, grupo:e.g1||'', gif:e.i1||'', reps:e.r1||'4x10'});
+          if(e.biset && e.n2) flat.push({nome:e.n2, grupo:e.g2||'', gif:e.i2||'', reps:e.r2||e.r1||'4x10'});
+        });
+        out[d] = flat;
+      });
+      builderState.days = out;
+    }catch(err){ builderState.days = builderState.days || {}; }
+  }
+
   window.openBuilder = function(profile){
     if(profile) builderState.profile = profile;
     else if(window.currentProfile) builderState.profile = window.currentProfile;
-    builderState.days = {};
+    // Use the user's currently-saved scheme if available, so the days shown
+    // match the existing pre-built program.
+    try{
+      if(typeof getStructure==='function'){
+        const s = getStructure(builderState.profile);
+        if(s && s.scheme && SCHEMES[s.scheme]) builderState.scheme = s.scheme;
+      }
+    }catch(e){}
+    bldSeedFromDB();
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById('screen-builder').classList.add('active');
     const bn=document.getElementById('bnav'); if(bn) bn.classList.add('hidden');
@@ -5257,6 +5414,7 @@ function mpAddByUrl(){
   };
 
   function isManu(){ return builderState.profile==='manu'; }
+
 
   function bldRender(){
     const manu = isManu();
@@ -5281,14 +5439,14 @@ function mpAddByUrl(){
           <div class="bld-day-name">Dia ${d}</div>
           <div class="bld-day-count">${exs.length} ex.</div>
         </div>
-        ${exs.map((e,i)=>`<div class="bld-ex">
+        <div class="bld-ex-grid">${exs.map((e,i)=>`<div class="bld-ex">
           <div class="bld-ex-thumb">${e.gif?`<img src="${e.gif}">`:'<i class="ti ti-barbell"></i>'}</div>
           <div class="bld-ex-info">
             <div class="bld-ex-name">${e.nome}</div>
             <div class="bld-ex-meta">${MUSC_NAMES[e.grupo]||e.grupo} · ${e.reps}</div>
           </div>
           <button class="bld-ex-rm" onclick="bldRemoveEx('${d}',${i})"><i class="ti ti-trash"></i></button>
-        </div>`).join('')}
+        </div>`).join('')}</div>
         <button class="bld-add-btn ${manu?'manu':''}" onclick="bldOpenSheet('${d}')">
           <i class="ti ti-plus"></i> Adicionar exercício
         </button>
@@ -5306,14 +5464,15 @@ function mpAddByUrl(){
     btn.disabled = total===0;
     btn.classList.toggle('manu', manu);
   }
-  window.bldSetProfile = function(p){ builderState.profile=p; builderState.days={}; bldRender(); };
-  window.bldSetScheme = function(k){ builderState.scheme=k; builderState.days={}; bldRender(); };
+  window.bldSetProfile = function(p){ builderState.profile=p; try{ if(typeof getStructure==='function'){ var s=getStructure(p); if(s && s.scheme && SCHEMES[s.scheme]) builderState.scheme=s.scheme; } }catch(e){} bldSeedFromDB(); bldRender(); };
+  window.bldSetScheme = function(k){ builderState.scheme=k; bldSeedFromDB(); bldRender(); };
+
   window.bldRemoveEx = function(d,i){ builderState.days[d].splice(i,1); bldRender(); };
 
   // ===== Picker sheet =====
   let pickerCtx = { day:null, muscle:null, exercise:null, reps:'4x10' };
   window.bldOpenSheet = function(day){
-    pickerCtx = { day, muscle:null, exercise:null, reps:'4x10', search:'' };
+    pickerCtx = { day, muscle:null, exercise:null, reps:'4x10', search:'', mode:'append' };
     document.getElementById('bld-sheet').classList.add('open');
     document.getElementById('bld-sheet-title').textContent = `Adicionar ao dia ${day}`;
     renderSheet();
@@ -5376,7 +5535,22 @@ function mpAddByUrl(){
       <div class="bld-reps-presets">
         ${['3x12','4x10','4x8','3x15','4x12,10,8','5x5'].map(p=>`<div class="bld-reps-preset" onclick="document.getElementById('bld-reps-input').value='${p}'">${p}</div>`).join('')}
       </div>
-      <button class="bld-validate ${manu?'manu':''}" style="position:static;margin-top:16px" onclick="bldConfirmAdd()"><i class="ti ti-check"></i>Adicionar ao dia ${pickerCtx.day}</button>
+      <div style="font-size:11px;letter-spacing:1px;color:var(--txt2);text-transform:uppercase;margin:14px 0 6px">Modo de inserção</div>
+      <div class="bld-chips" id="bld-mode-chips">
+        <div class="bld-chip ${pickerCtx.mode==='append'?'active':''} ${manu?'manu':''}" onclick="bldSetMode('append')"><i class="ti ti-plus"></i>Acrescentar</div>
+        <div class="bld-chip ${pickerCtx.mode==='replace'?'active':''} ${manu?'manu':''}" onclick="bldSetMode('replace')"><i class="ti ti-switch-horizontal"></i>Substituir específico</div>
+        <div class="bld-chip ${pickerCtx.mode==='replaceAll'?'active':''} ${manu?'manu':''}" onclick="bldSetMode('replaceAll')"><i class="ti ti-refresh"></i>Substituir o dia</div>
+      </div>
+      ${pickerCtx.mode==='replace'?`
+        <div style="font-size:11px;letter-spacing:1px;color:var(--txt2);text-transform:uppercase;margin:10px 0 6px">Qual exercício substituir?</div>
+        <select class="bld-search" id="bld-replace-target" style="padding:10px;border-radius:10px;background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);width:100%">
+          ${(builderState.days[pickerCtx.day]||[]).length
+            ? (builderState.days[pickerCtx.day]||[]).map((x,i)=>`<option value="${i}">${i+1}. ${x.nome} (${x.reps})</option>`).join('')
+            : '<option value="">— Nenhum exercício no dia ainda —</option>'}
+        </select>`:''}
+      <button class="bld-validate ${manu?'manu':''}" style="position:static;margin-top:16px" onclick="bldConfirmAdd()">
+        <i class="ti ti-check"></i>${pickerCtx.mode==='append'?'Acrescentar ao dia '+pickerCtx.day:pickerCtx.mode==='replace'?'Substituir exercício selecionado':'Substituir TODOS do dia '+pickerCtx.day}
+      </button>
     `;
   }
   window.bldSearch = function(v){ pickerCtx.search=v; renderSheet(); };
@@ -5403,10 +5577,29 @@ function mpAddByUrl(){
     pickerCtx.exercise = {nome, grupo:pickerCtx.muscle, gif};
     renderSheet();
   };
+  window.bldSetMode = function(m){ pickerCtx.mode = m; renderSheet(); };
   window.bldConfirmAdd = function(){
-    const reps = document.getElementById('bld-reps-input').value.trim() || '4x10';
+    const reps = (document.getElementById('bld-reps-input').value||'').trim() || '4x10';
     const e = pickerCtx.exercise;
-    builderState.days[pickerCtx.day].push({nome:e.nome, grupo:e.grupo, gif:e.gif, reps});
+    const item = {nome:e.nome, grupo:e.grupo, gif:e.gif, reps};
+    const day = pickerCtx.day;
+    builderState.days[day] = builderState.days[day] || [];
+    const mode = pickerCtx.mode || 'append';
+    if(mode === 'append'){
+      builderState.days[day].push(item);
+    } else if(mode === 'replace'){
+      const sel = document.getElementById('bld-replace-target');
+      const idx = sel ? parseInt(sel.value,10) : -1;
+      if(isNaN(idx) || idx<0 || !builderState.days[day][idx]){
+        if(typeof toast==='function') toast('Selecione qual exercício substituir','error');
+        else alert('Selecione qual exercício substituir');
+        return;
+      }
+      builderState.days[day][idx] = item;
+    } else if(mode === 'replaceAll'){
+      if(!confirm('Substituir TODOS os exercícios do dia '+day+' por este?')) return;
+      builderState.days[day] = [item];
+    }
     bldCloseSheet();
     bldRender();
   };
@@ -5458,7 +5651,7 @@ function mpAddByUrl(){
     if(document.getElementById('bld-fab-btn')) return;
     const fab = document.createElement('button');
     fab.id='bld-fab-btn'; fab.className='bld-fab';
-    fab.innerHTML='<i class="ti ti-wand"></i>Montar do zero';
+    fab.innerHTML='<i class="ti ti-wand"></i>Editar Programa';
     fab.onclick = ()=> openBuilder(window.currentProfile);
     document.body.appendChild(fab);
     function tick(){
@@ -5946,7 +6139,7 @@ h1,h2,h3,h4,.logo-mo,.logo-rest,.select-title,.pc-name,.workout-name,
 .workout-name{font-size:22px !important; letter-spacing:.03em !important}
 .ms-val{font-size:38px !important}
 .macro-val{font-size:26px !important}
-.rest-time{font-size:19px !important; letter-spacing:6px !important}
+.rest-time{font-size:18px !important; letter-spacing:6px !important}
 
 /* Metallic blue surfaces for Manu profile */
 body.is-manu .series-btn.blue,
@@ -6006,8 +6199,8 @@ body.is-manu .topbar-btn.b,
 body.is-manu .exer-card::before,
 .profile-manu .exer-card::before{background:var(--blue-metal) !important; width:3px !important}
 .ex-row.row2, .exercise-list.series-2 .ex-row.single{
-  border-left:3px solid transparent !important;
-  border-image:var(--blue-metal) 1 !important;
+  border-left:3px solid var(--blue) !important;
+  border-image:none !important;
 }
 .ex-num.b{
   background:var(--blue) !important;
@@ -7164,7 +7357,7 @@ body{ min-height:100dvh; }
   background:none !important;color:var(--blue) !important;
   -webkit-text-fill-color:var(--blue) !important;
 }
-.rest-time{font-size:19px !important;letter-spacing:6px !important}
+.rest-time{font-size:18px !important;letter-spacing:6px !important}
 .exercise-list.series-1 .ex-row.single{border-left:3px solid var(--red) !important;border-image:none !important}
 .exercise-list.series-2 .ex-row.single{border-left:3px solid var(--blue) !important;border-image:none !important}
 .workout-name{font-size:30px !important;letter-spacing:.03em !important}
@@ -7436,16 +7629,27 @@ html, body{
     daySel.innerHTML=days.map(function(d){return '<option value="'+d+'" '+(d===cur?'selected':'')+'>Dia '+d+'</option>';}).join('');
     var d=daySel.value||days[0];
     var ex=(typeof getExercises==='function'?getExercises():[]);
-    document.getElementById('pg-ex').innerHTML = ex.length
-      ? ex.map(function(e){return '<option value="'+esc(e.nome)+'">'+e.nome+' · '+e.grupo+'</option>';}).join('')
-      : '<option value="">(cadastre exercícios na biblioteca)</option>';
+    var libAll = (typeof getLibrary==='function'?getLibrary():[]);
+    var exNames = ex.reduce(function(m,e){m[(e.nome||'').toLowerCase()]=1;return m;},{});
+    var libExtras = libAll.filter(function(x){
+      var nm=(x.name||x.nome||'').trim(); return nm && !exNames[nm.toLowerCase()];
+    });
+    var optsEx = ex.map(function(e){return '<option value="'+esc(e.nome)+'">'+e.nome+' · '+e.grupo+'</option>';}).join('');
+    var optsLib = libExtras.map(function(x){var nm=x.name||x.nome||'GIF';return '<option value="'+esc(nm)+'">'+nm+' · biblioteca</option>';}).join('');
+    if(!ex.length && !libExtras.length){
+      document.getElementById('pg-ex').innerHTML = '<option value="">(cadastre exercícios na biblioteca)</option>';
+    } else {
+      document.getElementById('pg-ex').innerHTML =
+        (optsEx?'<optgroup label="Exercícios cadastrados">'+optsEx+'</optgroup>':'') +
+        (optsLib?'<optgroup label="Biblioteca de GIFs">'+optsLib+'</optgroup>':'');
+    }
     var cont=document.getElementById('pg-list');
     var idx=findPlanIdx(p,d);
-    if(idx<0){ cont.innerHTML='<div class="empty-state">Sem plano correspondente a esse dia.</div>'; return; }
+    if(idx<0){ cont.innerHTML='<div class="empty-state">Sem plano correspondente a esse dia.</div>'; try{ window.pgRefreshReplaceTarget && window.pgRefreshReplaceTarget(); }catch(e){} return; }
     var hasSnap = !!getSnap(p)[d];
     var items = hasSnap ? getSnap(p)[d] : (DB[p].planos[idx].ex||[]);
     var live='<div class="pg-livehint"><i class="ti ti-bolt"></i>As alterações são salvas e aparecem em tempo real no perfil.</div>';
-    if(!items.length){ cont.innerHTML=live+'<div class="empty-state">Nenhum exercício neste dia. Adicione abaixo.</div>'; return; }
+    if(!items.length){ cont.innerHTML=live+'<div class="empty-state">Nenhum exercício neste dia. Adicione abaixo.</div>'; try{ window.pgRefreshReplaceTarget && window.pgRefreshReplaceTarget(); }catch(e){} return; }
     cont.innerHTML = live + items.map(function(e,i){
       return '<div class="pg-item pg-item-edit">'+
         '<div class="pg-thumb">'+(e.i1?'<img src="'+esc(e.i1)+'">':'<i class="ti ti-photo"></i>')+'</div>'+
@@ -7462,6 +7666,36 @@ html, body{
         '</div>'+
       '</div>';
     }).join('') + (hasSnap?'<button class="pg-dayreset" onclick="pgResetDay()"><i class="ti ti-rotate"></i>Restaurar este dia ao original</button>':'');
+    try{ window.pgRefreshReplaceTarget && window.pgRefreshReplaceTarget(); }catch(e){}
+  };
+
+
+  window.pgMode = window.pgMode || 'append';
+  window.pgSetMode = function(m){
+    window.pgMode = m;
+    var chips = document.querySelectorAll('#pg-mode-chips .bld-chip');
+    chips.forEach(function(c){ c.classList.toggle('active', c.getAttribute('data-mode')===m); });
+    var wrap = document.getElementById('pg-replace-target-wrap');
+    if(wrap) wrap.style.display = (m==='replace') ? '' : 'none';
+    var btn = document.getElementById('pg-add-btn');
+    if(btn){
+      btn.innerHTML = m==='append' ? '<i class="ti ti-plus"></i>Acrescentar ao dia'
+        : m==='replace' ? '<i class="ti ti-switch-horizontal"></i>Substituir exercício selecionado'
+        : '<i class="ti ti-refresh"></i>Substituir TODOS do dia';
+    }
+    // refresh target list if needed
+    try{ window.pgRefreshReplaceTarget && window.pgRefreshReplaceTarget(); }catch(e){}
+  };
+  window.pgRefreshReplaceTarget = function(){
+    var sel = document.getElementById('pg-replace-target'); if(!sel) return;
+    var pEl=document.getElementById('pg-profile'), dEl=document.getElementById('pg-day');
+    if(!pEl||!dEl) return;
+    var p=pEl.value, d=dEl.value;
+    var idx=findPlanIdx(p,d);
+    var items = (getSnap(p)[d]) || (idx>=0 ? (DB[p].planos[idx].ex||[]) : []);
+    sel.innerHTML = items.length
+      ? items.map(function(x,i){return '<option value="'+i+'">'+(i+1)+'. '+(x.n1||'?')+' ('+(x.r1||'')+')</option>';}).join('')
+      : '<option value="">(dia vazio)</option>';
   };
 
   window.pgAdd = function(){
@@ -7470,14 +7704,35 @@ html, body{
     var nome=document.getElementById('pg-ex').value;
     var reps=normalizeReps(document.getElementById('pg-reps').value);
     if(!nome){ toast('Selecione um exercício','error'); return; }
-    if(findPlanIdx(p,d)<0){ toast('Plano não encontrado para esse dia','error'); return; }
+    // Auto-create plano vazio se não existir, para nunca bloquear inserção
+    if(findPlanIdx(p,d)<0){
+      try{
+        var letter=d.charAt(0), series=(d.match(/[12]$/)||[''])[0];
+        DB[p].planos = DB[p].planos || [];
+        DB[p].planos.push({t: letter+series+': Treino', ex:[]});
+      }catch(e){ toast('Plano não encontrado para esse dia','error'); return; }
+    }
     var r=resolveGif(nome);
+    var item={biset:false, g1:r.grupo, n1:nome, r1:reps, i1:r.gif||''};
     var snap=ensureSnap(p,d);
-    snap[d].push({biset:false, g1:r.grupo, n1:nome, r1:reps, i1:r.gif||''});
+    var mode = window.pgMode || 'append';
+    if(mode==='append'){
+      snap[d].push(item);
+    } else if(mode==='replace'){
+      var tgt=document.getElementById('pg-replace-target');
+      var i = tgt ? parseInt(tgt.value,10) : -1;
+      if(isNaN(i)||i<0||!snap[d][i]){ toast('Selecione qual exercício substituir','error'); return; }
+      snap[d][i]=item;
+    } else if(mode==='replaceAll'){
+      if(!confirm('Substituir TODOS os exercícios do dia '+d+' por "'+nome+'"?')) return;
+      snap[d]=[item];
+    }
     setSnap(p,snap);
     document.getElementById('pg-reps').value='';
-    reflect(); window.pgRender(); toast('Adicionado ao programa','success');
+    reflect(); window.pgRender();
+    toast(mode==='append'?'Exercício adicionado': mode==='replace'?'Exercício substituído':'Dia substituído','success');
   };
+
 
   window.pgRemove = function(i){
     var p=document.getElementById('pg-profile').value, d=document.getElementById('pg-day').value;
@@ -7812,6 +8067,198 @@ body.has-nav .font-scaler{ bottom:98px !important; }
   else document.addEventListener('DOMContentLoaded', applyA11y);
 })();
 </script>
+
+<script>
+/* ============== SMART IMPORT — NOVO EXERCÍCIO ============== */
+(function(){
+  var GROUP_MAP = [
+    ['peito',['peito','peitoral','supino','crucifix','crossover','peck','chest']],
+    ['costas',['costa','dorsal','remad','puxad','pull','barra fixa','levantamento terra','deadlift','row','lat']],
+    ['ombro',['ombro','deltoid','desenvolvimento','elevac','arnold','shoulder','press militar']],
+    ['biceps',['biceps','bíceps','rosca','curl']],
+    ['triceps',['triceps','tríceps','tricep','frances','francês','testa','triceps pulley','extens']],
+    ['quad',['quadric','quadríceps','agacha','squat','leg press','leg extension','cadeira extens','hack']],
+    ['posterior',['posterior','isquio','isquios','stiff','mesa flexora','flexora','hamstring']],
+    ['gluteo',['gluteo','glúteo','gluteos','glúteos','hip thrust','elevação pélvica','elevacao pelvica']],
+    ['adut',['adutor','abdutor','adducao','abducao','cadeira adut','cadeira abdut']],
+    ['pant',['panturr','gemeo','gêmeo','calf','soleus','soleo','sóleo']],
+    ['core',['abdomi','abdômi','prancha','core','obliquo','oblíquo','plank']],
+    ['cardio',['cardio','esteira','bike','elíptico','eliptico','corrida','remo ergom']]
+  ];
+  function norm(s){return (s||'').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+  function detectGroup(text){
+    var t = norm(text);
+    for(var i=0;i<GROUP_MAP.length;i++){
+      var g = GROUP_MAP[i];
+      for(var j=0;j<g[1].length;j++){ if(t.indexOf(g[1][j])>=0) return g[0]; }
+    }
+    return '';
+  }
+  function pickAfter(text, labels){
+    var lines = text.split(/\r?\n/);
+    var lblRe = new RegExp('^\\s*(?:'+labels.join('|')+')\\s*[:\\-–]\\s*(.+)$','i');
+    for(var i=0;i<lines.length;i++){
+      var m = lines[i].match(lblRe); if(m) return m[1].trim();
+    }
+    var inlineRe = new RegExp('(?:'+labels.join('|')+')\\s*[:\\-–]\\s*([^\\n\\r]+?)(?=(?:\\s{2,}|$|[·•|]))','i');
+    var m2 = text.match(inlineRe); return m2 ? m2[1].trim() : '';
+  }
+  function pickUrl(text){
+    var m = text.match(/https?:\/\/\S+\.(?:gif|png|jpe?g|webp|svg|mp4)(?:\?\S*)?/i);
+    return m ? m[0] : '';
+  }
+  function pickName(text){
+    var named = pickAfter(text, ['nome','exerc[ií]cio','exercicio','title']);
+    if(named) return named;
+    var lines = text.split(/\r?\n/).map(function(l){return l.trim();}).filter(Boolean);
+    for(var i=0;i<lines.length;i++){
+      var ln = lines[i];
+      if(/^https?:\/\//i.test(ln)) continue;
+      if(/^[\d\W]+$/.test(ln)) continue;
+      if(ln.length < 3 || ln.length > 80) continue;
+      return ln.replace(/[·•|].*$/,'').trim();
+    }
+    return '';
+  }
+  function pickLevel(text){
+    var t = norm(text);
+    if(/avanc/.test(t)) return 'avancado';
+    if(/intermedi/.test(t)) return 'intermediario';
+    if(/inici/.test(t)) return 'iniciante';
+    return '';
+  }
+
+  window.exSmartParse = function(text){
+    if(!text) return null;
+    var nome = pickName(text);
+    var grupo = detectGroup(nome) || detectGroup(text);
+    var equip = pickAfter(text, ['equipamento','equip','equipment','aparelho']);
+    if(!equip){
+      var em = text.match(/\b(barra|halter(?:es)?|polia|m[áa]quina|cabo|smith|kettlebell|peso\s*corporal|elastico|el[áa]stico|landmine)\b/i);
+      if(em) equip = em[0];
+    }
+    var instr = pickAfter(text, ['instru[cç][ãa]o','instru[cç][õo]es','execu[cç][ãa]o','passo a passo','como fazer','t[ée]cnica']);
+    if(!instr){
+      var stepLines = text.split(/\r?\n/).filter(function(l){return /^\s*(?:\d+\)|\d+\.|[-*•])\s+/.test(l);});
+      if(stepLines.length) instr = stepLines.map(function(l){return l.trim();}).join('\n');
+    }
+    var obs   = pickAfter(text, ['observa[cç][ãa]o','observa[cç][õo]es','obs','dica','aten[cç][ãa]o','cuidado']);
+    var gif   = pickUrl(text) || pickAfter(text, ['gif','imagem','url','link']);
+    var nivel = pickLevel(text);
+    return {nome:nome, grupo:grupo, equip:equip, instr:instr, obs:obs, gif:gif, nivel:nivel};
+  };
+
+  function setVal(id, v){ if(!v) return; var el=document.getElementById(id); if(el && !el.value){ el.value=v; } }
+  function setValForce(id, v){ if(v==null) return; var el=document.getElementById(id); if(el){ el.value=v; } }
+
+  window.exSmartApply = function(){
+    var ta = document.getElementById('ex-smart-text');
+    var status = document.getElementById('ex-smart-status');
+    var txt = (ta && ta.value || '').trim();
+    if(!txt){ status.textContent = 'Cole um texto ou use Foto/PDF para extrair primeiro.'; return; }
+    var p = exSmartParse(txt) || {};
+    setVal('ex-nome', p.nome);
+    setVal('ex-equip', p.equip);
+    setVal('ex-instr', p.instr);
+    setVal('ex-obs', p.obs);
+    setVal('ex-gif', p.gif);
+    if(p.grupo){
+      setValForce('ex-grupo', p.grupo);
+      var grid = document.getElementById('muscle-grid');
+      if(grid){
+        grid.querySelectorAll('.muscle-chip').forEach(function(c){ c.classList.toggle('active', c.dataset.grupo===p.grupo); });
+      }
+    }
+    if(p.nivel){
+      setValForce('ex-nivel', p.nivel);
+      var seg = document.getElementById('nivel-seg');
+      if(seg){ seg.querySelectorAll('button').forEach(function(b){ b.classList.toggle('active', b.dataset.nivel===p.nivel); }); }
+    }
+    if(typeof exGifPreview==='function') try{ exGifPreview(); }catch(_){}
+    var hit = [];
+    ['nome','grupo','equip','instr','obs','gif','nivel'].forEach(function(k){ if(p[k]) hit.push(k); });
+    status.textContent = hit.length ? ('Preenchido: '+hit.join(', ')+'. Revise e salve.') : 'Não consegui identificar campos. Edite o texto e tente novamente.';
+  };
+
+  // ---- OCR de imagem e PDF ----
+  async function ocrImageFile(file, status){
+    status.textContent = 'Carregando OCR...';
+    try{ await window.ensureTesseract(); }
+    catch(e){ status.textContent='OCR indisponível (sem conexão).'; return ''; }
+    status.textContent = 'Lendo imagem... 0%';
+    var res = await Tesseract.recognize(file, 'por+eng', {
+      logger: function(m){
+        if(m.status==='recognizing text'){ status.textContent='Reconhecendo... '+Math.round((m.progress||0)*100)+'%'; }
+      }
+    });
+    return (res && res.data && res.data.text || '').trim();
+  }
+  function ensurePdfJs(){
+    if(window.__pdfjsPromise) return window.__pdfjsPromise;
+    window.__pdfjsPromise = new Promise(function(resolve,reject){
+      if(window.pdfjsLib){ resolve(); return; }
+      var s=document.createElement('script');
+      s.src='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
+      s.onload=function(){
+        try{ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js'; }catch(e){}
+        resolve();
+      };
+      s.onerror=function(){ window.__pdfjsPromise=null; reject(new Error('pdfjs-load-failed')); };
+      document.head.appendChild(s);
+    });
+    return window.__pdfjsPromise;
+  }
+  async function pdfExtract(file, status){
+    status.textContent = 'Carregando leitor de PDF...';
+    try{ await ensurePdfJs(); }catch(e){ status.textContent='Falha ao carregar leitor de PDF.'; return ''; }
+    var buf = await file.arrayBuffer();
+    var pdf = await window.pdfjsLib.getDocument({data:buf}).promise;
+    var n = Math.min(pdf.numPages, 5);
+    var out = '';
+    for(var i=1;i<=n;i++){
+      status.textContent = 'Lendo PDF... página '+i+'/'+n;
+      var page = await pdf.getPage(i);
+      var tc = await page.getTextContent();
+      var pageText = tc.items.map(function(it){return it.str;}).join(' ').trim();
+      if(pageText){ out += pageText + '\n'; }
+      else {
+        // página escaneada -> OCR via canvas
+        var vp = page.getViewport({scale:1.5});
+        var canvas = document.createElement('canvas');
+        canvas.width = vp.width; canvas.height = vp.height;
+        var ctx = canvas.getContext('2d');
+        await page.render({canvasContext:ctx, viewport:vp}).promise;
+        var blob = await new Promise(function(r){canvas.toBlob(r,'image/png');});
+        var t = await ocrImageFile(blob, status);
+        if(t) out += t + '\n';
+      }
+    }
+    return out.trim();
+  }
+
+  window.exSmartOCR = async function(ev, kind){
+    var file = ev.target.files && ev.target.files[0]; if(!file) return;
+    var status = document.getElementById('ex-smart-status');
+    var ta = document.getElementById('ex-smart-text');
+    try{
+      var txt = '';
+      if(kind==='pdf'){ txt = await pdfExtract(file, status); }
+      else { txt = await ocrImageFile(file, status); }
+      if(!txt){ status.textContent='Nada reconhecido. Tente outro arquivo.'; return; }
+      ta.value = (ta.value ? ta.value.trim()+'\n' : '') + txt;
+      status.textContent = 'Texto extraído — clique em "Reconhecer e preencher" para distribuir nos campos.';
+      // Auto-aplica
+      try{ exSmartApply(); }catch(_){}
+    }catch(err){
+      console.error(err);
+      status.textContent = 'Erro: ' + (err && err.message || err);
+    } finally {
+      ev.target.value = '';
+    }
+  };
+})();
+</script>
+
 </body>
 </html>
 
