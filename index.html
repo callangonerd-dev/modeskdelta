@@ -9,7 +9,7 @@
 <script>
 /* Lazy-load do Tesseract.js (~3MB): carrega apenas quando o OCR for usado */
 window.ensureTesseract = function(){
-  if(window.__tesseractPromise) return window.__tesseractPromise; 
+  if(window.__tesseractPromise) return window.__tesseractPromise;
   window.__tesseractPromise = new Promise(function(resolve, reject){
     if(typeof Tesseract !== 'undefined'){ resolve(); return; }
     var s = document.createElement('script');
@@ -82,7 +82,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 /* SELECT SCREEN */
 .select-header{
   text-align:center;
-  padding:5px 0 5px;
+  padding:32px 0 28px;
 }
 .select-eyebrow{
   font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
@@ -162,10 +162,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
   margin-bottom:24px;
 }
 .topbar-actions {
-    margin-left: auto;
+      margin-left: auto;
     display: flex;
     gap: 8px;
-    flex-direction: column;
+    flex-direction: row;
 }
 .topbar-btn{
   display:inline-flex;align-items:center;gap:6px;
@@ -1648,6 +1648,10 @@ body.has-nav{padding-bottom:64px}
   background:var(--bg2);border:1px solid var(--bg4);
   border-radius:var(--radius-lg);padding:18px;margin-bottom:14px;
 }
+  .panel {
+    display: none;
+    
+}
 .panel-title{
   font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;
   display:flex;align-items:center;gap:8px;margin-bottom:14px;color:var(--txt);
@@ -2727,9 +2731,9 @@ body.has-nav{padding-bottom:64px}
   <button class="nav-btn" data-tab="bio" onclick="goTab('bio')"><i class="ti ti-scale"></i>Bio</button>
   <button class="nav-btn" data-tab="dash" onclick="goTab('dash')"><i class="ti ti-chart-bar"></i>Dash</button>
   <button class="nav-btn" data-tab="builder" onclick="openBuilder()"><i class="ti ti-wand"></i>Montar</button>
-  
+  <button class="nav-btn" data-tab="fabtoggle" onclick="toggleFabBtn()" title="Mostrar/ocultar botão Editar Programa"><i class="ti ti-eye"></i><span class="lbl">Editar</span></button>
   <button class="nav-btn" data-tab="config" onclick="goTab('config')"><i class="ti ti-settings"></i>Config</button>
-<button class="nav-btn nav-btn-exit" data-tab="exit" onclick="goHome()"><i class="ti ti-logout"></i>Sair</button>
+  <button class="nav-btn nav-btn-exit" data-tab="exit" onclick="goHome()"><i class="ti ti-logout"></i>Sair</button>
 </nav>
 
 <div class="toast" id="toast"></div>
@@ -3899,7 +3903,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
   background:#FFFFFF;border-color:rgba(0,0,0,.12);color:#0E0E18;
   box-shadow:0 10px 28px rgba(15,20,40,.18);
 }
-body.has-nav .font-scaler{bottom:126px}
+body.has-nav .font-scaler{bottom:78px}
 
 .font-scaler .fs-group-sel{
   background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);
@@ -6019,27 +6023,27 @@ body.is-manu .block-menu button.active,
 }
 
 /* FLOATING DOCK */
-.bottom-nav {
-        position: fixed !important;
-        left: 46% !important;
-        right: auto !important;
-        bottom: 53px !important;
-        transform: translateX(-50%) !important;
-        width: auto !important;
-        max-width: calc(105vw - 27px) !important;
-        display: flex !important;
-        width: 100% !important;
-        gap: 1px !important;
-        padding: 8px !important;
-        background: color-mix(in srgb, var(--bg2) 82%, transparent) !important;
-        -webkit-backdrop-filter: blur(24px) saturate(170%) !important;
-        backdrop-filter: blur(24px) saturate(170%) !important;
-        border: 1px solid var(--bg4) !important;
-        border-radius: 0 26px 26px 0 !important;
-        box-shadow: 0 22px 60px -12px rgba(0, 0, 0, .6), 0 0 0 1px color-mix(in srgb, var(--txt) 4%, transparent) inset !important;
-        z-index: 200 !important;
-        justify-content: center !important;
-    }
+.bottom-nav{
+  position:fixed !important;
+  left:50% !important; right:auto !important;
+  bottom:32px !important;
+  transform:translateX(-50%) !important;
+  width:auto !important;
+  max-width:calc(100vw - 20px) !important;
+  display:flex !important;
+  gap:2px !important;
+  padding:8px !important;
+  background:color-mix(in srgb, var(--bg2) 82%, transparent) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(170%) !important;
+  backdrop-filter:blur(24px) saturate(170%) !important;
+  border:1px solid var(--bg4) !important;
+  border-radius:26px !important;
+  box-shadow:
+    0 22px 60px -12px rgba(0,0,0,.6),
+    0 0 0 1px color-mix(in srgb, var(--txt) 4%, transparent) inset !important;
+  z-index:200 !important;
+  justify-content:center !important;
+}
 body[data-ap-bg="light"] .bottom-nav{
   box-shadow:0 22px 50px -14px rgba(15,20,40,.18) !important;
 }
@@ -6057,7 +6061,6 @@ body[data-ap-bg="light"] .bottom-nav{
   gap:3px !important;
   min-width:0 !important;
   flex:0 0 auto !important;
-  left: 26px;
   width:58px !important;
   padding:9px 4px !important;
   background:transparent !important;
@@ -6314,7 +6317,7 @@ body.is-manu .exer-card::before,
   background:color-mix(in srgb, var(--bg2) 92%, transparent) !important;
   border:1px solid var(--bg4) !important;
   font-family:'Manrope',sans-serif !important;
-  bottom:126px !important;
+  bottom:90px !important;
   display:flex !important;
 }
 .font-scaler button{
@@ -6570,6 +6573,9 @@ body[data-ap-bg="light"] .fs-toast{
 .bottom-nav .nav-btn[data-tab="fstoggle"]{ display:flex !important; flex-direction:column; align-items:center; justify-content:center; color:var(--txt2); }
 .bottom-nav .nav-btn[data-tab="fstoggle"].on{ color:var(--red); }
 body.is-manu .bottom-nav .nav-btn[data-tab="fstoggle"].on{ color:var(--blue); }
+.bottom-nav .nav-btn[data-tab="fabtoggle"]{ display:flex !important; flex-direction:column; align-items:center; justify-content:center; color:var(--txt2); }
+.bottom-nav .nav-btn[data-tab="fabtoggle"].on{ color:var(--red); }
+body.is-manu .bottom-nav .nav-btn[data-tab="fabtoggle"].on{ color:var(--blue); }
 </style>
 <script>
 /* v3: dock toggle for font-scaler visibility */
@@ -6613,6 +6619,48 @@ body.is-manu .bottom-nav .nav-btn[data-tab="fstoggle"].on{ color:var(--blue); }
   // Re-apply on profile / tab switches
   document.addEventListener('click', e=>{
     if(e.target.closest('.nav-btn')) setTimeout(applyState, 50);
+  });
+})();
+
+/* ====== Toggle FAB visível no rodapé ====== */
+(function(){
+  const LS_AP = 'morest.appearance.v1';
+  function readAppearance(){
+    try{ return JSON.parse(localStorage.getItem(LS_AP)||'{}'); }catch(e){ return {}; }
+  }
+  function writeAppearance(s){
+    localStorage.setItem(LS_AP, JSON.stringify(s));
+  }
+  function updateBodyFab(on){
+    document.body.setAttribute('data-ap-fab', on ? 'on' : 'off');
+    // Mantém o checkbox das Configurações sincronizado
+    const cfgTog = document.getElementById('ap-fab-toggle');
+    if(cfgTog) cfgTog.checked = !!on;
+  }
+  window.syncFabToggleBtn = function(){
+    const btn = document.querySelector('.bottom-nav .nav-btn[data-tab="fabtoggle"]');
+    if(!btn) return;
+    const on = document.body.getAttribute('data-ap-fab') !== 'off';
+    btn.classList.toggle('on', on);
+    const ic = btn.querySelector('i');
+    if(ic) ic.className = 'ti ti-' + (on ? 'eye' : 'eye-off');
+    const lbl = btn.querySelector('.lbl');
+    if(lbl) lbl.textContent = on ? 'Editar' : 'Editar';
+  };
+  window.toggleFabBtn = function(){
+    const s = readAppearance();
+    const on = !(document.body.getAttribute('data-ap-fab') !== 'off');
+    s.fab = on;
+    writeAppearance(s);
+    updateBodyFab(on);
+    syncFabToggleBtn();
+  };
+  function init(){ syncFabToggleBtn(); setTimeout(syncFabToggleBtn, 600); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+  // Re-sincroniza ao trocar de aba/perfil
+  document.addEventListener('click', e=>{
+    if(e.target.closest('.nav-btn')) setTimeout(syncFabToggleBtn, 50);
   });
 })();
 
@@ -7040,6 +7088,7 @@ body{ min-height:100dvh; }
       tog.dataset.bound='1';
       tog.addEventListener('change', e=>{
         const cur = load(); cur.fab = e.target.checked; save(cur); apply(cur);
+        if(typeof syncFabToggleBtn === 'function') syncFabToggleBtn();
       });
     }
 
@@ -8096,7 +8145,7 @@ body.is-manu .bottom-nav .nav-btn.active::before{ background:var(--blue) !import
 body, body.has-nav{ padding-bottom:0 !important; }
 body.has-nav .font-scaler{ bottom:98px !important; }
 .fs-toast{ bottom:152px !important; }
-.bld-fab{ bottom:126px !important; }
+.bld-fab{ bottom:104px !important; }
 
 @media (max-width:360px){
   .bottom-nav{ padding:6px 2px calc(6px + env(safe-area-inset-bottom,0px)) !important; }
@@ -8354,7 +8403,7 @@ body.has-nav .font-scaler{ bottom:98px !important; }
   .side-dock-toggle{
     position: fixed;
     left: 0;
-    bottom: 61px;
+    bottom: 24px;
     width: 42px;
     height: 56px;
     background: var(--red);
@@ -8369,9 +8418,6 @@ body.has-nav .font-scaler{ bottom:98px !important; }
     box-shadow: 0 10px 26px -8px rgba(255,0,0,.55), 0 2px 0 rgba(0,0,0,.25);
     transition: background .2s, transform .25s ease;
   }
-  button#side-dock-toggle {
-    z-index: 999 !important;
-}
   body.is-manu .side-dock-toggle{ background: var(--blue); box-shadow: 0 10px 26px -8px rgba(0,120,255,.55), 0 2px 0 rgba(0,0,0,.25); }
   .side-dock-toggle:hover{ transform: translateX(2px); }
   .side-dock-toggle i{ font-size: 22px; transition: transform .35s cubic-bezier(.22,1,.36,1); }
