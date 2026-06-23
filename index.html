@@ -2600,6 +2600,12 @@ body.has-nav{padding-bottom:64px}
 .bld-ex-meta{font-size:11px;color:var(--txt2);margin-top:2px}
 .bld-ex-rm{background:transparent;border:0;color:var(--txt3);cursor:pointer;padding:6px}
 .bld-ex-rm:hover{color:var(--red)}
+.bld-ex-drag{cursor:grab;color:var(--txt3);display:flex;align-items:center;padding:2px;font-size:18px;touch-action:none}
+.bld-ex-drag:active{cursor:grabbing}
+.bld-ex[draggable="true"]{user-select:none}
+.bld-ex.bld-dragging{opacity:.4}
+.bld-ex.bld-drop-before{box-shadow:-3px 0 0 0 var(--blue) inset, 3px 0 0 0 var(--blue)}
+.bld-ex.bld-drop-after{box-shadow:3px 0 0 0 var(--blue) inset, -3px 0 0 0 var(--blue)}
 
 .bld-add-btn{
   width:100%;padding:10px;border-radius:10px;background:var(--bg3);border:1px dashed var(--bg4);
@@ -5439,7 +5445,8 @@ function mpAddByUrl(){
           <div class="bld-day-name">Dia ${d}</div>
           <div class="bld-day-count">${exs.length} ex.</div>
         </div>
-        <div class="bld-ex-grid">${exs.map((e,i)=>`<div class="bld-ex">
+        <div class="bld-ex-grid" data-day="${d}">${exs.map((e,i)=>`<div class="bld-ex" draggable="true" data-day="${d}" data-idx="${i}">
+          <span class="bld-ex-drag" title="Arrastar para reordenar"><i class="ti ti-grip-vertical"></i></span>
           <div class="bld-ex-thumb">${e.gif?`<img src="${e.gif}">`:'<i class="ti ti-barbell"></i>'}</div>
           <div class="bld-ex-info">
             <div class="bld-ex-name">${e.nome}</div>
@@ -5468,6 +5475,61 @@ function mpAddByUrl(){
   window.bldSetScheme = function(k){ builderState.scheme=k; bldSeedFromDB(); bldRender(); };
 
   window.bldRemoveEx = function(d,i){ builderState.days[d].splice(i,1); bldRender(); };
+
+  // ===== Drag & drop reordering (delegated, idempotent) =====
+  if(!window.__bldDnDInit){
+    window.__bldDnDInit = true;
+    let dragSrc = null; // {day, idx, el}
+    document.addEventListener('dragstart', function(e){
+      const el = e.target.closest && e.target.closest('.bld-ex[draggable="true"]');
+      if(!el) return;
+      dragSrc = { day: el.dataset.day, idx: +el.dataset.idx, el };
+      el.classList.add('bld-dragging');
+      try{ e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain', el.dataset.idx); }catch(_){ }
+    });
+    document.addEventListener('dragend', function(e){
+      if(dragSrc && dragSrc.el) dragSrc.el.classList.remove('bld-dragging');
+      document.querySelectorAll('.bld-drop-before,.bld-drop-after').forEach(n=>n.classList.remove('bld-drop-before','bld-drop-after'));
+      dragSrc = null;
+    });
+    document.addEventListener('dragover', function(e){
+      if(!dragSrc) return;
+      const over = e.target.closest && e.target.closest('.bld-ex[draggable="true"]');
+      const grid = e.target.closest && e.target.closest('.bld-ex-grid');
+      if(!grid) return;
+      if(grid.dataset.day !== dragSrc.day) return; // same day only
+      e.preventDefault();
+      document.querySelectorAll('.bld-drop-before,.bld-drop-after').forEach(n=>n.classList.remove('bld-drop-before','bld-drop-after'));
+      if(over && over!==dragSrc.el){
+        const r = over.getBoundingClientRect();
+        const after = (e.clientX - r.left) > r.width/2;
+        over.classList.add(after?'bld-drop-after':'bld-drop-before');
+      }
+    });
+    document.addEventListener('drop', function(e){
+      if(!dragSrc) return;
+      const grid = e.target.closest && e.target.closest('.bld-ex-grid');
+      if(!grid || grid.dataset.day !== dragSrc.day) return;
+      e.preventDefault();
+      const over = e.target.closest && e.target.closest('.bld-ex[draggable="true"]');
+      const day = dragSrc.day;
+      const list = builderState.days[day] || [];
+      const from = dragSrc.idx;
+      let to = list.length - 1;
+      if(over && over!==dragSrc.el){
+        const overIdx = +over.dataset.idx;
+        const r = over.getBoundingClientRect();
+        const after = (e.clientX - r.left) > r.width/2;
+        to = after ? overIdx + 1 : overIdx;
+        if(from < to) to -= 1;
+      }
+      const [item] = list.splice(from, 1);
+      list.splice(to, 0, item);
+      dragSrc = null;
+      bldRender();
+    });
+  }
+
 
   // ===== Picker sheet =====
   let pickerCtx = { day:null, muscle:null, exercise:null, reps:'4x10' };
