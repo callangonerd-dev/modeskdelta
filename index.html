@@ -9,7 +9,7 @@
 <script>
 /* Lazy-load do Tesseract.js (~3MB): carrega apenas quando o OCR for usado */
 window.ensureTesseract = function(){
-  if(window.__tesseractPromise) return window.__tesseractPromise;
+  if(window.__tesseractPromise) return window.__tesseractPromise; 
   window.__tesseractPromise = new Promise(function(resolve, reject){
     if(typeof Tesseract !== 'undefined'){ resolve(); return; }
     var s = document.createElement('script');
