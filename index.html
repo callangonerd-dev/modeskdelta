@@ -82,7 +82,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-he
 /* SELECT SCREEN */
 .select-header{
   text-align:center;
-  padding:32px 0 28px;
+  padding:4px 0 4px;
 }
 .select-eyebrow{
   font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
@@ -6021,12 +6021,15 @@ body.is-manu .block-menu button.active,
   color:var(--blue) !important;
   border-color:var(--blue-border) !important;
 }
-
+    .bottom-nav .nav-btn-exit {
+        color: var(--txt3) !important;
+        display: none !important;
+    }
 /* FLOATING DOCK */
 .bottom-nav{
   position:fixed !important;
   left:50% !important; right:auto !important;
-  bottom:32px !important;
+  bottom:62px !important;
   transform:translateX(-50%) !important;
   width:auto !important;
   max-width:calc(100vw - 20px) !important;
@@ -6192,6 +6195,7 @@ img, svg, canvas{max-width:100% !important; height:auto}
 body, input, select, textarea, button{
   font-family:'Manrope','Inter',sans-serif !important;
   letter-spacing:-.01em;
+          z-index: 999;
 }
 h1,h2,h3,h4,.logo-mo,.logo-rest,.select-title,.pc-name,.workout-name,
 .tab-btn,.group-chip,.ms-val,.ll-val,.macro-val,.rest-time,.rest-label,
@@ -6318,7 +6322,7 @@ body.is-manu .exer-card::before,
   background:color-mix(in srgb, var(--bg2) 92%, transparent) !important;
   border:1px solid var(--bg4) !important;
   font-family:'Manrope',sans-serif !important;
-  bottom:90px !important;
+  bottom:136px !important;
   display:flex !important;
 }
 .font-scaler button{
@@ -8404,7 +8408,7 @@ body.has-nav .font-scaler{ bottom:98px !important; }
   .side-dock-toggle{
     position: fixed;
     left: 0;
-    bottom: 24px;
+    bottom: 70px;
     width: 42px;
     height: 56px;
     background: var(--red);
